@@ -7,8 +7,9 @@
 
 ### To Do
 
-- netlify.toml
 - Starter styles
+- .editorconfig, linting, git hooks
 - JS polyfills / babel config
+- netlify.toml
 - Component + styling conventions
-- Combine source files
+- ENV / secrets handling
