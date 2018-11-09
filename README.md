@@ -1,2 +1,2 @@
-# An opinionated project starter
+# An opinionated web project starter
 

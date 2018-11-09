@@ -1,0 +1,24 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(content='IE=edge' http-equiv='X-UA-Compatible')
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+
+    block headFonts
+    block headMeta
+
+    block headStylesOverride
+      link(rel='stylesheet' href='/assets/global.css')
+      block headStyles
+
+    block headScriptsOverride
+      block headScripts
+
+  body
+    block bodyOverride
+      block body
+
+    block footScriptsOverrride
+      script(src='/assets/global.js')
+      block footScripts

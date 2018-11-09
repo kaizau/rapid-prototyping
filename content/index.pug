@@ -1,0 +1,12 @@
+---
+title: Hello, universe.
+---
+
+extends _shared/base
+
+block headMeta
+  title= title
+  meta(name='description' content=title)
+
+block body
+  h1= title
