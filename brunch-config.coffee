@@ -1,3 +1,6 @@
+fs = require('fs')
+path = require('path')
+
 #
 # http://brunch.io/docs/config.html
 #
@@ -8,17 +11,18 @@ exports.paths =
 exports.conventions =
   assets: /static\//
 
+# TODO Generate dynamically
 exports.files =
   stylesheets:
     joinTo:
-      # 'output.js': [ 'module/included/if/matched/**/*.css' ]
+      # 'output.js': [ 'module/included/if/matched/**/*' ]
       'assets/global.css': [
-        'components/global/**/*.styl'
+        'components/global/**/*.(styl|css)'
       ]
   javascripts:
     entryPoints:
       # 'entry.js':
-      #   'output.js': [ 'module/included/if/matched/**/*.js' ]
+      #   'output.js': [ 'module/included/if/matched/**/*' ]
       'components/global/index.js':
         'assets/global.js': [
           'node_modules/**/*.js'
@@ -26,8 +30,8 @@ exports.files =
         ]
 
 exports.modules =
-  nameCleaner: (path) ->
-    path.replace('components/', '')
+  nameCleaner: (file) ->
+    file.replace('components/', '')
   autoRequire:
     'assets/global.js': ['global/index.js']
 
@@ -42,8 +46,8 @@ exports.plugins =
           require('pug-brunch-static')(
             pretty: true
             fileMatch: /\.pug$/
-            fileTransform: (path) ->
-              path.replace(/\.pug$/, '.html')
+            fileTransform: (file) ->
+              file.replace(/\.pug$/, '.html')
           )
         ]
       )
