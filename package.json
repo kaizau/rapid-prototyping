@@ -2,21 +2,25 @@
   "name": "web-project",
   "version": "1.0.0",
   "description": "An opinionated project starter for web",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "start": "node_modules/.bin/brunch watch --server"
+    "start": "node_modules/.bin/brunch watch --server",
+    "clean": "rm -rf ./public",
+    "build": "npm run clean && node_modules/.bin/brunch build --production"
   },
   "author": "k@kaizau.com",
+  "repository": "https://github.com/kaizau/web-project",
   "devDependencies": {
     "babel-brunch": "^7.0.0",
     "brunch": "^2.10.17",
     "brunch-static": "^1.2.1",
     "clean-css-brunch": "^2.10.0",
-    "fingerprint-brunch": "^2.0.5",
+    "fingerprinter-brunch": "0.0.2",
     "html-brunch-static": "^1.4.0",
     "postcss-brunch": "^2.10.1",
     "poststylus": "^1.0.0",
     "pug-brunch-static": "^3.0.0",
+    "replace": "^1.0.0",
     "stylus-brunch": "^2.10.1",
     "uglify-js-brunch": "^2.10.0"
   }

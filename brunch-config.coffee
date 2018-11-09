@@ -3,12 +3,12 @@
 #
 
 exports.paths =
-  watched: [ 'components', 'content' ]
+  watched: [ 'components', 'content', 'static' ]
 
 exports.conventions =
   # Include _redirects for netlify
   ignored: /\/_(?!redirects)/
-  assets: /\/content\//
+  assets: /static\//
 
 exports.files =
   stylesheets:
@@ -37,8 +37,6 @@ exports.plugins =
   cleancss:
     keepSpecialComments: 0
     removeEmpty: true
-  fingerprint:
-    autoClearOldFiles: true
   static:
     processors: [
       require('html-brunch-static')(
@@ -54,3 +52,21 @@ exports.plugins =
     ]
   stylus:
     includeCss: true
+
+if process.env.NODE_ENV == 'production'
+  exports.hooks =
+    onCompile: (generated, changed) ->
+      fs = require('fs')
+      replace = require('replace')
+      manifest = JSON.parse(fs.readFileSync('./public/manifest.json', 'utf8'))
+      Object.keys(manifest).forEach((key) ->
+        replace(
+          regex: key
+          replacement: manifest[key]
+          paths: ['./public']
+          exclude: 'manifest.json'
+          recursive: true
+          silent: true
+        )
+      )
+      fs.unlinkSync('./public/manifest.json')
