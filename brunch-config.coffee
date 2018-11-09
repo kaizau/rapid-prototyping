@@ -6,8 +6,6 @@ exports.paths =
   watched: [ 'components', 'content', 'static' ]
 
 exports.conventions =
-  # Include _redirects for netlify
-  ignored: /\/_(?!redirects)/
   assets: /static\//
 
 exports.files =
@@ -52,6 +50,9 @@ exports.plugins =
     ]
   stylus:
     includeCss: true
+    plugins: [
+      require('autoprefixer-stylus')({ hideWarnings: true })
+    ]
 
 if process.env.NODE_ENV == 'production'
   exports.hooks =
