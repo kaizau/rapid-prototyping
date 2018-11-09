@@ -1,0 +1,2 @@
+# An opinionated project starter
+
