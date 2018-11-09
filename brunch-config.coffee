@@ -59,10 +59,10 @@ exports.plugins =
     ]
 
 if process.env.NODE_ENV == 'production'
+  replace = require('replace')
+
   exports.hooks =
     onCompile: (generated, changed) ->
-      fs = require('fs')
-      replace = require('replace')
       manifest = JSON.parse(fs.readFileSync('./public/manifest.json', 'utf8'))
       Object.keys(manifest).forEach((key) ->
         replace(
