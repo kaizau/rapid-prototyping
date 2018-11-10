@@ -1,0 +1,15 @@
+---
+title: Page 1
+---
+
+extends _shared/base
+
+block headMeta
+  title= title
+  meta(name='description' content=title)
+
+block body
+  h1= title
+
+block footScripts
+  script(src='/assets/page1.js')

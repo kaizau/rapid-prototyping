@@ -23,5 +23,8 @@
     "replace": "^1.0.0",
     "stylus-brunch": "^2.10.1",
     "uglify-js-brunch": "^2.10.0"
+  },
+  "dependencies": {
+    "mithril": "^1.1.6"
   }
 }

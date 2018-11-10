@@ -9,11 +9,10 @@
 exports.paths =
   watched: [ 'components', 'content', 'static' ]
 
-
 exports.conventions =
+  ignored: /\/_(?!shared\/.+\.js)/
   assets: /static\//
 
-# TODO How to handle NPM?
 exports.files = scanFiles('components', 'assets')
 
 exports.modules =

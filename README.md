@@ -5,11 +5,25 @@
 - [**Stylus**](http://stylus-lang.com/) for flexible styling.
 - [**Netlify**](https://www.netlify.com/docs/netlify-toml-reference/) for static hosting.
 
-### To Do
+## Hints
+
+### Components
+
+- Each `/components/**/join.styl` is compiled to `/public/assets/**.css`.
+- Each `/components/**/entry{,~*}.js` is compiled to `/public/assets/**.js`.
+- To bundle npm modules, name the file `entry~module1~module2~module3.js`.
+- To bundle `_shared` JS modules, name the file `entry~_shared~module1~module2.js`.
+- Only modules actually `import`ed will be included.
+
+### Content
+
+- Pug layouts accept YAML and JSON frontmatter.
+
+## To Do
 
 - Starter styles
 - .editorconfig, linting, git hooks
 - JS polyfills / babel config
 - netlify.toml
-- Component + styling conventions
 - ENV / secrets handling
+- Pug conventions for loading assets

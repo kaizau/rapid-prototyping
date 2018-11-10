@@ -12,28 +12,34 @@ exports.scanFiles = (inDir, outDir) ->
       joinTo: {}
       entryPoints: {}
 
-  components = glob.readdirSync(inDir + '**/{entry,join}.{js,styl}')
+  components = glob.readdirSync(inDir + '**/{entry,join}{,~*}.{js,styl}')
 
   components.forEach((source) ->
     ext = path.extname(source)
     base = path.basename(source, ext)
     type = if ext == '.js' then 'javascripts' else 'stylesheets'
-    pattern = if ext == '.js' then '*.js' else '*.{styl,css}'
 
     sourceDir = path.dirname(source)
     targetDir = sourceDir.replace(inDir, outDir)
     targetExt = if ext == '.styl' then '.css' else ext
     target = targetDir + targetExt
 
-    if base == 'entry'
+    matchers = ["#{sourceDir}/**/*"]
+    if base.indexOf('~') > -1
+      modules = base.split('~')
+      modules.shift()
+      modules.forEach((module) ->
+        if module == '_shared'
+          matchers.unshift("#{inDir}_shared/**/*")
+        else
+          matchers.unshift("node_modules/#{module}/**/*")
+      )
+
+    if base.indexOf('entry') > -1
       output[type]['entryPoints'][source] =
-        "#{target}": [
-          "#{sourceDir}/**/#{pattern}"
-        ]
+        "#{target}": matchers
     else
-      output[type]['joinTo'][target] = [
-        "#{sourceDir}/**/#{pattern}"
-      ]
+      output[type]['joinTo'][target] = matchers
   )
 
   output
