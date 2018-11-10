@@ -1,5 +1,6 @@
-fs = require('fs')
-path = require('path')
+{scanFiles} = require('./brunch/scan-files')
+{rewriteAssets} = require('./brunch/rewrite-assets')
+{configureAutoRequire} = require('./brunch/auto-require')
 
 #
 # http://brunch.io/docs/config.html
@@ -8,32 +9,18 @@ path = require('path')
 exports.paths =
   watched: [ 'components', 'content', 'static' ]
 
+
 exports.conventions =
   assets: /static\//
 
-# TODO Generate dynamically
-exports.files =
-  stylesheets:
-    joinTo:
-      # 'output.js': [ 'module/included/if/matched/**/*' ]
-      'assets/global.css': [
-        'components/global/**/*.(styl|css)'
-      ]
-  javascripts:
-    entryPoints:
-      # 'entry.js':
-      #   'output.js': [ 'module/included/if/matched/**/*' ]
-      'components/global/index.js':
-        'assets/global.js': [
-          'node_modules/**/*.js'
-          'components/global/**/*.js'
-        ]
+# TODO How to handle NPM?
+exports.files = scanFiles('components', 'assets')
 
 exports.modules =
   nameCleaner: (file) ->
     file.replace('components/', '')
-  autoRequire:
-    'assets/global.js': ['global/index.js']
+
+configureAutoRequire(exports)
 
 exports.plugins =
   cleancss:
@@ -59,19 +46,6 @@ exports.plugins =
     ]
 
 if process.env.NODE_ENV == 'production'
-  replace = require('replace')
-
   exports.hooks =
-    onCompile: (generated, changed) ->
-      manifest = JSON.parse(fs.readFileSync('./public/manifest.json', 'utf8'))
-      Object.keys(manifest).forEach((key) ->
-        replace(
-          regex: key
-          replacement: manifest[key]
-          paths: ['./public']
-          exclude: 'manifest.json'
-          recursive: true
-          silent: true
-        )
-      )
-      fs.unlinkSync('./public/manifest.json')
+    onCompile: () ->
+      rewriteAssets('./public/manifest.json')

@@ -17,6 +17,7 @@
     "brunch-static": "^1.2.1",
     "clean-css-brunch": "^2.10.0",
     "fingerprinter-brunch": "0.0.2",
+    "glob-fs": "^0.1.7",
     "html-brunch-static": "^1.4.0",
     "pug-brunch-static": "^3.0.0",
     "replace": "^1.0.0",
