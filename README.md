@@ -22,6 +22,6 @@
 ## To Do
 
 - Starter styles
-- netlify.toml
 - ENV / secrets handling
 - Pug conventions for loading assets
+- Optional brunch CommonJS definition?

@@ -1,0 +1,23 @@
+# Note: These settings override those in the Netlify UI
+# https://www.netlify.com/docs/netlify-toml-reference/
+
+[build]
+publish = "public/"
+command = "npm run build"
+
+# SPA routing
+# [[redirects]]
+# from = "/*"
+# to = "/index.html"
+# status = 200
+
+# Headers
+# [[headers]]
+# for = "/*"
+# [headers.values]
+
+# Production overrides
+# [context.production]
+
+# Staging overrides
+# [context.branch-deploy]
