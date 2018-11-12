@@ -10,9 +10,6 @@
     "clean": "rm -rf ./public",
     "build": "npm run clean && node_modules/.bin/brunch build --production"
   },
-  "eslintConfig": {
-    "extends": "airbnb-base"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -23,6 +20,9 @@
       "eslint --fix",
       "git add"
     ]
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base"
   },
   "devDependencies": {
     "autoprefixer-stylus": "^0.14.0",

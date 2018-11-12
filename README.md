@@ -22,7 +22,6 @@
 ## To Do
 
 - Starter styles
-- JS polyfills / babel config
 - netlify.toml
 - ENV / secrets handling
 - Pug conventions for loading assets
