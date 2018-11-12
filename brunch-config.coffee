@@ -1,6 +1,7 @@
 {scanFiles} = require('./brunch/scan-files')
 {rewriteAssets} = require('./brunch/rewrite-assets')
 {configureAutoRequire} = require('./brunch/auto-require')
+cjs = require('commonjs-require-definition')
 
 #
 # http://brunch.io/docs/config.html
@@ -16,6 +17,8 @@ exports.conventions =
 exports.files = scanFiles('source/components', 'assets')
 
 exports.modules =
+  definition: (file) ->
+    if file.indexOf('/global.js') > -1 then cjs else ''
   nameCleaner: (file) ->
     file.replace('source/components/', '')
 

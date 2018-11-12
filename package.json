@@ -6,8 +6,8 @@
   "description": "An opinionated starting point for web projects",
   "private": true,
   "scripts": {
-    "start": "node_modules/.bin/brunch watch --server",
     "clean": "rm -rf ./public",
+    "start": "npm run clean && node_modules/.bin/brunch watch --server",
     "build": "npm run clean && node_modules/.bin/brunch build --production"
   },
   "husky": {
@@ -27,6 +27,7 @@
     "brunch": "^2.10.17",
     "brunch-static": "^1.2.1",
     "clean-css-brunch": "^2.10.0",
+    "commonjs-require-definition": "^0.6.2",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
