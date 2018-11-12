@@ -1,4 +1,4 @@
-# An opinionated web project starter
+# An opinionated starting point for web projects
 
 - [**Brunch**](https://brunch.io/docs/config) for markup and asset optimizations.
 - [**Mithril**](https://mithril.js.org/api.html) for SPAs and JS utilities.
@@ -22,7 +22,6 @@
 ## To Do
 
 - Starter styles
-- .editorconfig, linting, git hooks
 - JS polyfills / babel config
 - netlify.toml
 - ENV / secrets handling

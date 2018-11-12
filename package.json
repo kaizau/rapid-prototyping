@@ -1,24 +1,43 @@
 {
   "name": "web-project",
   "version": "1.0.0",
-  "description": "An opinionated project starter for web",
+  "author": "k@kaizau.com",
+  "repository": "https://github.com/kaizau/starter-web",
+  "description": "An opinionated starting point for web projects",
   "private": true,
   "scripts": {
     "start": "node_modules/.bin/brunch watch --server",
     "clean": "rm -rf ./public",
     "build": "npm run clean && node_modules/.bin/brunch build --production"
   },
-  "author": "k@kaizau.com",
-  "repository": "https://github.com/kaizau/web-project",
+  "eslintConfig": {
+    "extends": "airbnb-base"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
   "devDependencies": {
     "autoprefixer-stylus": "^0.14.0",
     "babel-brunch": "^7.0.0",
     "brunch": "^2.10.17",
     "brunch-static": "^1.2.1",
     "clean-css-brunch": "^2.10.0",
-    "fingerprinter-brunch": "0.0.2",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "fingerprinter-brunch": "^0.0.2",
     "glob-fs": "^0.1.7",
     "html-brunch-static": "^1.4.0",
+    "husky": "^1.1.3",
+    "lint-staged": "^8.0.4",
     "pug-brunch-static": "^3.0.0",
     "replace": "^1.0.0",
     "stylus-brunch": "^2.10.1",
