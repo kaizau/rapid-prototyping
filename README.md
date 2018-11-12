@@ -20,8 +20,15 @@
 - Pug layouts accept YAML and JSON frontmatter.
 - Create a 404.pug and Netlify will automaticall use it.
 
+### Build
+
+- ESLint pre-commit hook automatically attempts to fix errors.
+
 ## To Do
 
+- Switch to node-sass
 - ENV / secrets handling
+- Netlify functions
 - Pug conventions for loading assets
 - Optional brunch CommonJS definition?
+- RimRaf, node path, etc.

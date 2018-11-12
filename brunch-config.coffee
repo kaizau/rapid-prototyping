@@ -7,17 +7,17 @@
 #
 
 exports.paths =
-  watched: [ 'components', 'content', 'static' ]
+  watched: [ 'source/components', 'source/pages', 'source/static' ]
 
 exports.conventions =
   ignored: /\/_(?!shared\/.+\.js)/
-  assets: /static\//
+  assets: /source\/static\//
 
-exports.files = scanFiles('components', 'assets')
+exports.files = scanFiles('source/components', 'assets')
 
 exports.modules =
   nameCleaner: (file) ->
-    file.replace('components/', '')
+    file.replace('source/components/', '')
 
 configureAutoRequire(exports)
 

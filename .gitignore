@@ -17,6 +17,7 @@ npm-debug.log*
 .project
 .settings
 .tmproj
+.vscode
 nbproject
 Thumbs.db
 

@@ -21,9 +21,6 @@
       "git add"
     ]
   },
-  "eslintConfig": {
-    "extends": "airbnb-base"
-  },
   "devDependencies": {
     "autoprefixer-stylus": "^0.14.0",
     "babel-brunch": "^7.0.0",
@@ -41,10 +38,10 @@
     "pug-brunch-static": "^3.0.0",
     "replace": "^1.0.0",
     "stylus-brunch": "^2.10.1",
-    "tachyons": "^4.11.1",
     "uglify-js-brunch": "^2.10.0"
   },
   "dependencies": {
-    "mithril": "^1.1.6"
+    "mithril": "^1.1.6",
+    "tachyons": "^4.11.1"
   }
 }

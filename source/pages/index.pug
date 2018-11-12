@@ -10,4 +10,7 @@ block headMeta
 
 block body
   h1= title
-  img(src='/assets/test.jpg')
+  .nested
+    p This is a #[strong strong] tag
+    p.element
+      img(src='/assets/test.jpg')

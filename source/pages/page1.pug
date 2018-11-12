@@ -8,8 +8,8 @@ block headMeta
   title= title
   meta(name='description' content=title)
 
+block headScripts
+  script(defer src='/assets/page1.js')
+
 block body
   h1= title
-
-block footScripts
-  script(src='/assets/page1.js')
