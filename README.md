@@ -18,10 +18,10 @@
 ### Content
 
 - Pug layouts accept YAML and JSON frontmatter.
+- Create a 404.pug and Netlify will automaticall use it.
 
 ## To Do
 
-- Starter styles
 - ENV / secrets handling
 - Pug conventions for loading assets
 - Optional brunch CommonJS definition?
