@@ -42,6 +42,5 @@
 
 ## To Do
 
-- Netlify functions
 - Pug conventions for loading assets
 - RimRaf, node path, etc.
