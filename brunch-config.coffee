@@ -2,6 +2,7 @@
 # http://brunch.io/docs/config.html
 #
 
+require('dotenv/config')
 makeInputOutput = require('./config/input-output')
 makeAutoRequire = require('./config/auto-require')
 rewriteAssets = require('./config/rewrite-assets')

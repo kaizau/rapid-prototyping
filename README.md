@@ -10,11 +10,16 @@
 ### General
 
 - ESLint pre-commit hook automatically attempts to fix JS errors.
-- Airbnb settings are quite strict. Edit `.eslintrc.js` as needed.
-- Prefer root (non-relative) imports
+  - Airbnb settings are quite strict. Edit `.eslintrc.js` as needed.
+- Prefer root (non-relative) imports:
   - Pug: `extends /_shared/layout` (root)
   - JS: `import '_shared/util';`
   - Stylus: `@import _shared/config`
+- Secrets should be stored in `.env`.
+  - Make a copy from `.env.example`. Do not check this file in.
+  - Import or require `dotenv/config` at the beginning of any script to
+    populate `process.env.*`.
+  - Existing ENV variables will never be overwritten.
 
 ### /source/**.pug
 
@@ -37,7 +42,6 @@
 
 ## To Do
 
-- ENV / secrets handling
 - Netlify functions
 - Pug conventions for loading assets
 - RimRaf, node path, etc.

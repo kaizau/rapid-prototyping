@@ -27,3 +27,6 @@ node_modules/
 # Brunch
 tmp/
 public/
+
+# Env
+.env

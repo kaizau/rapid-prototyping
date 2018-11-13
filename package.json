@@ -27,6 +27,7 @@
     "brunch": "^2.10.17",
     "brunch-static": "^1.2.1",
     "clean-css-brunch": "^2.10.0",
+    "dotenv": "^6.1.0",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
