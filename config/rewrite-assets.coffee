@@ -2,7 +2,7 @@ fs = require('fs')
 path = require('path')
 replace = require('replace')
 
-exports.rewriteAssets = (file) ->
+module.exports = (file) ->
   dir = path.dirname(file)
   manifest = JSON.parse(fs.readFileSync(file, 'utf8'))
   Object.keys(manifest).forEach((key) ->

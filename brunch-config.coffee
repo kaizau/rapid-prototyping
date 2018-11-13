@@ -1,28 +1,28 @@
-{scanFiles} = require('./brunch/scan-files')
-{rewriteAssets} = require('./brunch/rewrite-assets')
-{configureAutoRequire} = require('./brunch/auto-require')
-cjs = require('commonjs-require-definition')
-
 #
 # http://brunch.io/docs/config.html
 #
 
+makeInputOutput = require('./config/input-output')
+makeAutoRequire = require('./config/auto-require')
+rewriteAssets = require('./config/rewrite-assets')
+cjs = require('commonjs-require-definition')
+
 exports.paths =
-  watched: [ 'source/components', 'source/pages', 'source/static' ]
+  watched: ['source/', 'static/']
 
 exports.conventions =
-  ignored: /\/_(?!shared\/.+\.js)/
-  assets: /source\/static\//
+  ignored: /\/_(?!.+\.js)/
+  assets: /static\//
 
-exports.files = scanFiles('source/components', 'assets')
+exports.files = makeInputOutput('source/', 'assets/')
 
 exports.modules =
   definition: (file) ->
-    if file.indexOf('/global.js') > -1 then cjs else ''
+    if file.indexOf('global.js') > -1 then cjs else ''
   nameCleaner: (file) ->
-    file.replace('source/components/', '')
+    file.replace('source/', '')
 
-configureAutoRequire(exports)
+exports.modules.autoRequire = makeAutoRequire(exports)
 
 exports.plugins =
   cleancss:
@@ -34,6 +34,7 @@ exports.plugins =
         processors: [
           require('pug-brunch-static')(
             pretty: true
+            basedir: 'source/'
             fileMatch: /\.pug$/
             fileTransform: (file) ->
               file.replace(/\.pug$/, '.html')

@@ -1,4 +1,4 @@
-exports.configureAutoRequire = (config) ->
+module.exports = (config) ->
   scripts = config.files.javascripts.entryPoints
   output = {}
 
@@ -8,4 +8,4 @@ exports.configureAutoRequire = (config) ->
     output[component] = [autoRequired]
   )
 
-  config.modules.autoRequire = output
+  output

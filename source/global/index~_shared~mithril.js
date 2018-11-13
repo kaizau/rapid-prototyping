@@ -1,5 +1,4 @@
-// import m from 'mithril';
-import { delegateEvent } from '../_shared/util';
+import { delegateEvent } from '_shared/util';
 
 console.log('Hello, universe.');
 

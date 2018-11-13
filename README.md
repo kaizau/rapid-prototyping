@@ -7,25 +7,30 @@
 
 ## Hints
 
-### Components
+### General
 
-- `/source/components/global/*.js` must be loaded on every page.
-- Each `/source/components/*/join.styl` is compiled to `/public/assets/*.css`.
-- Each `/source/components/*/entry{,~*}.js` is compiled to `/public/assets/*.js`.
-- To bundle npm modules, name the file `entry~module1~module2~etc.js`.
-- To bundle `_shared` JS modules, name the file `entry~_shared~module1~etc.js`.
-- Only modules actually `import`ed will be included.
+- ESLint pre-commit hook automatically attempts to fix JS errors.
+- Airbnb settings are quite strict. Edit `.eslintrc.js` as needed.
+- Prefer absolute imports (`import '_shared/util'`, `@import /_shared/config`).
 
-### Pages
+### /source/**.pug
 
-- Pug layouts accept YAML and JSON frontmatter.
+- Each `/source/**.pug` is compiled to `/public/**.html`.
+- Layouts accept YAML and JSON frontmatter.
 - Create a 404.pug and Netlify will automatically use it.
 - Prefer `<script defer ...>` in the `<head>`.
 
-### Build
+### /source/*/*.js
 
-- ESLint pre-commit hook automatically attempts to fix errors.
-- Airbnb settings are quite strict. Edit `.eslintrc.js` as needed.
+- Each `/source/*/index{,~*}.js` is compiled to `/public/assets/*.js`.
+- To bundle npm modules, name the file `index~module1~module2~etc.js`.
+- To bundle `_shared` JS modules, name the file `index~_shared~module1~etc.js`.
+- `/source/global/*.js` must be loaded on every page.
+- Only modules actually `import`ed will be included.
+
+### /source/*/*.styl
+
+- Each `/source/*/index.styl` is compiled to `/public/assets/*.css`.
 
 ## To Do
 
