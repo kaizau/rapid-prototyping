@@ -5,7 +5,7 @@
 makeInputOutput = require('./config/input-output')
 makeAutoRequire = require('./config/auto-require')
 rewriteAssets = require('./config/rewrite-assets')
-cjs = require('commonjs-require-definition')
+cjs = require('commonjs-require-definition') # included with brunch
 
 exports.paths =
   watched: ['source/', 'static/']
@@ -14,7 +14,7 @@ exports.conventions =
   ignored: /\/_(?!.+\.js)/
   assets: /static\//
 
-exports.files = makeInputOutput('source/', 'assets/')
+exports.files = makeInputOutput('source/', 'assets/', 'js,styl')
 
 exports.modules =
   definition: (file) ->
@@ -44,9 +44,8 @@ exports.plugins =
     ]
   stylus:
     includeCss: true
-    plugins: [
-      require('autoprefixer-stylus')({ hideWarnings: true })
-    ]
+    paths: ['source/']
+    plugins: [require('autoprefixer-stylus')({hideWarnings: true})]
 
 if process.env.NODE_ENV == 'production'
   exports.hooks =

@@ -2,7 +2,7 @@ fs = require('fs')
 path = require('path')
 glob = require('glob-fs')()
 
-module.exports = (inDir, outDir) ->
+module.exports = (inDir, outDir, extensions) ->
   inDir = if inDir.slice(-1) == '/' then inDir else inDir + '/'
   outDir = if outDir.slice(-1) == '/' then outDir else outDir + '/'
   output =
@@ -11,7 +11,7 @@ module.exports = (inDir, outDir) ->
     javascripts:
       entryPoints: {}
 
-  glob.readdirSync(inDir + '**/index{,~*}.{js,styl}').forEach((file) ->
+  glob.readdirSync(inDir + "**/index{,~*}.{#{extensions}}").forEach((file) ->
     ext = path.extname(file)
     base = path.basename(file, ext)
     source = path.dirname(file)

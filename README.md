@@ -11,7 +11,10 @@
 
 - ESLint pre-commit hook automatically attempts to fix JS errors.
 - Airbnb settings are quite strict. Edit `.eslintrc.js` as needed.
-- Prefer absolute imports (`import '_shared/util'`, `@import /_shared/config`).
+- Prefer root (non-relative) imports
+  - Pug: `extends /_shared/layout` (root)
+  - JS: `import '_shared/util';`
+  - Stylus: `@import _shared/config`
 
 ### /source/**.pug
 
@@ -34,7 +37,6 @@
 
 ## To Do
 
-- Switch to node-sass
 - ENV / secrets handling
 - Netlify functions
 - Pug conventions for loading assets
