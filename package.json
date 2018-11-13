@@ -6,10 +6,9 @@
   "description": "An opinionated starting point for web projects",
   "private": true,
   "scripts": {
-    "clean": "rm -rf ./public",
-    "start": "npm run clean && npm run watch",
-    "watch": "node_modules/.bin/brunch watch --server",
-    "netlify": "node_modules/.bin/netlify-lambda serve services/netlify-source",
+    "clean": "rimraf public/*",
+    "start": "npm run clean && node_modules/.bin/brunch watch --server",
+    "start-netlify": "node_modules/.bin/netlify-lambda serve services/netlify-source",
     "build": "npm run clean && npm run node_modules/.bin/brunch build --production"
   },
   "husky": {
@@ -41,6 +40,7 @@
     "netlify-lambda": "^1.0.3",
     "pug-brunch-static": "^3.0.0",
     "replace": "^1.0.0",
+    "rimraf": "^2.6.2",
     "stylus-brunch": "^2.10.1",
     "uglify-js-brunch": "^2.10.0"
   },

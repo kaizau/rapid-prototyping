@@ -43,4 +43,3 @@
 ## To Do
 
 - Pug conventions for loading assets
-- RimRaf, node path, etc.
