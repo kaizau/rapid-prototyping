@@ -10,11 +10,7 @@ module.exports = {
   rules: {
     "arrow-body-style": "off",
     "camelcase": "off",
-    "prefer-destructuring": "off",
-    "import/no-extraneous-dependencies": [
-      "error",
-      {"devDependencies": ["services/**/*.js"]}
-    ]
+    "prefer-destructuring": "off"
   },
   settings: {
     "import/resolver": {

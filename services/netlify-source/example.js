@@ -1,7 +1,15 @@
 // https://www.netlify.com/docs/functions/#javascript-lambda-functions
 
-require('dotenv/config');
+// Configure production ENV on Netlify
+import 'dotenv/config';
+import respond from './_shared/respond';
 
-exports.handler = function (event, context, callback) {
-  callback(null, {});
-};
+export function handler(event, context, callback) {
+  // event.httpMethod
+  // event.headers
+  // event.queryStringParameters
+  // event.body
+
+
+  callback(null, respond(200, ':)'));
+}
