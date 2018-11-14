@@ -42,4 +42,5 @@
 
 ## To Do
 
+- CSS framework / conventions
 - Pug conventions for loading assets

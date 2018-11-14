@@ -7,9 +7,9 @@
   "private": true,
   "scripts": {
     "clean": "rimraf public/*",
-    "start": "npm run clean && node_modules/.bin/brunch watch --server",
-    "start-netlify": "node_modules/.bin/netlify-lambda serve services/netlify-source",
-    "build": "npm run clean && npm run node_modules/.bin/brunch build --production"
+    "start": "npm run clean && brunch watch --server",
+    "start-netlify": "netlify-lambda serve services/netlify-source",
+    "build": "npm run clean && npm run brunch build --production"
   },
   "husky": {
     "hooks": {
