@@ -43,4 +43,5 @@
 ## To Do
 
 - CSS framework / conventions
+- Purify CSS to reduce output
 - Pug conventions for loading assets

@@ -1,3 +1,4 @@
+import 'mithril';
 import { delegateEvent } from '_shared/util';
 
 console.log('Hello, universe.');
