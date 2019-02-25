@@ -1,15 +1,13 @@
 ---
-title: Hello, universe.
+title: Meta title
+description: Meta description
+variable: Hello, universe.
 ---
 
 extends /_shared/layout
 
-block headMeta
-  title= title
-  meta(name='description' content=title)
-
 block body
-  h1= title
+  h1= variable
   .nested
     .elements
       p This is a #[strong strong] tag

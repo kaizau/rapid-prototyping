@@ -6,21 +6,17 @@
   "description": "An opinionated starting point for web projects",
   "private": true,
   "scripts": {
-    "clean": "rimraf public/*",
     "start": "npm run clean && brunch watch --server",
-    "start-netlify": "netlify-lambda serve services/netlify-source",
-    "build": "npm run clean && npm run brunch build --production"
+    "build": "npm run clean && brunch build --production",
+    "start-functions": "netlify-lambda serve netlify-functions/source/",
+    "build-functions": "netlify-lambda build netlify-functions/source/",
+    "clean": "rimraf public/*",
+    "lint": "eslint --fix ."
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "npm run lint"
     }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
   },
   "devDependencies": {
     "autoprefixer-stylus": "^0.14.0",
@@ -34,7 +30,6 @@
     "glob-fs": "^0.1.7",
     "html-brunch-static": "^1.4.1",
     "husky": "^1.3.1",
-    "lint-staged": "^8.1.4",
     "netlify-lambda": "^1.4.2",
     "pug-brunch-static": "^3.0.1",
     "replace": "^1.0.1",

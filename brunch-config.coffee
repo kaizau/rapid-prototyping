@@ -3,9 +3,9 @@
 #
 
 require('dotenv/config')
-makeInputOutput = require('./config/input-output')
-makeAutoRequire = require('./config/auto-require')
-rewriteAssets = require('./config/rewrite-assets')
+entryPoints = require('./brunch-config/entry-points')
+autoRequire = require('./brunch-config/auto-require')
+rewriteAssets = require('./brunch-config/rewrite-assets')
 cjs = require('commonjs-require-definition') # included with brunch
 
 exports.paths =
@@ -15,7 +15,8 @@ exports.conventions =
   ignored: /\/_(?!.+\.js)/
   assets: /static\//
 
-exports.files = makeInputOutput('source/', 'assets/', 'js,styl')
+# Imports all source/*/index.{js,styl} as entry points
+exports.files = entryPoints('source/', 'assets/', 'js,styl')
 
 exports.modules =
   definition: (file) ->
@@ -23,7 +24,8 @@ exports.modules =
   nameCleaner: (file) ->
     file.replace('source/', '')
 
-exports.modules.autoRequire = makeAutoRequire(exports)
+# Makes every module self-executing
+exports.modules.autoRequire = autoRequire(exports)
 
 exports.plugins =
   cleancss:
@@ -38,6 +40,7 @@ exports.plugins =
             basedir: 'source/'
             fileMatch: /\.pug$/
             fileTransform: (file) ->
+              file = file.replace('index/index', 'index')
               file.replace(/\.pug$/, '.html')
           )
         ]
@@ -48,6 +51,7 @@ exports.plugins =
     paths: ['source/']
     plugins: [require('autoprefixer-stylus')({hideWarnings: true})]
 
+# For production builds, apply cachebusting hashes to all assets
 if process.env.NODE_ENV == 'production'
   exports.hooks =
     onCompile: () ->

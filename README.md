@@ -9,8 +9,7 @@
 
 ### General
 
-- ESLint pre-commit hook automatically attempts to fix JS errors.
-  - Airbnb settings are quite strict. Edit `.eslintrc.js` as needed.
+- ESLint pre-commit hook automatically attempts to fix JS errors and styles.
 - Prefer root (non-relative) imports:
   - Pug: `extends /_shared/layout` (root)
   - JS: `import '_shared/util';`
@@ -42,6 +41,7 @@
 
 ## To Do
 
+- Document Netlify functions
 - CSS framework / conventions
 - Purify CSS to reduce output
 - Pug conventions for loading assets
