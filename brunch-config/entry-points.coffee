@@ -36,4 +36,5 @@ module.exports = (inDir, outDir, extensions) ->
       output.stylesheets.joinTo[targetFile] = matchers
   )
 
+  console.log(output.javascripts.entryPoints)
   output

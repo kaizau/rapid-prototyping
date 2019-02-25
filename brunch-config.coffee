@@ -3,20 +3,18 @@
 #
 
 require('dotenv/config')
-entryPoints = require('./brunch-config/entry-points')
-autoRequire = require('./brunch-config/auto-require')
-rewriteAssets = require('./brunch-config/rewrite-assets')
 cjs = require('commonjs-require-definition') # included with brunch
 
 exports.paths =
   watched: ['source/', 'static/']
+  public: 'public/'
 
 exports.conventions =
   ignored: /\/_(?!.+\.js)/
   assets: /static\//
 
 # Imports all source/*/index.{js,styl} as entry points
-exports.files = entryPoints('source/', 'assets/', 'js,styl')
+exports.files = require('./brunch-config/entry-points')('source/', 'assets/', 'js,styl')
 
 exports.modules =
   definition: (file) ->
@@ -25,7 +23,7 @@ exports.modules =
     file.replace('source/', '')
 
 # Makes every module self-executing
-exports.modules.autoRequire = autoRequire(exports)
+exports.modules.autoRequire = require('./brunch-config/auto-require')(exports)
 
 exports.plugins =
   cleancss:
@@ -54,5 +52,4 @@ exports.plugins =
 # For production builds, apply cachebusting hashes to all assets
 if process.env.NODE_ENV == 'production'
   exports.hooks =
-    onCompile: () ->
-      rewriteAssets('./public/manifest.json')
+    onCompile: require('./brunch-config/cachebust')
