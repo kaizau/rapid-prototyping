@@ -10,11 +10,14 @@
 
 ### General
 
-- ESLint pre-commit hook automatically attempts to fix JS errors and styles.
-- Prefer root (non-relative) imports:
-  - Pug: `extends /_shared/layout` (root)
-  - JS: `import '_shared/util';`
+- Code is organized by "page namespaces".
+  - Related markup, styles, and scripts live in the same folder when possible.
+  - `source/global` includes styles and scripts that are loaded on all pages.
+  - `source/_shared` contains import-able, shared resources.
+- Prefer root (non-relative) imports.
+  - Pug: `extends /_shared/layout` (requires leading slash)
   - Stylus: `@import _shared/config`
+  - JS: `import '_shared/util';`
 - Secrets should be stored in `.env`.
   - Make a copy from `.env.example`. Do not check this file in.
   - Import or require `dotenv/config` at the beginning of any script to
@@ -23,22 +26,24 @@
 
 ### /source/**.pug
 
-- Each `/source/**.pug` is compiled to `/public/**.html`.
-- Layouts accept YAML and JSON frontmatter.
-- Create a 404.pug and Netlify will automatically use it.
-- Prefer `<script defer ...>` in the `<head>`.
+- Each `source/**.pug` is compiled to `public/**.html`.
+- Prefer `source/example/index.pug` over `source/example.pug`.
+- Create `source/404.pug` and Netlify will automatically use it.
+- Pages can have YAML and JSON frontmatter.
+  - `title` and `description` configure SEO metadata.
+- Prefer using `<script defer ...>` in the `<head>`.
 
-### /source/*/*.js
+### /source/**/index.js
 
-- Each `/source/*/index{,~*}.js` is compiled to `/public/assets/*.js`.
+- Each `source/**/index{,~*}.js` is compiled to `public/assets/**.js`.
 - To bundle npm modules, name the file `index~module1~module2~etc.js`.
 - To bundle `_shared` JS modules, name the file `index~_shared~module1~etc.js`.
-- `/source/global/*.js` must be loaded on every page.
-- Only modules actually `import`ed will be included.
+- Only modules actually `import`-ed will be included in the build.
 
-### /source/*/*.styl
+### /source/**/index.styl
 
-- Each `/source/*/index.styl` is compiled to `/public/assets/*.css`.
+- Each `source/**/index.styl` is compiled to `public/assets/**.css`.
+- Shared stylus variables live in `source/_shared/config.styl`.
 
 ## To Do
 
