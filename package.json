@@ -1,9 +1,9 @@
 {
-  "name": "web-project",
+  "name": "",
   "version": "1.0.0",
   "author": "k@kaizau.com",
-  "repository": "https://github.com/kaizau/starter-web",
-  "description": "An opinionated starting point for web projects",
+  "repository": "",
+  "description": "",
   "private": true,
   "scripts": {
     "start": "npm run clean && brunch watch --server",
