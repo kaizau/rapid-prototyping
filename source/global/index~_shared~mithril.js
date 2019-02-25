@@ -1,8 +1,5 @@
-import 'mithril';
-import { delegateEvent } from '_shared/util';
+import 'mithril'; // Includes Promise polyfill
+import { toArray } from '_shared/util';
 
-console.log('Hello, universe.');
-
-delegateEvent(document.querySelector('body'), 'p', 'click', (e) => {
-  console.log(`Clicked ${e.target.nodeName}`);
-});
+const images = toArray(document.querySelectorAll('img'));
+console.log('Images', images);

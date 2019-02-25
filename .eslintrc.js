@@ -10,7 +10,7 @@ module.exports = {
     sourceType: "module",
   },
   rules: {
-    "comma-dangle": ["warn", "only-multiline"],
+    "comma-dangle": ["warn", "always-multiline"],
     "indent": ["warn", 2],
     "linebreak-style": ["warn", "unix"],
     "no-console": "warn",
