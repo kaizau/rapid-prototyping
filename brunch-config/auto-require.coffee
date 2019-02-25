@@ -1,11 +1,8 @@
 module.exports = (config) ->
   scripts = config.files.javascripts.entryPoints
   output = {}
-
-  Object.keys(scripts).forEach((key) ->
-    autoRequired = config.modules.nameCleaner(key)
-    component = Object.keys(scripts[key])[0]
-    output[component] = [autoRequired]
-  )
-
+  for entry, value of scripts
+    moduleName = config.modules.nameCleaner(entry)
+    exit = Object.keys(value)[0]
+    output[exit] = [moduleName]
   output

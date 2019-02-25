@@ -5,16 +5,21 @@
 require('dotenv/config')
 cjs = require('commonjs-require-definition') # included with brunch
 
+# Used by custom brunch-config/* helpers
+exports.customPaths =
+  input: 'source/'
+  output: 'public/'
+  compiled: 'assets/'
+
 exports.paths =
   watched: ['source/', 'static/']
-  public: 'public/'
 
 exports.conventions =
   ignored: /\/_(?!.+\.js)/
   assets: /static\//
 
 # Imports all source/*/index.{js,styl} as entry points
-exports.files = require('./brunch-config/entry-points')('source/', 'assets/', 'js,styl')
+exports.files = require('./brunch-config/entry-points')(exports)
 
 exports.modules =
   definition: (file) ->
@@ -52,4 +57,4 @@ exports.plugins =
 # For production builds, apply cachebusting hashes to all assets
 if process.env.NODE_ENV == 'production'
   exports.hooks =
-    onCompile: require('./brunch-config/cachebust')
+    onCompile: require('./brunch-config/cachebust')(exports)

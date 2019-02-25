@@ -2,7 +2,9 @@ fs = require('fs')
 path = require('path')
 glob = require('glob-fs')()
 
-module.exports = (inDir, outDir, extensions) ->
+module.exports = (config) ->
+  inDir = config.customPaths.input
+  outDir = config.customPaths.compiled
   inDir = if inDir.slice(-1) == '/' then inDir else inDir + '/'
   outDir = if outDir.slice(-1) == '/' then outDir else outDir + '/'
   output =
@@ -11,7 +13,7 @@ module.exports = (inDir, outDir, extensions) ->
     javascripts:
       entryPoints: {}
 
-  glob.readdirSync(inDir + "**/index{,~*}.{#{extensions}}").forEach((file) ->
+  for file in glob.readdirSync(inDir + "**/index{,~*}.{js,styl}")
     ext = path.extname(file)
     base = path.basename(file, ext)
     source = path.dirname(file)
@@ -23,17 +25,15 @@ module.exports = (inDir, outDir, extensions) ->
       if base.indexOf('~') > -1
         modules = base.split('~')
         modules.shift()
-        modules.forEach((module) ->
+        for module in modules
           if module == '_shared'
             matchers.unshift("#{inDir}_shared/**/*")
           else
             matchers.unshift("node_modules/#{module}/**/*")
-        )
       output.javascripts.entryPoints[file] =
         "#{targetFile}": matchers
 
     else
       output.stylesheets.joinTo[targetFile] = matchers
-  )
 
   output

@@ -17,8 +17,9 @@ hashPath = (path) ->
   outputFile = "#{base}-#{hash}#{ext}"
   pathlib.join(dir, outputFile)
 
-module.exports = (files, assets) ->
-  publicFolder = 'public/'
+outputFolder = null
+
+onCompile = (files, assets) ->
   generated = files.concat(
     assets.map(
       (asset) -> path: asset.destinationPath
@@ -28,12 +29,16 @@ module.exports = (files, assets) ->
   for asset in generated
     hashedPath = hashPath(asset.path)
     fs.renameSync(asset.path, hashedPath)
-    original = pathlib.relative(publicFolder, asset.path)
-    hashed = pathlib.relative(publicFolder, hashedPath)
+    original = pathlib.relative(outputFolder, asset.path)
+    hashed = pathlib.relative(outputFolder, hashedPath)
     replace(
       regex: original
       replacement: hashed
-      paths: [publicFolder]
+      paths: [outputFolder]
       recursive: true
       silent: true
     )
+
+module.exports = (config) ->
+  outputFolder = config.customPaths.output
+  onCompile
