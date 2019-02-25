@@ -1,6 +1,6 @@
 fs = require('fs')
 path = require('path')
-glob = require('glob-fs')()
+glob = require('glob')
 
 module.exports = (config) ->
   inDir = config.customPaths.input
@@ -13,7 +13,8 @@ module.exports = (config) ->
     javascripts:
       entryPoints: {}
 
-  for file in glob.readdirSync(inDir + "**/index{,~*}.{js,styl}")
+  files = glob.sync(inDir + "**/index{,~*}.{js,styl}")
+  for file in files
     ext = path.extname(file)
     base = path.basename(file, ext)
     source = path.dirname(file)
