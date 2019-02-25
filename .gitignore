@@ -9,7 +9,6 @@
 *.vi
 *~
 *.sass-cache
-npm-debug.log*
 
 # OS or Editor folders
 .DS_Store
@@ -23,6 +22,7 @@ Thumbs.db
 
 # NPM
 node_modules/
+npm-debug.log*
 
 # Brunch
 tmp/

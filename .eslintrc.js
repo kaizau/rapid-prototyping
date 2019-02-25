@@ -1,22 +1,16 @@
-// https://github.com/airbnb/javascript
 // https://eslint.org/docs/user-guide/configuring
 
 module.exports = {
-  extends: "airbnb-base",
+  extends: "eslint:recommended",
   env: {
     browser: true,
-    es6: true
+    es6: true,
   },
   rules: {
-    "arrow-body-style": "off",
-    "camelcase": "off",
-    "prefer-destructuring": "off"
-  },
-  settings: {
-    "import/resolver": {
-      node: {
-        paths: ["source"]
-      }
-    }
+    "comma-dangle": ["warn", "only-multiline"],
+    "indent": ["warn", 2],
+    "linebreak-style": ["warn", "unix"],
+    "no-trailing-spaces": "warn",
+    "space-before-function-paren": ["warn", "never"],
   }
 };
