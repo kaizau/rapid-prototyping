@@ -1,9 +1,10 @@
 # An opinionated starting point for web projects
 
-- [**Brunch**](https://brunch.io/docs/config) for markup and asset optimizations.
-- [**Mithril**](https://mithril.js.org/api.html) for SPAs and JS utilities.
+- [**Brunch**](https://brunch.io/docs/config) for static site generation.
+- [**Pug**](https://pugjs.org/) (and [companion plugin](https://github.com/bmatcuk/pug-brunch-static)) for flexible static markup.
 - [**Stylus**](http://stylus-lang.com/) for flexible styling.
-- [**Netlify**](https://www.netlify.com/docs/netlify-toml-reference/) for static hosting.
+- [**Mithril**](https://mithril.js.org/api.html) for SPAs and JS utilities.
+- [**Netlify**](https://www.netlify.com/docs/netlify-toml-reference/) for static hosting, auth, and serverless functions.
 
 ## Hints
 
