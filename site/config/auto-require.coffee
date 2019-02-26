@@ -1,5 +1,5 @@
 module.exports = (config) ->
-  scripts = config.entryPoints
+  scripts = config.entryPoints.javascripts.entryPoints
   output = {}
   for entry, value of scripts
     moduleName = config.nameCleaner(entry)
