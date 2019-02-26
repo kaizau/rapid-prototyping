@@ -17,6 +17,7 @@ module.exports = {
     "no-duplicate-imports": "warn",
     "no-trailing-spaces": "warn",
     "no-var": "warn",
+    "no-undef": "warn",
     "no-unused-vars": "warn",
     "space-before-function-paren": ["warn", "never"],
   },
