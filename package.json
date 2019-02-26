@@ -8,9 +8,9 @@
   "scripts": {
     "start": "npm run clean && npm run lint && brunch watch --server",
     "build": "npm run clean && brunch build --production",
-    "start-functions": "netlify-lambda serve netlify-functions/source/",
-    "build-functions": "netlify-lambda build netlify-functions/source/",
-    "clean": "rimraf public/*",
+    "start-functions": "netlify-lambda serve functions/source/",
+    "build-functions": "netlify-lambda build functions/source/",
+    "clean": "rimraf publish/*",
     "lint": "eslint --fix ."
   },
   "devDependencies": {

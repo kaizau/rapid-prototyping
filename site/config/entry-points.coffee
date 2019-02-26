@@ -4,7 +4,7 @@ glob = require('glob')
 
 module.exports = (config) ->
   inDir = config.customPaths.input
-  outDir = config.customPaths.compiled
+  outDir = config.customPaths.assetPrefix
   inDir = if inDir.slice(-1) == '/' then inDir else inDir + '/'
   outDir = if outDir.slice(-1) == '/' then outDir else outDir + '/'
   output =
