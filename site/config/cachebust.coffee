@@ -40,5 +40,5 @@ onCompile = (files, assets) ->
     )
 
 module.exports = (config) ->
-  outputFolder = config.customPaths.output
+  outputFolder = config.publishRoot
   onCompile

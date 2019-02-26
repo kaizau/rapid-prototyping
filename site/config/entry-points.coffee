@@ -3,8 +3,8 @@ path = require('path')
 glob = require('glob')
 
 module.exports = (config) ->
-  inDir = config.customPaths.input
-  outDir = config.customPaths.assetPrefix
+  inDir = config.compileSource
+  outDir = config.publishAssets
   inDir = if inDir.slice(-1) == '/' then inDir else inDir + '/'
   outDir = if outDir.slice(-1) == '/' then outDir else outDir + '/'
   output =

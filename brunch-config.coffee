@@ -5,31 +5,32 @@
 require('dotenv/config')
 cjs = require('commonjs-require-definition') # included with brunch
 
-# Used by custom brunch-config/* helpers
-exports.customPaths =
-  input: 'site/source/'
-  output: 'publish/site/'
-  assetPrefix: 'assets/'
+config = {}
+config.compileSource = 'site/source/'
+config.compileStatic = 'site/static/'
+config.publishRoot = 'publish/site/'
+config.publishAssets = 'assets/'
+config.nameCleaner = (file) ->
+  file.replace(config.compileSource, '')
+
+# Import all site/source/**/index.{js,styl} as entry points
+config.entryPoints = require('./site/config/entry-points')(config)
 
 exports.paths =
-  watched: ['site/source/', 'site/static/']
-  public: 'publish/site/'
+  watched: [config.compileSource, config.compileStatic]
+  public: config.publishRoot
 
 exports.conventions =
   ignored: /\/_(?!.+\.js)/
-  assets: /site\/static\//
+  assets: config.compileStatic + '*'
 
-# Imports all site/source/*/index.{js,styl} as entry points
-exports.files = require('./site/config/entry-points')(exports)
+exports.files = config.entryPoints
 
 exports.modules =
   definition: (file) ->
     if file.indexOf('global.js') > -1 then cjs else ''
-  nameCleaner: (file) ->
-    file.replace('site/source/', '')
-
-# Makes every module self-executing
-exports.modules.autoRequire = require('./site/config/auto-require')(exports)
+  nameCleaner: config.nameCleaner
+  autoRequire: require('./site/config/auto-require')(config)
 
 exports.plugins =
   cleancss:
@@ -41,7 +42,7 @@ exports.plugins =
         processors: [
           require('pug-brunch-static')(
             pretty: true
-            basedir: 'site/source/'
+            basedir: config.compileSource
             fileMatch: /\.pug$/
             fileTransform: (file) ->
               file = file.replace('index/index', 'index')
@@ -52,10 +53,10 @@ exports.plugins =
     ]
   stylus:
     includeCss: true
-    paths: ['site/source/']
+    paths: [config.compileSource]
     plugins: [require('autoprefixer-stylus')({hideWarnings: true})]
 
 # For production builds, apply cachebusting hashes to all assets
 if process.env.NODE_ENV == 'production'
   exports.hooks =
-    onCompile: require('./site/config/cachebust')(exports)
+    onCompile: require('./site/config/cachebust')(config)
