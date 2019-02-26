@@ -22,7 +22,8 @@ exports.paths =
 
 exports.conventions =
   ignored: /\/_(?!.+\.js)/
-  assets: config.compileStatic + '*'
+  # FIXME
+  assets: config.compileStatic + '**'
 
 exports.files = config.entryPoints
 
