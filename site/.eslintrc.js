@@ -2,8 +2,7 @@
 
 module.exports = {
   env: {
-    browser: false,
-    es6: true,
-    node: true,
+    browser: true,
+    node: false,
   },
 };
