@@ -7,32 +7,22 @@
   "private": true,
   "scripts": {
     "start": "npm run clean && npm run lint && npm run dev-site",
-    "dev-site": "node -r now-env node_modules/.bin/brunch watch --server --port 8888",
+    "build": "npm run clean && npm run dev-build",
+    "dev-site": "node -r now-env node_modules/.bin/parcel site/**/*.pug --port 8888 --no-source-maps",
     "dev-api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
-    "dev-build": "node -r now-env node_modules/.bin/brunch build --production",
-    "clean": "rimraf publish/*",
+    "dev-build": "node -r now-env node_modules/.bin/parcel build site/**/*.pug --no-source-maps",
+    "clean": "rimraf dist/*",
     "lint": "eslint --fix .",
-    "now-build": "npm run clean && brunch build --production"
+    "now-build": "npm run clean && parcel build site/**.pug --no-source-maps"
   },
   "devDependencies": {
-    "autoprefixer-stylus": "^0.14.0",
-    "babel-brunch": "^7.0.0",
-    "brunch": "^2.10.17",
-    "brunch-static": "^1.2.3",
-    "clean-css-brunch": "^2.10.0",
-    "envstatic-brunch": "^0.1.0",
     "eslint": "^5.14.1",
-    "express": "^4.16.4",
-    "express-http-proxy": "^1.5.1",
-    "glob": "^7.1.3",
-    "html-brunch-static": "^1.4.1",
     "now-env": "kaizau/now-env",
     "now-lambda-runner": "^3.3.0",
-    "pug-brunch-static": "^3.0.1",
-    "replace": "^1.0.1",
+    "parcel": "^1.12.0",
+    "pug": "^2.0.3",
     "rimraf": "^2.6.3",
-    "stylus-brunch": "^2.10.1",
-    "uglify-js-brunch": "^2.10.0"
+    "stylus": "^0.54.5"
   },
   "dependencies": {
     "mithril": "^1.1.6",

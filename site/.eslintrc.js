@@ -6,6 +6,7 @@ module.exports = {
     node: false,
   },
   globals: {
-    $ENV: 'readonly',
+    // For ENV var replacement
+    process: 'readonly',
   },
 };
