@@ -8,9 +8,9 @@
   "scripts": {
     "start": "npm run clean && npm run lint && npm run dev-site",
     "build": "npm run clean && npm run dev-build",
-    "dev-site": "node -r now-env node_modules/.bin/parcel site/**/*.pug --port 8888 --no-source-maps",
+    "dev-site": "node -r now-env node_modules/.bin/parcel watch site/{,**/}*.pug --no-source-maps",
     "dev-api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
-    "dev-build": "node -r now-env node_modules/.bin/parcel build site/**/*.pug --no-source-maps",
+    "dev-build": "node -r now-env node_modules/.bin/parcel build site/{,**/}*.pug --no-source-maps",
     "clean": "rimraf dist/*",
     "lint": "eslint --fix .",
     "now-build": "npm run clean && parcel build site/**.pug --no-source-maps"
