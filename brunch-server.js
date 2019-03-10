@@ -11,9 +11,9 @@ module.exports = (config, callback) => {
   app.use(express.static(path.join(__dirname, config.path)));
 
   app.all('/api/*', proxy(apiURL, {
-    proxyErrorHandler: (err, res, next) => {
-      return res.send("ERROR: Restart dev API with `npm run dev-api`");
-    }
+    proxyErrorHandler: (err, res) => {
+      return res.send('ERROR: Restart dev API with `npm run dev-api`');
+    },
   }));
 
   app.listen(config.port, () => {

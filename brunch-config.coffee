@@ -7,7 +7,7 @@ cjs = require('commonjs-require-definition') # included with brunch
 config = {}
 config.compileSource = 'site/source/'
 config.compileStatic = 'site/static/'
-config.publishRoot = 'publish/site/'
+config.publishRoot = 'publish/'
 config.publishAssets = 'assets/'
 config.nameCleaner = (file) ->
   file.replace(config.compileSource, '')

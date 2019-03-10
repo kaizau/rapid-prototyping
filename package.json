@@ -6,8 +6,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "npm run clean && npm run lint && npm run dev",
-    "dev": "npm run dev-site & npm run dev-api",
+    "start": "npm run clean && npm run lint && npm run dev-site",
     "dev-site": "node -r now-env node_modules/.bin/brunch watch --server --port 8888",
     "dev-api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
     "dev-build": "node -r now-env node_modules/.bin/brunch build --production",
