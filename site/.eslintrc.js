@@ -5,4 +5,7 @@ module.exports = {
     browser: true,
     node: false,
   },
+  globals: {
+    $ENV: 'readonly',
+  },
 };

@@ -13,7 +13,7 @@ module.exports = (config) ->
     javascripts:
       entryPoints: {}
 
-  files = glob.sync(inDir + "**/index{,~*}.{js,styl}")
+  files = glob.sync(inDir + "**/index{,#{config.moduleSeparator}*}.{js,styl}")
   for file in files
     ext = path.extname(file)
     base = path.basename(file, ext)
@@ -23,8 +23,8 @@ module.exports = (config) ->
     matchers = ["#{source}/**/*"]
 
     if ext == '.js'
-      if base.indexOf('~') > -1
-        modules = base.split('~')
+      if base.indexOf(config.moduleSeparator) > -1
+        modules = base.split(config.moduleSeparator)
         modules.shift()
         for module in modules
           if module == '_shared'

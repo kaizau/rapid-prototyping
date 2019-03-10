@@ -3,7 +3,6 @@ const proxy = require('express-http-proxy');
 const path = require('path');
 const app = express();
 
-// TODO Investigate controlling now-lambda-runner from here
 module.exports = (config, callback) => {
   const siteURL = `http://${config.hostname}:${config.port}/`;
   const apiURL = `http://${config.hostname}:${config.port + 1}/api/`;
@@ -12,7 +11,7 @@ module.exports = (config, callback) => {
 
   app.all('/api/*', proxy(apiURL, {
     proxyErrorHandler: (err, res) => {
-      return res.send('ERROR: Restart dev API with `npm run dev-api`');
+      return res.send('Dev API error. Restart with `npm run dev-api`.');
     },
   }));
 

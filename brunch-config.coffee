@@ -5,12 +5,16 @@
 cjs = require('commonjs-require-definition') # included with brunch
 
 config = {}
+config.moduleSeparator = '+'
 config.compileSource = 'site/source/'
 config.compileStatic = 'site/static/'
 config.publishRoot = 'publish/'
 config.publishAssets = 'assets/'
 config.nameCleaner = (file) ->
   file.replace(config.compileSource, '')
+
+envVars =
+  EXAMPLE_BUILD_VAR: process.env.EXAMPLE_BUILD_VAR
 
 # Import all site/source/**/index.{js,styl} as entry points
 config.entryPoints = require('./site/config/entry-points')(config)
@@ -35,6 +39,11 @@ exports.plugins =
   cleancss:
     keepSpecialComments: 0
     removeEmpty: true
+  envstatic:
+    prefix: '$ENV.'
+    pattern: /\$ENV\.(\w+)/g
+    referenceFiles: /\.(js|css)$/
+    variables: envVars
   static:
     processors: [
       require('html-brunch-static')(
