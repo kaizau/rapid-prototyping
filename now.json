@@ -1,0 +1,43 @@
+{
+  "name": "project-name",
+  "alias": "www.project.domain",
+  "version": 2,
+
+  "build": {
+    "env": {
+      "EXAMPLE_BUILD_VAR": "@example-build-var"
+    }
+  },
+
+  "env": {
+    "EXAMPLE_FUNCTION_VAR": "@example-function-var"
+  },
+
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/static-build",
+      "distDir": "publish"
+    },
+    {
+      "src": "functions/*.js",
+      "use": "@now/node"
+    }
+  ],
+
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/functions/$1.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/.*",
+      "status": 404,
+      "dest": "/404.html"
+    }
+  ]
+}

@@ -24,8 +24,6 @@ Thumbs.db
 node_modules/
 npm-debug.log*
 
-# Build
+# Now
 publish/
-
-# Env
-.env
+now-secrets.json

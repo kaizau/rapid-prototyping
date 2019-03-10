@@ -4,7 +4,7 @@
 - [**Pug**](https://pugjs.org/) (and [companion plugin](https://github.com/bmatcuk/pug-brunch-static)) for flexible static markup.
 - [**Stylus**](http://stylus-lang.com/) for flexible styling.
 - [**Mithril**](https://mithril.js.org/api.html) for SPAs and JS utilities.
-- [**Netlify**](https://www.netlify.com/docs/netlify-toml-reference/) for static hosting, auth, and serverless functions.
+- [**Now**](https://zeit.co/docs/) for static hosting and serverless functions.
 
 ## Hints
 
@@ -28,7 +28,6 @@
 
 - Each `source/**.pug` is compiled to `public/**.html`.
 - Prefer `source/example/index.pug` over `source/example.pug`.
-- Create `source/404.pug` and Netlify will automatically use it.
 - Pages can have YAML and JSON frontmatter.
   - `title` and `description` configure SEO metadata.
 - Prefer using `<script defer ...>` in the `<head>`.
@@ -47,7 +46,5 @@
 
 ## To Do
 
-- Document Netlify functions
-- CSS framework / conventions
 - Purify CSS to reduce output
 - Pug conventions for loading assets

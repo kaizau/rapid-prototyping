@@ -2,7 +2,6 @@
 # http://brunch.io/docs/config.html
 #
 
-require('dotenv/config')
 cjs = require('commonjs-require-definition') # included with brunch
 
 config = {}
