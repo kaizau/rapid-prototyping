@@ -20,6 +20,7 @@
     "del": "^4.0.0",
     "file-loader": "^3.0.1",
     "gulp": "^4.0.0",
+    "gulp-add-src": "^1.0.0",
     "gulp-manifest-replace": "^1.0.1-rc.1",
     "gulp-pug": "^4.0.1",
     "mini-css-extract-plugin": "^0.5.0",

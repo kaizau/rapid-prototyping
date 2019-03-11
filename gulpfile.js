@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const pug = require('gulp-pug');
+const addSrc = require('gulp-add-src');
 const replace = require('gulp-manifest-replace');
 const del = require('del');
 
@@ -27,10 +28,17 @@ function assets(cb, watch) {
     loader: 'stylus-loader',
     options: { 'include css': true, include: 'site/' },
   };
+  // css-loader is buggy when handling url() in stylus, so we disable it. Only
+  // included because otherwise webpack complains. Instead, use absolute paths,
+  // which will get replaced by gulp.
+  const cssLoader = {
+    loader: 'css-loader',
+    options: { url: false },
+  };
   const webpackConfig = {
     mode: isProd ? 'production' : 'development',
     watch: watch === 'watch',
-    context: pathlib.join(__dirname, 'site'),
+    context: pathlib.join(__dirname, 'site/'),
     entry() {
       const entries = {};
       glob.sync('site/**/index.{js,styl,css.styl}').forEach(entry => {
@@ -41,7 +49,10 @@ function assets(cb, watch) {
       });
       return entries;
     },
-    output: { filename: isProd ? '[name].[chunkhash:8].js' : '[name].js' },
+    output: {
+      path: pathlib.join(__dirname, 'dist'),
+      filename: isProd ? '[name].[chunkhash:8].js' : '[name].js',
+    },
     plugins: [
       new webpack.EnvironmentPlugin(env),
       new MiniCssExtractPlugin({
@@ -60,11 +71,11 @@ function assets(cb, watch) {
         },
         {
           test: /(?!\.css).{4}\.styl$/,
-          use: ['style-loader', 'css-loader', stylusLoader],
+          use: ['style-loader', cssLoader, stylusLoader],
         },
         {
           test: /\.css\.styl$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader', stylusLoader],
+          use: [MiniCssExtractPlugin.loader, cssLoader, stylusLoader],
         },
       ],
     },
@@ -83,6 +94,7 @@ function html() {
       basedir: 'site/',
       locals: env
     }))
+    .pipe(addSrc('dist/**/*.{css,js}')) // Also rewrite Webpack output
     .pipe(replace({ manifest }))
     .pipe(dest('dist/'));
 }
