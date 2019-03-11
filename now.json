@@ -5,11 +5,13 @@
 
   "build": {
     "env": {
+      "EXAMPLE_VAR": "Hello from EXAMPLE_VAR",
       "EXAMPLE_BUILD_VAR": "@example-build-var"
     }
   },
 
   "env": {
+    "EXAMPLE_VAR": "Hello from EXAMPLE_VAR",
     "EXAMPLE_FUNCTION_VAR": "@example-function-var"
   },
 

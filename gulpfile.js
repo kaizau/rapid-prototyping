@@ -15,6 +15,7 @@ if (process.env.USE_LOCAL_ENV) require('now-env');
 
 const env = {
   NODE_ENV: process.env.NODE_ENV || 'production',
+  EXAMPLE_VAR: process.env.EXAMPLE_VAR,
   EXAMPLE_BUILD_VAR: process.env.EXAMPLE_BUILD_VAR,
 };
 
@@ -53,6 +54,13 @@ function assets(cb, watch) {
       path: pathlib.join(__dirname, 'dist'),
       filename: isProd ? '[name].[chunkhash:8].js' : '[name].js',
     },
+    resolve: {
+      alias: {
+        // Duplicated to allow stylus to use same alias
+        '~shared': pathlib.resolve(__dirname, 'site', '_shared'),
+        'shared': pathlib.resolve(__dirname, 'site', '_shared'),
+      },
+    },
     plugins: [
       new webpack.EnvironmentPlugin(env),
       new MiniCssExtractPlugin({
@@ -63,11 +71,15 @@ function assets(cb, watch) {
     module: {
       rules: [
         {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+          options: { cacheDirectory: true },
+        },
+        {
           test: /\.(png|jpg|gif|svg)$/,
-          use: [{
-            loader: 'file-loader',
-            options: { name: isProd ? '[path][name].[hash:8].[ext]' : '[path][name].[ext]' },
-          }],
+          loader: 'file-loader',
+          options: { name: isProd ? '[path][name].[hash:8].[ext]' : '[path][name].[ext]' },
         },
         {
           test: /(?!\.css).{4}\.styl$/,
