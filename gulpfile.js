@@ -1,7 +1,7 @@
 const fs = require('fs');
 const pathlib = require('path');
 const glob = require('glob');
-const { src, dest, series, parallel, watch } = require('gulp');
+const { src, dest, series, watch } = require('gulp');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -21,7 +21,7 @@ const env = {
 // Transforms site/* to dist/* with webpack, stylus, pug
 //
 
-function assets(cb) {
+function assets(cb, watch) {
   const isProd = env.NODE_ENV === 'production';
   const stylusLoader = {
     loader: 'stylus-loader',
@@ -29,6 +29,7 @@ function assets(cb) {
   };
   const webpackConfig = {
     mode: isProd ? 'production' : 'development',
+    watch: watch === 'watch',
     context: pathlib.join(__dirname, 'site'),
     entry() {
       const entries = {};
@@ -90,13 +91,9 @@ function html() {
 // Public Tasks
 //
 
-const compile = series(clean, assets, html)
+exports.default = series(clean, assets, html);
 
-exports.default = compile;
-
-exports.watch = function watchTask() {
-  watch('site/**/*', { ignoreInitial: false }, compile);
-}
+exports.watch = series(clean, activateWatch);
 
 //
 // Utilities
@@ -104,6 +101,12 @@ exports.watch = function watchTask() {
 
 function clean() {
   return del('dist/');
+}
+
+function activateWatch() {
+  watch('dist/manifest.json', html);
+  watch('site/**/*.pug', html);
+  assets(function noop() {}, 'watch');
 }
 
 function createWebpackEntry(entries, entry) {
