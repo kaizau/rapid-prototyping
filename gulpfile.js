@@ -8,7 +8,8 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-manifest-replace');
-const purgecss = require('gulp-purgecss');
+const purgeCss = require('gulp-purgecss');
+const cleanCss = require('gulp-clean-css');
 const del = require('del');
 
 // ENV vars passed to webpack and pug
@@ -29,8 +30,13 @@ const isProd = env.NODE_ENV === 'production';
 function assets(cb, watch) {
   const stylusLoader = {
     loader: 'stylus-loader',
-    options: { 'include css': true, include: 'site/' },
+    options: {
+      'include css': true,
+      include: 'site/',
+      preferPathResolver: 'webpack',
+    },
   };
+
   // css-loader is buggy when handling url() in stylus, so we disable it. Only
   // included because otherwise webpack complains. Instead, use absolute paths,
   // which will get replaced by gulp.
@@ -38,6 +44,7 @@ function assets(cb, watch) {
     loader: 'css-loader',
     options: { url: false },
   };
+
   const webpackConfig = {
     mode: isProd ? 'production' : 'development',
     watch: watch === 'watch',
@@ -119,17 +126,22 @@ function html() {
   return task.pipe(dest('dist/'));
 }
 
-function purge(cb) {
+function optimize(cb) {
   if (!isProd) {
     cb(); return;
   }
 
   return src('dist/**/*.css')
-    .pipe(purgecss({ content: ['dist/**/*.html'] }))
+    .pipe(purgeCss({ content: ['dist/**/*.html'] }))
+    .pipe(cleanCss({
+      level: {
+        1: { specialComments: false },
+      },
+    }))
     .pipe(dest('dist/'));
 }
 
-const finalize = series(html, purge);
+const finalize = series(html, optimize);
 
 //
 // Public Tasks

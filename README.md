@@ -64,6 +64,5 @@ npm run prod
 
 ## To Do
 
-- Webpack optimization
 - Autoprefixer
 - Pug conventions for loading assets
