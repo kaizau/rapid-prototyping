@@ -1,3 +1,4 @@
-export function toArray(list) {
-  return Array.prototype.slice.call(list);
+export function log(...args) {
+  // eslint-disable-next-line no-console
+  console.log(...args);
 }

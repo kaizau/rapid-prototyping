@@ -94,6 +94,7 @@ function assets(cb, watch) {
   };
 
   webpack(webpackConfig, function webpackCb(error, stats) {
+    // eslint-disable-next-line no-console
     console.log(stats.toString({ colors: true, modules: false }));
     cb(error);
   });
@@ -104,7 +105,7 @@ function html() {
   return src(['site/**/*.pug', '!site/_shared/**'])
     .pipe(pug({
       basedir: 'site/',
-      locals: env
+      locals: env,
     }))
     .pipe(addSrc('dist/**/*.{css,js}')) // Also rewrite Webpack output
     .pipe(replace({ manifest }))

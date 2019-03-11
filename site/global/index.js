@@ -1,4 +1,4 @@
-import m from 'mithril';
-import { toArray } from '~shared/util';
+import 'mithril'; // Includes Promise polyfill
+import { log } from '~shared/util';
 
-console.log('>', process.env.EXAMPLE_BUILD_VAR);
+log('>', process.env.EXAMPLE_BUILD_VAR);

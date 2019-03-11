@@ -64,5 +64,6 @@ npm run prod
 
 ## To Do
 
-- Purify CSS to reduce output
+- More useful CSS starter
+- Autoprefixer / Purify CSS to reduce output
 - Pug conventions for loading assets
