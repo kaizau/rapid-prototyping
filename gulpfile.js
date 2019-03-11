@@ -1,19 +1,17 @@
 const fs = require('fs');
 const pathlib = require('path');
 const { src, dest, series, parallel, watch } = require('gulp');
-const stylus = require('gulp-stylus');
 const autoprefixer = require('gulp-autoprefixer');
 const named = require('vinyl-named');
-const eslint = require('gulp-eslint');
-const babel = require('gulp-babel');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const pug = require('gulp-pug');
 const replace = require('gulp-manifest-replace');
 const del = require('del');
 
-// ENV vars passed webpack and pug
+// ENV vars passed to webpack and pug
 if (process.env.USE_LOCAL_ENV) require('now-env');
 
 const env = {
@@ -22,47 +20,51 @@ const env = {
 };
 
 //
-// Static Site Compilation
-// - Transforms site/* to dist/* with webpack, stylus, pug
-// - Using webpack as a simple js bundler, nothing more
+// Transforms site/* to dist/* with webpack, stylus, pug
 //
 
-const assets = parallel(copied, css, js);
-const all = series(assets, html);
-
-function copied() {
-  return src(['site/**/*.{jpg,png,gif,svg}', '!site/_shared/**'])
-    .pipe(dest('dist/'));
-}
-
-function css() {
-  return src('site/**/index.styl')
-    .pipe(stylus({
-      include: 'site/',
-      'include css': true,
-      compress: env.NODE_ENV === 'production',
-    }))
-    .pipe(autoprefixer())
-    .pipe(dest('dist/'));
-}
-
-function js() {
+function assets() {
   const isProd = env.NODE_ENV === 'production';
-  const mode = isProd ? 'production' : 'development';
-  const filename = isProd ? '[name].[chunkhash:8].js' : '[name].js';
-  const plugins = [
-    new ManifestPlugin(),
-    new webpack.EnvironmentPlugin(env),
-  ];
-  const webpackConfig = { mode, plugins, output: { filename } };
+  const stylusConfig = {
+    loader: 'stylus-loader',
+    options: { 'include css': true, include: 'site/' },
+  };
+  const webpackConfig = {
+    mode: isProd ? 'production' : 'development',
+    output: { filename: isProd ? '[name].[chunkhash:8].js' : '[name].js' },
+    plugins: [
+      new webpack.EnvironmentPlugin(env),
+      new MiniCssExtractPlugin({
+        filename: isProd ? '[name].[chunkhash:8].css' : '[name].css',
+      }),
+      new ManifestPlugin(),
+    ],
+    module: {
+      rules: [
+        {
+          test: /\.(jpg|png|gif|svg)$/,
+          use: ['file-loader'],
+        },
+        {
+          test: /(?!\.css).{4}\.styl$/,
+          use: ['style-loader', 'css-loader', stylusConfig],
+        },
+        {
+          test: /\.css\.styl$/,
+          use: [MiniCssExtractPlugin.loader, 'css-loader', stylusConfig],
+        },
+      ],
+    },
+  };
 
-  return src('site/**/index.js')
+  return src(['site/**/index.{js,styl,css.styl}', 'site/**/*.{jpg,png,gif,svg}'])
     .pipe(named(file => {
       const basename = file.dirname + '/' + file.stem;
-      return pathlib.relative(file.base, basename);
+      const relative = pathlib.relative(file.base, basename);
+      return relative.slice(-4) === '.css' ? relative.slice(0, -4) : relative;
     }))
-    .pipe(eslint({ fix: true }))
-    .pipe(babel())
+    // .pipe(eslint({ fix: true }))
+    // .pipe(babel())
     .pipe(webpackStream(webpackConfig, webpack))
     .pipe(dest('dist/'));
 }
@@ -82,11 +84,12 @@ function html() {
 // Public Tasks
 //
 
-exports.default = series(clean, all);
+const compile = series(clean, assets, html)
+
+exports.default = compile;
 
 exports.watch = function watchTask() {
-  clean();
-  watch('site/**/*', { ignoreInitial: false }, all);
+  watch('site/**/*', { ignoreInitial: false }, compile);
 }
 
 //
