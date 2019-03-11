@@ -8,17 +8,17 @@
   "scripts": {
     "start": "serve --listen 8888",
     "api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
-    "watch": "gulp watch",
-    "build": "gulp production",
+    "dev": "USE_LOCAL_ENV=1 NODE_ENV=development gulp watch",
+    "prod": "USE_LOCAL_ENV=1 gulp watch",
     "now-build": "gulp production"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "@babel/register": "^7.0.0",
-    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "del": "^4.0.0",
     "gulp": "^4.0.0",
+    "gulp-autoprefixer": "^6.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-eslint": "^5.0.0",
     "gulp-pug": "^4.0.1",
