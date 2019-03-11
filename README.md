@@ -65,5 +65,5 @@ npm run prod
 ## To Do
 
 - Webpack optimization
-- Autoprefixer / Purge CSS to reduce output
+- Autoprefixer
 - Pug conventions for loading assets

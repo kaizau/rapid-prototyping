@@ -8,6 +8,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-manifest-replace');
+const purgecss = require('gulp-purgecss');
 const del = require('del');
 
 // ENV vars passed to webpack and pug
@@ -19,12 +20,13 @@ const env = {
   EXAMPLE_BUILD_VAR: process.env.EXAMPLE_BUILD_VAR,
 };
 
+const isProd = env.NODE_ENV === 'production';
+
 //
 // Transforms site/* to dist/* with webpack, stylus, pug
 //
 
 function assets(cb, watch) {
-  const isProd = env.NODE_ENV === 'production';
   const stylusLoader = {
     loader: 'stylus-loader',
     options: { 'include css': true, include: 'site/' },
@@ -101,22 +103,39 @@ function assets(cb, watch) {
 }
 
 function html() {
-  const manifest = JSON.parse(fs.readFileSync('./dist/manifest.json', 'utf8'));
-  return src(['site/**/*.pug', '!site/_shared/**'])
+  let task = src(['site/**/*.pug', '!site/_shared/**'])
     .pipe(pug({
       basedir: 'site/',
       locals: env,
-    }))
-    .pipe(addSrc('dist/**/*.{css,js}')) // Also rewrite Webpack output
-    .pipe(replace({ manifest }))
+    }));
+
+  if (isProd) {
+    // Rewrite assets in html and webpack output
+    const manifest = JSON.parse(fs.readFileSync('./dist/manifest.json', 'utf8'));
+    task = task.pipe(addSrc('dist/**/*.{css,js}'))
+      .pipe(replace({ manifest }));
+  }
+
+  return task.pipe(dest('dist/'));
+}
+
+function purge(cb) {
+  if (!isProd) {
+    cb(); return;
+  }
+
+  return src('dist/**/*.css')
+    .pipe(purgecss({ content: ['dist/**/*.html'] }))
     .pipe(dest('dist/'));
 }
+
+const finalize = series(html, purge);
 
 //
 // Public Tasks
 //
 
-exports.default = series(clean, assets, html);
+exports.default = series(clean, assets, finalize);
 
 exports.watch = series(clean, activateWatch);
 
@@ -129,8 +148,8 @@ function clean() {
 }
 
 function activateWatch() {
-  watch('dist/manifest.json', html);
-  watch('site/**/*.pug', html);
+  watch('dist/manifest.json', finalize);
+  watch('site/**/*.pug', finalize);
   assets(function noop() {}, 'watch');
 }
 
