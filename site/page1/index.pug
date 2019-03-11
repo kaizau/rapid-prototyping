@@ -1,23 +1,14 @@
-doctype html
-html
-  head
-    meta(charset='utf-8')
-    meta(content='IE=edge' http-equiv='X-UA-Compatible')
-    meta(name='viewport' content='width=device-width, initial-scale=1')
+extends /_shared/layout.pug
 
-    title TITLE
-    meta(name='description' content='DESCRIPTION')
+append headScripts
+  script(defer src='./index.js')
 
-    link(rel='stylesheet' href='../shared/global.styl')
-    //- script(defer src='https://cdn.polyfill.io/v2/polyfill.min.js')
-    script(defer src='../shared/global.js')
-    script(defer src='./index.js')
+block body
+  nav
+    ul
+      li
+        a(href='/') Home
+      li
+        strong Page 1
 
-  body
-    nav
-      ul
-        li
-          a(href='/') Home
-        li
-          strong Page 1
-    .AppRoot
+  .AppRoot

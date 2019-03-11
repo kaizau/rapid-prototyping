@@ -6,24 +6,27 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "npm run clean && npm run lint && npm run dev-site",
-    "build": "npm run clean && npm run dev-build",
-    "dev-site": "node -r now-env node_modules/.bin/parcel watch site/{,**/}*.pug --no-source-maps",
-    "dev-api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
-    "dev-build": "node -r now-env node_modules/.bin/parcel build site/{,**/}*.pug --no-source-maps",
-    "clean": "rimraf dist/*",
-    "lint": "eslint --fix .",
-    "now-build": "npm run clean && parcel build site/**.pug --no-source-maps"
+    "start": "serve --listen 8888",
+    "api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
+    "watch": "gulp watch",
+    "build": "gulp production",
+    "now-build": "gulp production"
   },
   "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
     "@babel/register": "^7.0.0",
-    "eslint": "^5.14.1",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
+    "del": "^4.0.0",
     "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-eslint": "^5.0.0",
     "gulp-pug": "^4.0.1",
     "gulp-stylus": "^2.7.0",
     "now-env": "kaizau/now-env",
     "now-lambda-runner": "^3.3.0",
-    "rimraf": "^2.6.3"
+    "serve": "^10.1.2",
+    "webpack-stream": "^5.2.1"
   },
   "dependencies": {
     "mithril": "^1.1.6",

@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(content='IE=edge' http-equiv='X-UA-Compatible')
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+
+    block headMeta
+
+    block headStyles
+      link(rel='stylesheet' href='/global/index.css')
+
+    block headScripts
+      //- script(defer src='https://cdn.polyfill.io/v2/polyfill.min.js')
+      script(defer src='/global/index.js')
+
+  body
+    block body
+
+    block footScripts
