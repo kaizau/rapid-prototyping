@@ -1,15 +1,16 @@
 extends /_shared/layout.pug
 
 block body
-  nav
+  nav.Nav.horizontal.Container.padded
     ul
       li
-        strong Home
+        strong.nav-item Home
       li
-        a(href='/page1/') Page 1
+        a.nav-item(href='/page1/') Page 1
 
-  h1 Hello, universe.
-  p These are inline #[strong strong] and #[em em] tags.
-  p Example variable: #{EXAMPLE_BUILD_VAR}
-  p
-    img(src='./index/test.jpg')
+  .Container.padded
+    h1 Hello, universe.
+    p These are inline #[strong strong] and #[em em] tags.
+    p Example variable: #{EXAMPLE_BUILD_VAR}
+    p
+      img(src='/index/test.jpg')

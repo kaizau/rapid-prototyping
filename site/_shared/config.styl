@@ -1,2 +1,99 @@
-$body-bg = #eee
-$body-text = #444
+//
+// Variables
+//
+
+$fonts-system = -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
+
+
+
+//
+// Helpers
+//
+
+$clearfix
+  zoom: 1
+  &:before, &:after
+    content: " "
+    display: table
+  &:after
+    clear: both
+
+clearfix()
+  @extend $clearfix
+
+$hide-text
+  border: 0
+  color: transparent
+  font: 0 / 0 a
+  text-shadow: none
+
+hide-text()
+  @extend $hide-text
+
+$hide-visually
+  border: 0
+  clip: rect(0 0 0 0)
+  height: 1px
+  margin: -1px
+  overflow: hidden
+  padding: 0
+  position: absolute
+  width: 1px
+
+hide-visually()
+  @extend $hide-visually
+
+$naked-list
+  list-style: none
+  list-style-image: none
+  padding-left: 0
+
+naked-list()
+  @extend $naked-list
+
+background-image-2x(filename, ext, size = 'cover', suffix = '.2x')
+  background-image: url(filename + '.' + ext)
+  +retina
+    background-image: url(filename + suffix + '.' + ext)
+    if size
+      background-size(size)
+
+$fill-container
+  bottom: 0
+  left: 0
+  right: 0
+  top: 0
+  position: absolute
+
+fill-container()
+  @extend $fill-container
+
+aspect-ratio(width, height)
+  height: auto;
+  position: relative;
+
+  &:before
+    content: ''
+    display: block
+    padding-top: (height / width) * 100%
+    width: 100%
+
+//
+// Media Queries
+//
+
+above(width)
+  @media only screen and (min-width: width)
+    {block}
+
+below(width)
+  @media only screen and (max-width: (width - 1px))
+    {block}
+
+between(min, max)
+  @media only screen and (min-width: min) and (max-width: (max - 1px))
+    {block}
+
+retina()
+  @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)
+    {block}

@@ -4,11 +4,12 @@ append headScripts
   script(defer src='/page1/index.js')
 
 block body
-  nav
+  nav.Nav.horizontal.Container.padded
     ul
       li
-        a(href='/') Home
+        a.nav-item(href='/') Home
       li
-        strong Page 1
+        strong.nav-item Page 1
 
-  .AppRoot
+  .Container.padded
+    .AppRoot

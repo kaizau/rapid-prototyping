@@ -36,7 +36,8 @@
     "webpack-manifest-plugin": "^2.0.4"
   },
   "dependencies": {
+    "normalize.css": "^8.0.1",
     "mithril": "^1.1.6",
-    "normalize.css": "^8.0.1"
+    "purecss": "^1.0.0"
   }
 }

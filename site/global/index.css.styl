@@ -1,6 +1,66 @@
 @import '~shared/config'
 
+//
+// https://purecss.io/
+// A starting point, intended to be replaced as the project matures.
+//
+
+@import '~normalize.css/normalize.css'
+@import '~purecss/build/grids-responsive.css'
+@import '~purecss/build/buttons.css'
+@import '~purecss/build/forms.css'
+
+//
+// Structure
+//
+
+html
+  box-sizing: border-box
+
+*, *:before, *:after
+  box-sizing: inherit
+
 body
-  background: $body-bg
-  color: $body-text
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
+  background: #fff
+  color: #444
+  font-size: 16px
+  font-family: $fonts-system
+  line-height: 1.5
+
+img
+  max-width: 100%
+  height: auto
+  display: block
+
+.Container
+  margin: 0 auto
+  max-width: 1200px
+
+.Container.padded
+.Container.h-padded
+  padding-left: 2em
+  padding-right: 2em
+
+.Container.padded
+.Container.v-padded
+  padding-bottom: 2em
+  padding-top: 2em
+
+.Nav
+  ul, ol
+    naked-list()
+
+  &.horizontal
+    li
+      display: inline-block
+
+    .nav-item
+      display: block
+      padding: .5em
+
+//
+// Custom
+//
+
+.Nav
+  background: url('/global/bg.png')

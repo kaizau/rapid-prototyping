@@ -5,6 +5,7 @@ const App = {
     return m('.App', [
       m('h1', 'Page 1'),
       m('p', '(Rendered by mithril.js)'),
+      m('p', m('img', {src: '/index/test.jpg'})),
     ]);
   },
 };
