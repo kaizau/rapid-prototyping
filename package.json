@@ -10,7 +10,7 @@
     "dev-site": "node -r now-env node_modules/.bin/brunch watch --server --port 8888",
     "dev-api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
     "dev-build": "node -r now-env node_modules/.bin/brunch build --production",
-    "clean": "rimraf publish/*",
+    "clean": "rimraf dist/*",
     "lint": "eslint --fix .",
     "now-build": "npm run clean && brunch build --production"
   },

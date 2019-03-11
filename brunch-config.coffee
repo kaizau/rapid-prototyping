@@ -8,7 +8,7 @@ config = {}
 config.moduleSeparator = '+'
 config.compileSource = 'site/source/'
 config.compileStatic = 'site/static/'
-config.publishRoot = 'publish/'
+config.publishRoot = 'dist/'
 config.publishAssets = 'assets/'
 config.nameCleaner = (file) ->
   file.replace(config.compileSource, '')

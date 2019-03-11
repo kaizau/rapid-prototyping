@@ -16,8 +16,7 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@now/static-build",
-      "distDir": "publish"
+      "use": "@now/static-build"
     },
     {
       "src": "functions/*.js",

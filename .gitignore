@@ -25,5 +25,5 @@ node_modules/
 npm-debug.log*
 
 # Now
-publish/
+dist/
 now-secrets.json
