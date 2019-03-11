@@ -21,12 +21,14 @@
     "gulp-autoprefixer": "^6.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-eslint": "^5.0.0",
+    "gulp-manifest-replace": "^1.0.1-rc.1",
     "gulp-pug": "^4.0.1",
     "gulp-stylus": "^2.7.0",
     "now-env": "kaizau/now-env",
     "now-lambda-runner": "^3.3.0",
     "serve": "^10.1.2",
     "vinyl-named": "^1.1.0",
+    "webpack-manifest-plugin": "^2.0.4",
     "webpack-stream": "^5.2.1"
   },
   "dependencies": {

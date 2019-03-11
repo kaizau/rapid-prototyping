@@ -1,13 +1,16 @@
-const { src, dest, series, parallel, watch } = require('gulp');
-const named = require('vinyl-named');
+const fs = require('fs');
 const pathlib = require('path');
+const { src, dest, series, parallel, watch } = require('gulp');
 const stylus = require('gulp-stylus');
 const autoprefixer = require('gulp-autoprefixer');
+const named = require('vinyl-named');
 const eslint = require('gulp-eslint');
 const babel = require('gulp-babel');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const pug = require('gulp-pug');
+const replace = require('gulp-manifest-replace');
 const del = require('del');
 
 // ENV vars passed webpack and pug
@@ -23,8 +26,6 @@ const env = {
 // - Transforms site/* to dist/* with webpack, stylus, pug
 // - Using webpack as a simple js bundler, nothing more
 //
-// TODO
-// - data pipeline
 
 const assets = parallel(copied, css, js);
 const all = series(assets, html);
@@ -46,8 +47,15 @@ function css() {
 }
 
 function js() {
-  const mode = env.NODE_ENV === 'production' ? 'production' : 'development';
-  const filename = env.NODE_ENV === 'production' ? '[name].[chunkhash:8].js' : '[name].js';
+  const isProd = env.NODE_ENV === 'production';
+  const mode = isProd ? 'production' : 'development';
+  const filename = isProd ? '[name].[chunkhash:8].js' : '[name].js';
+  const plugins = [
+    new ManifestPlugin(),
+    new webpack.EnvironmentPlugin(env),
+  ];
+  const webpackConfig = { mode, plugins, output: { filename } };
+
   return src('site/**/index.js')
     .pipe(named(file => {
       const basename = file.dirname + '/' + file.stem;
@@ -55,20 +63,18 @@ function js() {
     }))
     .pipe(eslint({ fix: true }))
     .pipe(babel())
-    .pipe(webpackStream({
-      mode,
-      output: { filename },
-      plugins: [ new webpack.EnvironmentPlugin(env) ]
-    }))
+    .pipe(webpackStream(webpackConfig, webpack))
     .pipe(dest('dist/'));
 }
 
 function html() {
+  const manifest = JSON.parse(fs.readFileSync('./dist/manifest.json', 'utf8'));
   return src(['site/**/*.pug', '!site/_shared/**'])
     .pipe(pug({
       basedir: 'site/',
       locals: env
     }))
+    .pipe(replace({ manifest }))
     .pipe(dest('dist/'));
 }
 

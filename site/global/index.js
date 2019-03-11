@@ -1,1 +1,1 @@
-console.log(process.env.EXAMPLE_BUILD_VAR);
+console.log('>', process.env.EXAMPLE_BUILD_VAR);
