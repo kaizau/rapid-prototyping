@@ -1,10 +1,8 @@
 const fs = require('fs');
 const pathlib = require('path');
+const glob = require('glob');
 const { src, dest, series, parallel, watch } = require('gulp');
-const autoprefixer = require('gulp-autoprefixer');
-const named = require('vinyl-named');
 const webpack = require('webpack');
-const webpackStream = require('webpack-stream');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const pug = require('gulp-pug');
@@ -23,14 +21,25 @@ const env = {
 // Transforms site/* to dist/* with webpack, stylus, pug
 //
 
-function assets() {
+function assets(cb) {
   const isProd = env.NODE_ENV === 'production';
-  const stylusConfig = {
+  const stylusLoader = {
     loader: 'stylus-loader',
     options: { 'include css': true, include: 'site/' },
   };
   const webpackConfig = {
     mode: isProd ? 'production' : 'development',
+    context: pathlib.join(__dirname, 'site'),
+    entry() {
+      const entries = {};
+      glob.sync('site/**/index.{js,styl,css.styl}').forEach(entry => {
+        createWebpackEntry(entries, entry);
+      });
+      glob.sync('site/**/*.{png,jpg,gif,svg}').forEach(entry => {
+        createWebpackEntry(entries, entry);
+      });
+      return entries;
+    },
     output: { filename: isProd ? '[name].[chunkhash:8].js' : '[name].js' },
     plugins: [
       new webpack.EnvironmentPlugin(env),
@@ -42,31 +51,28 @@ function assets() {
     module: {
       rules: [
         {
-          test: /\.(jpg|png|gif|svg)$/,
-          use: ['file-loader'],
+          test: /\.(png|jpg|gif|svg)$/,
+          use: [{
+            loader: 'file-loader',
+            options: { name: isProd ? '[path][name].[hash:8].[ext]' : '[path][name].[ext]' },
+          }],
         },
         {
           test: /(?!\.css).{4}\.styl$/,
-          use: ['style-loader', 'css-loader', stylusConfig],
+          use: ['style-loader', 'css-loader', stylusLoader],
         },
         {
           test: /\.css\.styl$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader', stylusConfig],
+          use: [MiniCssExtractPlugin.loader, 'css-loader', stylusLoader],
         },
       ],
     },
   };
 
-  return src(['site/**/index.{js,styl,css.styl}', 'site/**/*.{jpg,png,gif,svg}'])
-    .pipe(named(file => {
-      const basename = file.dirname + '/' + file.stem;
-      const relative = pathlib.relative(file.base, basename);
-      return relative.slice(-4) === '.css' ? relative.slice(0, -4) : relative;
-    }))
-    // .pipe(eslint({ fix: true }))
-    // .pipe(babel())
-    .pipe(webpackStream(webpackConfig, webpack))
-    .pipe(dest('dist/'));
+  webpack(webpackConfig, function webpackCb(error, stats) {
+    console.log(stats.toString({ colors: true, modules: false }));
+    cb(error);
+  });
 }
 
 function html() {
@@ -98,4 +104,14 @@ exports.watch = function watchTask() {
 
 function clean() {
   return del('dist/');
+}
+
+function createWebpackEntry(entries, entry) {
+  const relative = pathlib.relative('site/', entry);
+  const dir = pathlib.dirname(relative);
+  const ext = pathlib.extname(relative);
+  const base = pathlib.basename(pathlib.basename(relative, ext), '.css');
+  const key = pathlib.join(dir, base);
+  entries[key] = entries[key] || [];
+  entries[key].push('./' + relative);
 }
