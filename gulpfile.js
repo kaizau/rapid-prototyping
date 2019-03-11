@@ -1,4 +1,6 @@
 const { src, dest, series, parallel, watch } = require('gulp');
+const named = require('vinyl-named');
+const pathlib = require('path');
 const stylus = require('gulp-stylus');
 const eslint = require('gulp-eslint');
 const babel = require('gulp-babel');
@@ -12,11 +14,13 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 
 //
 // Static Site Compilation
-// - Transforms site/* to dist/* with babel, stylus, pug
+// - Transforms site/* to dist/* with webpack, stylus, pug
+// - Using webpack as a simple js bundler, nothing more
 //
 // TODO
 // - data pipeline
 // - production
+// - consider rolling all compilation into webpack
 
 const assets = parallel(copied, css, js);
 const all = series(assets, markup);
@@ -34,10 +38,18 @@ function css() {
 
 function js() {
   return src('site/**/index.js')
+    .pipe(named(file => {
+      const basename = file.dirname + '/' + file.stem;
+      return pathlib.relative(file.base, basename);
+    }))
     .pipe(eslint({ fix: true }))
+    // TODO Handle babel, process.env replacement, etc in webpack
     .pipe(babel())
     .pipe(webpack({
-      mode: 'development'
+      mode: 'development',
+      output: {
+        filename: '[name].js',
+      },
     }))
     .pipe(dest('dist/'));
 }
