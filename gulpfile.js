@@ -19,6 +19,7 @@ if (process.env.USE_LOCAL_ENV) require('now-env');
 const config = {
   source: 'site',
   output: 'dist',
+  fileExts: ['png', 'jpg', 'gif', 'svg'],
   env: {
     NODE_ENV: process.env.NODE_ENV || 'production',
     EXAMPLE_VAR: process.env.EXAMPLE_VAR,
@@ -64,15 +65,24 @@ function assets(cb) {
       modules: false,
     }));
 
+    // Concat commons.js with core.js
     config.manifest = JSON.parse(fs.readFileSync(`./${config.output}/manifest.json`, 'utf8'));
     const commons = pathlib.join(config.output, config.manifest['commons.js']);
     const core = pathlib.join(config.output, config.manifest['global/index.js']);
     const concat = fs.readFileSync(commons) + fs.readFileSync(core);
     fs.writeFileSync(core, concat);
 
-    // TODO Cleanup [images].js and commons.js
-
-    cb(error);
+    // Cleanup image entry points and commons.js
+    const cleanup = [commons];
+    Object.keys(config.manifest).forEach(file => {
+      const ext = pathlib.extname(file).slice(1);
+      if (config.fileExts.indexOf(ext) > -1) {
+        const key = file.slice(0, file.lastIndexOf('.')) + '.js';
+        const js = pathlib.join(config.output, config.manifest[key]);
+        cleanup.push(js);
+      }
+    })
+    del(cleanup).then(() => cb(error));
   });
 }
 

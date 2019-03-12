@@ -31,7 +31,8 @@ module.exports = function makeWebpackConfig(config) {
     entry() {
       const entries = {};
       const compiled = glob.sync(`${config.source}/**/index.{js,styl,css.styl}`);
-      const copied = glob.sync(`${config.source}/**/*.{png,jpg,gif,svg}`);
+      const fileExts = config.fileExts.join(',');
+      const copied = glob.sync(`${config.source}/**/*.{${fileExts}}`);
       compiled.concat(copied).forEach(entry => {
         addWebpackEntry(entries, entry);
       });
@@ -64,7 +65,7 @@ module.exports = function makeWebpackConfig(config) {
           options: { cacheDirectory: true },
         },
         {
-          test: /\.(png|jpg|gif|svg)$/,
+          test: new RegExp(`\\.(${config.fileExts.join('|')})$`),
           loader: 'file-loader',
           options: { name: config.isProd ? '[path][name].[hash:8].[ext]' : '[path][name].[ext]' },
         },
