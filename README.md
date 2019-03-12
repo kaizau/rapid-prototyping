@@ -10,7 +10,7 @@
 ## Usage
 
 ```sh
-# start local dev server
+# start local dev server (/api/* proxied to api server)
 npm start
 
 # start local dev api server
@@ -59,10 +59,10 @@ npm run prod
 
 ### /site/**/index.styl
 
-- Each `site/**/index.styl` is compiled to `dist/**.css`.
+- Each `site/**/index.styl` is compiled to `dist/**/index.css`.
 - Import global stylus variables for every entry point `@import '~shared/config'`.
 
 ## To Do
 
-- Webpack commons chunk, DLL, optimizations
+- Rename global to core
 - Investigate implications of PurgeCSS + SPA (styles in core might need to be shared with SPA)

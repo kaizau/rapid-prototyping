@@ -1,5 +1,6 @@
 const fs = require('fs');
 const del = require('del');
+const pathlib = require('path');
 const { src, dest, series, watch } = require('gulp');
 const webpack = require('webpack');
 const pug = require('gulp-pug');
@@ -57,10 +58,20 @@ function assets(cb) {
   webpack(webpackConfig, function webpackCb(error, stats) {
     // eslint-disable-next-line no-console
     console.log(stats.toString({
+      chunks: false,
       colors: true,
       entrypoints: false,
       modules: false,
     }));
+
+    config.manifest = JSON.parse(fs.readFileSync(`./${config.output}/manifest.json`, 'utf8'));
+    const commons = pathlib.join(config.output, config.manifest['commons.js']);
+    const core = pathlib.join(config.output, config.manifest['global/index.js']);
+    const concat = fs.readFileSync(commons) + fs.readFileSync(core);
+    fs.writeFileSync(core, concat);
+
+    // TODO Cleanup [images].js and commons.js
+
     cb(error);
   });
 }
@@ -75,9 +86,8 @@ function html() {
   if (config.isProd) {
     // Rewrite hashed asset paths. Also rewrites for webpack output due to
     // css-loader url() bug.
-    const manifest = JSON.parse(fs.readFileSync(`./${config.output}/manifest.json`, 'utf8'));
     task = task.pipe(addSrc(`${config.output}/**/*.{css,js}`))
-      .pipe(replace({ manifest }));
+      .pipe(replace({ manifest: config.manifest }));
   }
 
   return task.pipe(dest(config.output));

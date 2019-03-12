@@ -79,12 +79,28 @@ module.exports = function makeWebpackConfig(config) {
       ],
     },
     optimization: {
-      // runtimeChunk: {
-      //   name: 'global/index',
-      // },
-      // splitChunks: {
-      //   chunks: 'initial',
-      // },
+      // Creates a commons.js that contains:
+      // - Shared webpack runtime code
+      // - Any module shared between 2 chunks
+      //
+      // Webpack doesn't allow concat'ing this directly to a single global
+      // entry point, so we do it with gulp instead.
+      // - https://github.com/webpack/webpack/issues/6977
+      runtimeChunk: {
+        name: 'commons',
+      },
+      splitChunks: {
+        cacheGroups: {
+          default: false,
+          vendors: false,
+          commons: {
+            name: 'commons',
+            chunks: 'all',
+            minChunks: 2,
+            reuseExistingChunk: true,
+          },
+        },
+      },
     },
   };
 
