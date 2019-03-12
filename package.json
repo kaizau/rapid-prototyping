@@ -7,8 +7,8 @@
   "private": true,
   "scripts": {
     "start": "npm run lint && serve --listen 8888 dist/",
-    "api": "npm run lint && node -r now-env node_modules/.bin/now-lambda --port 8889",
-    "dev": "npm run lint && USE_LOCAL_ENV=1 NODE_ENV=development gulp watch",
+    "api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
+    "dev": "USE_LOCAL_ENV=1 NODE_ENV=development gulp watch",
     "prod": "npm run lint && USE_LOCAL_ENV=1 gulp watch",
     "lint": "eslint --fix .",
     "now-build": "gulp"

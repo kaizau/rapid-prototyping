@@ -1,107 +1,58 @@
 const fs = require('fs');
-const pathlib = require('path');
-const glob = require('glob');
+const del = require('del');
 const { src, dest, series, watch } = require('gulp');
 const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-manifest-replace');
 const purgeCss = require('gulp-purgecss');
 const cleanCss = require('gulp-clean-css');
-const del = require('del');
-
-// ENV vars passed to webpack and pug
+const makeWebpackConfig = require('./webpack');
 if (process.env.USE_LOCAL_ENV) require('now-env');
 
-const env = {
-  NODE_ENV: process.env.NODE_ENV || 'production',
-  EXAMPLE_VAR: process.env.EXAMPLE_VAR,
-  EXAMPLE_BUILD_VAR: process.env.EXAMPLE_BUILD_VAR,
+//
+// Static site + serverless functions
+// Powered by Gulp, Webpack, Stylus, Pug, Zeit
+//
+
+const config = {
+  source: 'site/',
+  output: 'dist/',
+  env: {
+    NODE_ENV: process.env.NODE_ENV || 'production',
+    EXAMPLE_VAR: process.env.EXAMPLE_VAR,
+    EXAMPLE_BUILD_VAR: process.env.EXAMPLE_BUILD_VAR,
+  },
 };
-
-const isProd = env.NODE_ENV === 'production';
+config.isProd = config.env.NODE_ENV === 'production';
+const webpackConfig = makeWebpackConfig(config);
 
 //
-// Transforms site/* to dist/* with webpack, stylus, pug
+// Public Tasks
 //
 
-function assets(cb, watch) {
-  const stylusLoader = {
-    loader: 'stylus-loader',
-    options: {
-      'include css': true,
-      include: 'site/',
-      preferPathResolver: 'webpack',
-    },
-  };
+exports.default = series(clean, assets, html, optimize);
 
-  // css-loader is buggy when handling url() in stylus, so we disable it. Only
-  // included because otherwise webpack complains. Instead, use absolute paths,
-  // which will get replaced by gulp.
-  const cssLoader = {
-    loader: 'css-loader',
-    options: { url: false },
-  };
+exports.watch = series(clean, startWatch);
 
-  const webpackConfig = {
-    mode: isProd ? 'production' : 'development',
-    watch: watch === 'watch',
-    context: pathlib.join(__dirname, 'site/'),
-    entry() {
-      const entries = {};
-      glob.sync('site/**/index.{js,styl,css.styl}').forEach(entry => {
-        createWebpackEntry(entries, entry);
-      });
-      glob.sync('site/**/*.{png,jpg,gif,svg}').forEach(entry => {
-        createWebpackEntry(entries, entry);
-      });
-      return entries;
-    },
-    output: {
-      path: pathlib.join(__dirname, 'dist'),
-      filename: isProd ? '[name].[chunkhash:8].js' : '[name].js',
-    },
-    resolve: {
-      alias: {
-        // Duplicated to allow stylus to use same alias
-        '~shared': pathlib.resolve(__dirname, 'site', '_shared'),
-        'shared': pathlib.resolve(__dirname, 'site', '_shared'),
-      },
-    },
-    plugins: [
-      new webpack.EnvironmentPlugin(env),
-      new MiniCssExtractPlugin({
-        filename: isProd ? '[name].[chunkhash:8].css' : '[name].css',
-      }),
-      new ManifestPlugin(),
-    ],
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          loader: 'babel-loader',
-          options: { cacheDirectory: true },
-        },
-        {
-          test: /\.(png|jpg|gif|svg)$/,
-          loader: 'file-loader',
-          options: { name: isProd ? '[path][name].[hash:8].[ext]' : '[path][name].[ext]' },
-        },
-        {
-          test: /(?!\.css).{4}\.styl$/,
-          use: ['style-loader', cssLoader, stylusLoader],
-        },
-        {
-          test: /\.css\.styl$/,
-          use: [MiniCssExtractPlugin.loader, cssLoader, stylusLoader],
-        },
-      ],
-    },
-  };
+function startWatch() {
+  webpackConfig.watch = true;
+  watch([
+    `${config.output}/manifest.json`,
+    `${config.source}/**/*.pug`,
+  ], series(html, optimize));
+  assets(function noop() {});
+}
 
+//
+// Build Tasks
+//
+
+function clean() {
+  return del(config.output);
+}
+
+function assets(cb) {
   webpack(webpackConfig, function webpackCb(error, stats) {
     // eslint-disable-next-line no-console
     console.log(stats.toString({ colors: true, modules: false }));
@@ -110,67 +61,34 @@ function assets(cb, watch) {
 }
 
 function html() {
-  let task = src(['site/**/*.pug', '!site/_shared/**'])
+  let task = src([`${config.source}/**/*.pug`, `!${config.source}/_shared/**`])
     .pipe(pug({
-      basedir: 'site/',
-      locals: env,
+      basedir: config.source,
+      locals: config.env,
     }));
 
-  if (isProd) {
-    // Rewrite assets in html and webpack output
-    const manifest = JSON.parse(fs.readFileSync('./dist/manifest.json', 'utf8'));
-    task = task.pipe(addSrc('dist/**/*.{css,js}'))
+  if (config.isProd) {
+    // Rewrite hashed asset paths. Also rewrites for webpack output due to
+    // css-loader url() bug.
+    const manifest = JSON.parse(fs.readFileSync(`./${config.output}/manifest.json`, 'utf8'));
+    task = task.pipe(addSrc(`${config.output}/**/*.{css,js}`))
       .pipe(replace({ manifest }));
   }
 
-  return task.pipe(dest('dist/'));
+  return task.pipe(dest(config.output));
 }
 
 function optimize(cb) {
-  if (!isProd) {
+  if (!config.isProd) {
     cb(); return;
   }
 
-  return src('dist/**/*.css')
-    .pipe(purgeCss({ content: ['dist/**/*.html'] }))
+  return src(`${config.output}/**/*.css`)
+    .pipe(purgeCss({ content: [`${config.output}/**/*.html`] }))
     .pipe(cleanCss({
       level: {
         1: { specialComments: false },
       },
     }))
-    .pipe(dest('dist/'));
-}
-
-const finalize = series(html, optimize);
-
-//
-// Public Tasks
-//
-
-exports.default = series(clean, assets, finalize);
-
-exports.watch = series(clean, activateWatch);
-
-//
-// Utilities
-//
-
-function clean() {
-  return del('dist/');
-}
-
-function activateWatch() {
-  watch('dist/manifest.json', finalize);
-  watch('site/**/*.pug', finalize);
-  assets(function noop() {}, 'watch');
-}
-
-function createWebpackEntry(entries, entry) {
-  const relative = pathlib.relative('site/', entry);
-  const dir = pathlib.dirname(relative);
-  const ext = pathlib.extname(relative);
-  const base = pathlib.basename(pathlib.basename(relative, ext), '.css');
-  const key = pathlib.join(dir, base);
-  entries[key] = entries[key] || [];
-  entries[key].push('./' + relative);
+    .pipe(dest(config.output));
 }
