@@ -1,4 +1,6 @@
 const pathlib = require('path');
+const fs = require('fs');
+const del = require('del');
 const webpack = require('webpack');
 const glob = require('glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -6,7 +8,47 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const autoprefixer = require('autoprefixer-stylus');
 
 // Not a standard webpack.config.js function
-module.exports = function makeWebpackConfig(config) {
+module.exports = function runWebpack(config, watch) {
+  const webpackConfig = makeWebpackConfig(config);
+  if (watch === 'watch') {
+    webpackConfig.watch = true;
+  }
+
+  return new Promise(function webpackPromise(resolve, reject) {
+    webpack(webpackConfig, function webpackCb(error, stats) {
+      if (error) reject(error);
+
+      // eslint-disable-next-line no-console
+      console.log(stats.toString({
+        chunks: false,
+        colors: true,
+        entrypoints: false,
+        modules: false,
+      }));
+
+      // Concat commons.js with core.js
+      config.manifest = JSON.parse(fs.readFileSync(`./${config.output}/manifest.json`, 'utf8'));
+      const commons = pathlib.join(config.output, config.manifest['commons.js']);
+      const core = pathlib.join(config.output, config.manifest['global/index.js']);
+      const concat = fs.readFileSync(commons) + fs.readFileSync(core);
+      fs.writeFileSync(core, concat);
+
+      // Cleanup image entry points and commons.js
+      const cleanup = [commons];
+      Object.keys(config.manifest).forEach(file => {
+        const ext = pathlib.extname(file).slice(1);
+        if (config.fileExts.indexOf(ext) > -1) {
+          const key = file.slice(0, file.lastIndexOf('.')) + '.js';
+          const js = pathlib.join(config.output, config.manifest[key]);
+          cleanup.push(js);
+        }
+      })
+      del(cleanup).then(() => resolve());
+    });
+  });
+}
+
+function makeWebpackConfig(config) {
   const stylusLoader = {
     loader: 'stylus-loader',
     options: {

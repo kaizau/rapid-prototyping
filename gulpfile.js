@@ -1,14 +1,11 @@
-const fs = require('fs');
 const del = require('del');
-const pathlib = require('path');
 const { src, dest, series, watch } = require('gulp');
-const webpack = require('webpack');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-manifest-replace');
 const purgeCss = require('gulp-purgecss');
 const cleanCss = require('gulp-clean-css');
-const makeWebpackConfig = require('./webpack');
+const webpack = require('./webpack');
 if (process.env.USE_LOCAL_ENV) require('now-env');
 
 //
@@ -27,7 +24,6 @@ const config = {
   },
 };
 config.isProd = config.env.NODE_ENV === 'production';
-const webpackConfig = makeWebpackConfig(config);
 
 //
 // Public Tasks
@@ -38,13 +34,12 @@ exports.default = series(clean, assets, html, optimize);
 exports.watch = series(clean, startWatch);
 
 function startWatch() {
-  webpackConfig.watch = true;
   const paths = [
     `${config.output}/manifest.json`,
     `${config.source}/**/*.pug`,
   ]
   watch(paths, series(html, optimize));
-  assets(function noop() {});
+  webpack(config, 'watch');
 }
 
 //
@@ -55,35 +50,8 @@ function clean() {
   return del(config.output);
 }
 
-function assets(cb) {
-  webpack(webpackConfig, function webpackCb(error, stats) {
-    // eslint-disable-next-line no-console
-    console.log(stats.toString({
-      chunks: false,
-      colors: true,
-      entrypoints: false,
-      modules: false,
-    }));
-
-    // Concat commons.js with core.js
-    config.manifest = JSON.parse(fs.readFileSync(`./${config.output}/manifest.json`, 'utf8'));
-    const commons = pathlib.join(config.output, config.manifest['commons.js']);
-    const core = pathlib.join(config.output, config.manifest['global/index.js']);
-    const concat = fs.readFileSync(commons) + fs.readFileSync(core);
-    fs.writeFileSync(core, concat);
-
-    // Cleanup image entry points and commons.js
-    const cleanup = [commons];
-    Object.keys(config.manifest).forEach(file => {
-      const ext = pathlib.extname(file).slice(1);
-      if (config.fileExts.indexOf(ext) > -1) {
-        const key = file.slice(0, file.lastIndexOf('.')) + '.js';
-        const js = pathlib.join(config.output, config.manifest[key]);
-        cleanup.push(js);
-      }
-    })
-    del(cleanup).then(() => cb(error));
-  });
+function assets() {
+  return webpack(config);
 }
 
 function html() {
