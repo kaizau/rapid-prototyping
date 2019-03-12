@@ -65,7 +65,5 @@ npm run prod
 ## To Do
 
 - Proxy dev server to api server
-- Autoprefixer
-- Rename global to core, remove index file naming?
 - Webpack commons chunk, DLL, optimizations
 - Investigate implications of PurgeCSS + SPA (styles in core might need to be shared with SPA)

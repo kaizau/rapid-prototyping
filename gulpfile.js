@@ -16,8 +16,8 @@ if (process.env.USE_LOCAL_ENV) require('now-env');
 //
 
 const config = {
-  source: 'site/',
-  output: 'dist/',
+  source: 'site',
+  output: 'dist',
   env: {
     NODE_ENV: process.env.NODE_ENV || 'production',
     EXAMPLE_VAR: process.env.EXAMPLE_VAR,
@@ -37,10 +37,11 @@ exports.watch = series(clean, startWatch);
 
 function startWatch() {
   webpackConfig.watch = true;
-  watch([
+  const paths = [
     `${config.output}/manifest.json`,
     `${config.source}/**/*.pug`,
-  ], series(html, optimize));
+  ]
+  watch(paths, series(html, optimize));
   assets(function noop() {});
 }
 
@@ -55,7 +56,11 @@ function clean() {
 function assets(cb) {
   webpack(webpackConfig, function webpackCb(error, stats) {
     // eslint-disable-next-line no-console
-    console.log(stats.toString({ colors: true, modules: false }));
+    console.log(stats.toString({
+      colors: true,
+      entrypoints: false,
+      modules: false,
+    }));
     cb(error);
   });
 }

@@ -3,15 +3,17 @@ const webpack = require('webpack');
 const glob = require('glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const autoprefixer = require('autoprefixer-stylus');
 
 // Not a standard webpack.config.js function
-module.exports = function makeWebpackCongfig(config) {
+module.exports = function makeWebpackConfig(config) {
   const stylusLoader = {
     loader: 'stylus-loader',
     options: {
       'include css': true,
       include: config.source,
       preferPathResolver: 'webpack',
+      use: [autoprefixer()],
     },
   };
 
@@ -76,11 +78,14 @@ module.exports = function makeWebpackCongfig(config) {
         },
       ],
     },
-    // optimization: {
-    //   splitChunks: {
-    //     chunks: 'initial',
-    //   },
-    // },
+    optimization: {
+      // runtimeChunk: {
+      //   name: 'global/index',
+      // },
+      // splitChunks: {
+      //   chunks: 'initial',
+      // },
+    },
   };
 
   function addWebpackEntry(entries, entry) {
