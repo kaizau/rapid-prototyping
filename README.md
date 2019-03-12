@@ -29,7 +29,7 @@ npm run prod
 
 - Code is organized by "page namespaces".
   - Related markup, styles, and scripts live in the same folder when possible.
-  - `site/global` includes styles and scripts that are loaded on all pages.
+  - `site/core` includes styles and scripts that are loaded on all pages.
   - `site/_shared` contains import-able, shared resources.
 - Prefer aliased or root paths for imports.
   - JS: `import '~shared/util';`
@@ -60,9 +60,4 @@ npm run prod
 ### /site/**/index.styl
 
 - Each `site/**/index.styl` is compiled to `dist/**/index.css`.
-- Import global stylus variables for every entry point `@import '~shared/config'`.
-
-## To Do
-
-- Rename global to core
-- Investigate implications of PurgeCSS + SPA (styles in core might need to be shared with SPA)
+- Import shared stylus variables with `@import '~shared/config'`.

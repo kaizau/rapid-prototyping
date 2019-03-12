@@ -29,7 +29,7 @@ module.exports = function runWebpack(config, watch) {
       // Concat commons.js with core.js
       config.manifest = JSON.parse(fs.readFileSync(`./${config.output}/manifest.json`, 'utf8'));
       const commons = pathlib.join(config.output, config.manifest['commons.js']);
-      const core = pathlib.join(config.output, config.manifest['global/index.js']);
+      const core = pathlib.join(config.output, config.manifest['core/index.js']);
       const concat = fs.readFileSync(commons) + fs.readFileSync(core);
       fs.writeFileSync(core, concat);
 
@@ -49,7 +49,28 @@ module.exports = function runWebpack(config, watch) {
 }
 
 function makeWebpackConfig(config) {
-  const stylusLoader = {
+  const cssLoaders = [];
+
+  // css-loader is buggy when handling url() in stylus, so we disable it. Only
+  // included because otherwise webpack complains. Instead, use absolute paths,
+  // which will get replaced by gulp.
+  cssLoaders.push({
+    loader: 'css-loader',
+    options: { url: false },
+  });
+
+  if (config.isProd) {
+    cssLoaders.push({
+      loader: 'clean-css-loader',
+      options: {
+        level: {
+          1: { specialComments: false },
+        },
+      },
+    });
+  }
+
+  cssLoaders.push({
     loader: 'stylus-loader',
     options: {
       'include css': true,
@@ -57,15 +78,12 @@ function makeWebpackConfig(config) {
       preferPathResolver: 'webpack',
       use: [autoprefixer()],
     },
-  };
+  });
 
-  // css-loader is buggy when handling url() in stylus, so we disable it. Only
-  // included because otherwise webpack complains. Instead, use absolute paths,
-  // which will get replaced by gulp.
-  const cssLoader = {
-    loader: 'css-loader',
-    options: { url: false },
-  };
+  const cssInjected = cssLoaders.slice();
+  cssInjected.unshift('style-loader');
+  const cssExtracted = cssLoaders.slice();
+  cssExtracted.unshift(MiniCssExtractPlugin.loader);
 
   return {
     mode: config.isProd ? 'production' : 'development',
@@ -111,14 +129,8 @@ function makeWebpackConfig(config) {
           loader: 'file-loader',
           options: { name: config.isProd ? '[path][name].[hash:8].[ext]' : '[path][name].[ext]' },
         },
-        {
-          test: /(?!\.css).{4}\.styl$/,
-          use: ['style-loader', cssLoader, stylusLoader],
-        },
-        {
-          test: /\.css\.styl$/,
-          use: [MiniCssExtractPlugin.loader, cssLoader, stylusLoader],
-        },
+        { test: /(?!\.css).{4}\.styl$/, use: cssInjected },
+        { test: /\.css\.styl$/, use: cssExtracted },
       ],
     },
     optimization: {
@@ -126,7 +138,7 @@ function makeWebpackConfig(config) {
       // - Shared webpack runtime code
       // - Any module shared between 2 chunks
       //
-      // Webpack doesn't allow concat'ing this directly to a single global
+      // Webpack doesn't allow concat'ing this directly to a single core
       // entry point, so we do it with gulp instead.
       // - https://github.com/webpack/webpack/issues/6977
       runtimeChunk: {

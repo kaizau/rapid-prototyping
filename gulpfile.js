@@ -3,8 +3,6 @@ const { src, dest, series, watch } = require('gulp');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-manifest-replace');
-const purgeCss = require('gulp-purgecss');
-const cleanCss = require('gulp-clean-css');
 const webpack = require('./webpack');
 if (process.env.USE_LOCAL_ENV) require('now-env');
 
@@ -29,7 +27,7 @@ config.isProd = config.env.NODE_ENV === 'production';
 // Public Tasks
 //
 
-exports.default = series(clean, assets, html, optimize);
+exports.default = series(clean, assets, html);
 
 exports.watch = series(clean, startWatch);
 
@@ -38,7 +36,7 @@ function startWatch() {
     `${config.output}/manifest.json`,
     `${config.source}/**/*.pug`,
   ]
-  watch(paths, series(html, optimize));
+  watch(paths, html);
   webpack(config, 'watch');
 }
 
@@ -69,19 +67,4 @@ function html() {
   }
 
   return task.pipe(dest(config.output));
-}
-
-function optimize(cb) {
-  if (!config.isProd) {
-    cb(); return;
-  }
-
-  return src(`${config.output}/**/*.css`)
-    .pipe(purgeCss({ content: [`${config.output}/**/*.html`] }))
-    .pipe(cleanCss({
-      level: {
-        1: { specialComments: false },
-      },
-    }))
-    .pipe(dest(config.output));
 }
