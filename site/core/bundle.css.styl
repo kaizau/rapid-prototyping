@@ -11,7 +11,7 @@
 @import '~purecss/build/forms.css'
 
 //
-// Structure
+// Defaults
 //
 
 html
@@ -32,6 +32,10 @@ img
   height: auto
   display: block
 
+//
+// Structure
+//
+
 .Container
   margin: 0 auto
   max-width: 1200px
@@ -46,7 +50,13 @@ img
   padding-bottom: 2em
   padding-top: 2em
 
+//
+// Components
+//
+
 .Nav
+  background: url('/core/bg.png')
+
   ul, ol
     naked-list()
 
@@ -57,10 +67,3 @@ img
     .nav-item
       display: block
       padding: .5em
-
-//
-// Custom
-//
-
-.Nav
-  background: url('/core/bg.png')
