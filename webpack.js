@@ -27,7 +27,8 @@ module.exports = function runWebpack(config, watch) {
       }));
 
       // Load manifest into config for gulp
-      config.manifest = JSON.parse(fs.readFileSync(`./${config.output}/manifest.json`, 'utf8'));
+      const manifest = pathlib.join(config.output, 'manifest.json');
+      config.manifest = JSON.parse(fs.readFileSync(manifest, 'utf8'));
 
       // Concat commons.js with [config.globalEntry].js
       const commons = pathlib.join(config.output, config.manifest['commons.js']);

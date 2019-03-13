@@ -27,37 +27,44 @@ npm run prod
 
 ### General
 
-- Code is organized by "page namespaces".
+- Code is organized by "page namespaces."
   - Related markup, styles, and scripts live in the same folder when possible.
-  - `site/core` includes styles and scripts that are loaded on all pages.
+  - `site/core` must be loaded first on ALL pages.
   - `site/_shared` contains import-able, shared resources.
-- Prefer aliased or root paths for imports.
+- Use alias and root paths for local imports. No relative paths.
   - JS: `import '~shared/util';`
   - Stylus: `@import ~shared/config`
-  - Pug: `extends /_shared/layout` (leading slash)
   - Stylus url(): `url(/assets/image.jpg)` (leading slash)
+  - Pug: `extends /_shared/layout` (leading slash)
 - Use ENV variables for environment configuration and secrets.
-  - Configure general, "not-so-secret" variables in `now.json`.
+  - Add general, "not-so-secret" variables in `now.json`.
   - Save deployed _production_ secrets with `now secret` and reference them in
     `now.json`.
   - Save local _development_ secrets `now-secrets.json`. Prepend
     `USE_LOCAL_ENV=1` to commands apply local variables. Do not check this
     file in.
-- Gulp runs production commands by default. Prepend `NODE_ENV=development` to
-  use development settings.
 
 ### /site/**.pug
 
 - Each `site/**.pug` is compiled to `dist/**.html`.
 - Prefer `site/example/index.pug` over `source/example.pug`.
-- Prefer using `<script defer ...>` in the `<head>`.
 
-### /site/**/index.js
+### /site/**/bundle.js
 
-- Each `site/**/index.js` is compiled to `dist/**/index.js`.
-- Only modules actually `import`-ed will be included in the build.
+- Each `site/**/bundle.js` is compiled to `dist/**/bundle.js`.
+- No need to `import './bundle.styl'`. Webpack is configured to find styles
+  automatically.
 
-### /site/**/index.styl
+### /site/**/bundle{,.css}.styl
 
-- Each `site/**/index.styl` is compiled to `dist/**/index.css`.
 - Import shared stylus variables with `@import '~shared/config'`.
+- Each `site/**/bundle.css.styl` is compiled to `dist/**/bundle.css`.
+- Each `site/**/bundle.styl` is compiled and merged into `dist/**/bundle.js`.
+
+## TODO
+
+- More robust local dev server
+- Browser sync / livereload / webpack dev server?
+- Better styling defaults
+- Add a "getting started checklist" (env, config, etc.)
+- Add zeit / express patterns
