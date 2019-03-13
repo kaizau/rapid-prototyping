@@ -14,6 +14,8 @@ if (process.env.USE_LOCAL_ENV) require('now-env');
 const config = {
   source: 'site',
   output: 'dist',
+  coreDir: 'core',
+  entryBase: 'bundle',
   fileExts: ['png', 'jpg', 'gif', 'svg'],
   env: {
     NODE_ENV: process.env.NODE_ENV || 'production',

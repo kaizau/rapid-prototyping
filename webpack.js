@@ -29,9 +29,9 @@ module.exports = function runWebpack(config, watch) {
       // Load manifest into config for gulp
       config.manifest = JSON.parse(fs.readFileSync(`./${config.output}/manifest.json`, 'utf8'));
 
-      // Concat commons.js with core.js
+      // Concat commons.js with [config.globalEntry].js
       const commons = pathlib.join(config.output, config.manifest['commons.js']);
-      const core = pathlib.join(config.output, config.manifest['core/index.js']);
+      const core = pathlib.join(config.output, config.manifest[`${config.coreDir}/${config.entryBase}.js`]);
       const concat = fs.readFileSync(commons) + fs.readFileSync(core);
       fs.writeFileSync(core, concat);
 
@@ -106,7 +106,7 @@ function makeWebpackConfig(config) {
       // - Shared webpack runtime code
       // - Any module shared between 2 chunks
       //
-      // Webpack doesn't allow concat'ing this directly to a single core
+      // Webpack doesn't allow concat'ing this directly to a single primary
       // entry point, so we do it with gulp instead.
       // - https://github.com/webpack/webpack/issues/6977
       runtimeChunk: {
@@ -130,7 +130,7 @@ function makeWebpackConfig(config) {
 
 function makeWebpackEntries(config) {
   const entries = {};
-  const compiled = glob.sync(`${config.source}/**/index.{js,styl,css.styl}`);
+  const compiled = glob.sync(`${config.source}/**/${config.entryBase}.{js,styl,css.styl}`);
   const fileExts = config.fileExts.join(',');
   const copied = glob.sync(`${config.source}/**/*.{${fileExts}}`);
   compiled.concat(copied).forEach(entry => {
