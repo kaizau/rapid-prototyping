@@ -2,7 +2,7 @@ const del = require('del');
 const { src, dest, series, watch } = require('gulp');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
-const replace = require('gulp-manifest-replace');
+const replace = require('gulp-replace');
 const webpack = require('./webpack');
 if (process.env.USE_LOCAL_ENV) require('now-env');
 
@@ -60,10 +60,12 @@ function html() {
     }));
 
   if (config.isProd) {
-    // Rewrite hashed asset paths. Also rewrites for webpack output due to
-    // css-loader url() bug.
-    task = task.pipe(addSrc(`${config.output}/**/*.{css,js}`))
-      .pipe(replace({ manifest: config.manifest }));
+    // Rewrite asset paths in .html, .css, and .js
+    task = task.pipe(addSrc(`${config.output}/**/*.{css,js}`));
+    Object.keys(config.manifest).forEach(function rewriteAssetPath(key) {
+      const value = config.manifest[key];
+      task = task.pipe(replace(key, value));
+    });
   }
 
   return task.pipe(dest(config.output));

@@ -5,9 +5,9 @@ const webpack = require('webpack');
 const glob = require('glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const autoprefixer = require('autoprefixer-stylus');
+const cssnano = require('cssnano');
+const autoprefixer = require('autoprefixer');
 
-// Not a standard webpack.config.js function
 module.exports = function runWebpack(config, watch) {
   const webpackConfig = makeWebpackConfig(config);
   if (watch === 'watch') {
@@ -26,8 +26,10 @@ module.exports = function runWebpack(config, watch) {
         modules: false,
       }));
 
-      // Concat commons.js with core.js
+      // Load manifest into config for gulp
       config.manifest = JSON.parse(fs.readFileSync(`./${config.output}/manifest.json`, 'utf8'));
+
+      // Concat commons.js with core.js
       const commons = pathlib.join(config.output, config.manifest['commons.js']);
       const core = pathlib.join(config.output, config.manifest['core/index.js']);
       const concat = fs.readFileSync(commons) + fs.readFileSync(core);
@@ -35,69 +37,29 @@ module.exports = function runWebpack(config, watch) {
 
       // Cleanup image entry points and commons.js
       const cleanup = [commons];
+      delete config.manifest['commons.js']
       Object.keys(config.manifest).forEach(file => {
         const ext = pathlib.extname(file).slice(1);
         if (config.fileExts.indexOf(ext) > -1) {
           const key = file.slice(0, file.lastIndexOf('.')) + '.js';
           const js = pathlib.join(config.output, config.manifest[key]);
           cleanup.push(js);
+          delete config.manifest[key];
         }
-      })
-      del(cleanup).then(() => resolve());
+      });
+
+      del(cleanup)
+        .then(() => resolve());
     });
   });
 }
 
+// Not a standard webpack.config.js function
 function makeWebpackConfig(config) {
-  const cssLoaders = [];
-
-  // css-loader is buggy when handling url() in stylus, so we disable it. Only
-  // included because otherwise webpack complains. Instead, use absolute paths,
-  // which will get replaced by gulp.
-  cssLoaders.push({
-    loader: 'css-loader',
-    options: { url: false },
-  });
-
-  if (config.isProd) {
-    cssLoaders.push({
-      loader: 'clean-css-loader',
-      options: {
-        level: {
-          1: { specialComments: false },
-        },
-      },
-    });
-  }
-
-  cssLoaders.push({
-    loader: 'stylus-loader',
-    options: {
-      'include css': true,
-      include: config.source,
-      preferPathResolver: 'webpack',
-      use: [autoprefixer()],
-    },
-  });
-
-  const cssInjected = cssLoaders.slice();
-  cssInjected.unshift('style-loader');
-  const cssExtracted = cssLoaders.slice();
-  cssExtracted.unshift(MiniCssExtractPlugin.loader);
-
   return {
     mode: config.isProd ? 'production' : 'development',
     context: pathlib.join(__dirname, config.source),
-    entry() {
-      const entries = {};
-      const compiled = glob.sync(`${config.source}/**/index.{js,styl,css.styl}`);
-      const fileExts = config.fileExts.join(',');
-      const copied = glob.sync(`${config.source}/**/*.{${fileExts}}`);
-      compiled.concat(copied).forEach(entry => {
-        addWebpackEntry(entries, entry);
-      });
-      return entries;
-    },
+    entry: makeWebpackEntries(config),
     output: {
       path: pathlib.join(__dirname, config.output),
       filename: config.isProd ? '[name].[chunkhash:8].js' : '[name].js',
@@ -129,8 +91,14 @@ function makeWebpackConfig(config) {
           loader: 'file-loader',
           options: { name: config.isProd ? '[path][name].[hash:8].[ext]' : '[path][name].[ext]' },
         },
-        { test: /(?!\.css).{4}\.styl$/, use: cssInjected },
-        { test: /\.css\.styl$/, use: cssExtracted },
+        {
+          test: /(?!\.css).{4}\.styl$/,
+          use: ['style-loader', ...sharedStyleLoaders(config)],
+        },
+        {
+          test: /\.css\.styl$/,
+          use: [MiniCssExtractPlugin.loader, ...sharedStyleLoaders(config)],
+        },
       ],
     },
     optimization: {
@@ -158,8 +126,14 @@ function makeWebpackConfig(config) {
       },
     },
   };
+}
 
-  function addWebpackEntry(entries, entry) {
+function makeWebpackEntries(config) {
+  const entries = {};
+  const compiled = glob.sync(`${config.source}/**/index.{js,styl,css.styl}`);
+  const fileExts = config.fileExts.join(',');
+  const copied = glob.sync(`${config.source}/**/*.{${fileExts}}`);
+  compiled.concat(copied).forEach(entry => {
     const relative = pathlib.relative(config.source, entry);
     const dir = pathlib.dirname(relative);
     const ext = pathlib.extname(relative);
@@ -167,5 +141,42 @@ function makeWebpackConfig(config) {
     const key = pathlib.join(dir, base);
     entries[key] = entries[key] || [];
     entries[key].push('./' + relative);
+  });
+  return entries;
+}
+
+function sharedStyleLoaders(config) {
+  // css-loader is buggy when handling url() in stylus, so we disable it. Only
+  // included because otherwise webpack complains. Instead, use absolute paths,
+  // which will get replaced by gulp.
+  const cssLoader = {
+    loader: 'css-loader',
+    options: { url: false },
+  };
+
+  const postcssLoader = {
+    loader: 'postcss-loader',
+    options: {
+      ident: 'postcss',
+      plugins: [ autoprefixer() ],
+    },
+  };
+  if (config.isProd) {
+    postcssLoader.options.plugins.push(cssnano({
+      preset: ['default', {
+        discardComments: { removeAll: true },
+      }],
+    }));
   }
+
+  const stylusLoader = {
+    loader: 'stylus-loader',
+    options: {
+      'include css': true,
+      include: config.source,
+      preferPathResolver: 'webpack',
+    },
+  };
+
+  return [cssLoader, postcssLoader, stylusLoader];
 }
