@@ -22,7 +22,6 @@ Thumbs.db
 
 # NPM
 node_modules/
-npm-debug.log*
 
 # Now
 dist/

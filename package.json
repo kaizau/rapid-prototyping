@@ -1,7 +1,7 @@
 {
   "name": "",
-  "version": "1.0.0",
-  "author": "k@kaizau.com",
+  "version": "",
+  "author": "",
   "repository": "",
   "description": "",
   "private": true,
@@ -11,6 +11,7 @@
     "prod": "npm run lint && USE_LOCAL_ENV=1 gulp watch",
     "api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
     "lint": "eslint --fix .",
+    "deploy": "now && now alias",
     "now-build": "gulp"
   },
   "devDependencies": {

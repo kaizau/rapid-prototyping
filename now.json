@@ -1,6 +1,6 @@
 {
-  "name": "project-name",
-  "alias": "www.project.domain",
+  "name": "",
+  "alias": "",
   "version": 2,
 
   "build": {
@@ -32,8 +32,9 @@
       "dest": "/functions/$1.js"
     },
     {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "src": "/.*",
+      "status": 404,
+      "dest": "/404.html"
     }
   ]
 }

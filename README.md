@@ -1,24 +1,47 @@
-# An opinionated starting point for web projects
+# A streamlined starting point for a static site + serverless functions
 
 - [**Gulp**](https://gulpjs.com/docs/en/api/concepts) for tooling.
 - [**Webpack**](https://webpack.js.org/concepts) for asset bundling.
-- [**Pug**](https://pugjs.org/) for flexible markup.
-- [**Stylus**](http://stylus-lang.com/) for flexible styling.
+- [**Pug**](https://pugjs.org/) for markup.
+- [**Stylus**](http://stylus-lang.com/) for styling.
 - [**Mithril**](https://mithril.js.org/api.html) for SPAs and JS utilities.
-- [**Now**](https://zeit.co/docs/) for static hosting and serverless functions.
+- [**Now**](https://zeit.co/docs/) for hosting.
 
-## Usage
+## Getting Started
+
+### Usage
+
+**Site:** http://localhost:8888/>
+
+**API:** http://localhost:8889/>
 
 ```sh
-# local server in development mode (livereload)
+# start server in development mode (livereload)
 npm start
 
-# local server in production mode (asset hashing, minification)
+# start server in production mode (asset hashing, minification)
 npm run prod
 
-# local api server
+# start api server
 npm run api
+
+# deploy
+npm i -g now-cli # required
+npm run deploy
 ```
+
+### Checklist
+
+- [ ] If this project was `git clone`'ed, `rm -rf .git && git init`.
+- [ ] Install dependencies with `npm i`.
+- [ ] Configure Zeit:
+  - [ ] Add project name and domain (`alias`) in `now.json`.
+  - [ ] Save production secrets with `now secret` and reference them in
+    `now.json`.
+  - [ ] Create local secrets schema in `now-secrets.example.json`.
+  - [ ] Copy local secrets file (`cp now-secrets.example.json
+    now-secrets.json`) and add local secrets. Do not check this file in!
+- [ ] Test out commands and initial deployment.
 
 ## Hints
 
@@ -28,18 +51,11 @@ npm run api
   - Related markup, styles, and scripts live in the same folder when possible.
   - `site/core` must be loaded first on ALL pages.
   - `site/_shared` contains import-able, shared resources.
-- Use alias and root paths for local imports. No relative paths.
+- Use alias and root paths for local imports. Avoid relative path imports.
   - JS: `import '~shared/util';`
   - Stylus: `@import ~shared/config`
   - Stylus url(): `url(/assets/image.jpg)` (leading slash)
   - Pug: `extends /_shared/layout` (leading slash)
-- Use ENV variables for environment configuration and secrets.
-  - Add general, "not-so-secret" variables in `now.json`.
-  - Save deployed _production_ secrets with `now secret` and reference them in
-    `now.json`.
-  - Save local _development_ secrets `now-secrets.json`. Prepend
-    `USE_LOCAL_ENV=1` to commands apply local variables. Do not check this
-    file in.
 
 ### /site/**.pug
 
@@ -56,10 +72,9 @@ npm run api
 
 - Import shared stylus variables with `@import '~shared/config'`.
 - Each `site/**/bundle.css.styl` is compiled to `dist/**/bundle.css`.
-- Each `site/**/bundle.styl` is compiled and merged into `dist/**/bundle.js`.
+- Each `site/**/bundle.styl` is merged into `dist/**/bundle.js`, which injects
+  styles onto the page. Best for packaging styles with components.
 
 ## TODO
 
 - Better styling defaults
-- Add a "getting started checklist" (env, config, etc.)
-- Add zeit / express patterns
