@@ -10,12 +10,12 @@ const autoprefixer = require('autoprefixer');
 module.exports = function runWebpack(config, watch) {
   const webpackConfig = makeWebpackConfig(config);
   webpackConfig.watch = watch === 'watch';
+
   return webpack(webpackConfig, (error, stats) => {
     if (error) {
       // eslint-disable-next-line no-console
       console.log(error); return;
     }
-
     webpackCallback(config, stats);
   });
 }
@@ -112,9 +112,7 @@ function makeWebpackConfig(config) {
       // Webpack doesn't allow concat'ing this directly to a single primary
       // entry point, so we do it with gulp instead.
       // - https://github.com/webpack/webpack/issues/6977
-      runtimeChunk: {
-        name: 'commons',
-      },
+      runtimeChunk: { name: 'commons' },
       splitChunks: {
         cacheGroups: {
           default: false,

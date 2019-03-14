@@ -11,7 +11,84 @@ block body
 
   .Container.padded
     h1 Hello, universe.
-    p These are inline #[strong strong] and #[em em] tags.
-    p Example variable: #{EXAMPLE_BUILD_VAR}
+    p.
+      This page is a self-guided tour of some useful features of this
+      framework. Open up #[code site/index.pug] to see how it was generated.
+
+    .pure-g
+      .pure-u-1-2
+        h2 Pug
+        ul
+          li Layout inheritance with #[code extends] and #[code blocks]
+          li ENV variables (#[code #{EXAMPLE_BUILD_VAR}])
+          li Conditional logic with #[code if] and #[code unless]
+          li.
+            Iteration with #[code for #[small val, index] in #[small iterable]]
+            and #[code while #[small isTruthy]]
+          - let interpolation = 'example'
+          - let expression = ['JS', 'expressions', 'and', 'string', 'interpolation']
+          li(class=`${interpolation}-class`)= expression.join(' ')
+          li
+            a(href='https://pugjs.org/language/attributes.html') And a whole lot more
+
+      .pure-u-1-2
+        h2 PureCSS
+        ul
+          li Grid system with #[code .pure-g] and #[code .pure-u-1-24]
+          li Buttons with #[code .pure-button]
+          li Forms with #[code .pure-form]
+          li
+            a(href='https://purecss.io/grids/') And a whole lot more
+
+    hr
+
+    // This comment will be rendered.
+    //- This comment will not.
+
+    h1 Heading 1
+    h2 Heading 2
+    h3 Heading 3
+    h4 Heading 4
+    h5 Heading 5
+
+    p.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+      occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+      mollit anim id est laborum.
+
+    blockquote.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+      occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+      mollit anim id est laborum.
+
+    p.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+      occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+      mollit anim id est laborum.
+
+    form.pure-form.pure-form-stacked
+      p
+        label(for='email') Email
+        input.pure-input-1#email(type='email' placeholder='Email')
+        span.pure-form-message This is a required field.
+
+      p
+        label(for='password') Password
+        input.pure-input-1#password(type='password' placeholder='Password')
+
+      button.pure-button.pure-button-primary(type='submit') Sign In
+
     p
-      img(src='/index/test.jpg')
+      img(src='/home/test.jpg')
