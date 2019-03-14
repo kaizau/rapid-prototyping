@@ -4,25 +4,25 @@
 - [**Webpack**](https://webpack.js.org/concepts) for asset bundling.
 - [**Pug**](https://pugjs.org/) for markup.
 - [**Stylus**](http://stylus-lang.com/) for styling.
-- [**Mithril**](https://mithril.js.org/api.html) for SPAs and JS utilities.
+- [**Mithril**](https://mithril.js.org/api.html) for SPAs and JS components.
 - [**Now**](https://zeit.co/docs/) for hosting.
 
 ## Getting Started
 
 ### Usage
 
-**Site:** http://localhost:8888/>
+**Site:** <http://localhost:8888>
 
-**API:** http://localhost:8889/>
+**API:** <http://localhost:8889>
 
 ```sh
-# start server in development mode (livereload)
+# serve site in development mode (livereload)
 npm start
 
-# start server in production mode (asset hashing, minification)
+# serve site in production mode (asset hashing, minification)
 npm run prod
 
-# start api server
+# serve api
 npm run api
 
 # deploy
@@ -35,7 +35,7 @@ npm run deploy
 - [ ] If this project was `git clone`'ed, `rm -rf .git && git init`.
 - [ ] Install dependencies with `npm i`.
 - [ ] Configure Zeit:
-  - [ ] Add project name and domain (`alias`) in `now.json`.
+  - [ ] Add project name and alias in `now.json`.
   - [ ] Save production secrets with `now secret` and reference them in
     `now.json`.
   - [ ] Create local secrets schema in `now-secrets.example.json`.
