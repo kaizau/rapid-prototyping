@@ -1,57 +1,76 @@
 const pathlib = require('path');
 const fs = require('fs');
-const del = require('del');
-const webpack = require('webpack');
 const glob = require('glob');
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const cssnano = require('cssnano');
 const autoprefixer = require('autoprefixer');
 
-module.exports = function runWebpack(config, watch) {
+const statsConfig = {
+  chunks: false,
+  colors: true,
+  entrypoints: false,
+  modules: false,
+};
+
+module.exports = function runWebpack(config, devServer) {
   const webpackConfig = makeWebpackConfig(config);
-  if (watch === 'watch') {
-    webpackConfig.watch = true;
-  }
 
-  return new Promise(function webpackPromise(resolve, reject) {
-    webpack(webpackConfig, function webpackCb(error, stats) {
-      if (error) reject(error);
-
-      // eslint-disable-next-line no-console
-      console.log(stats.toString({
-        chunks: false,
-        colors: true,
-        entrypoints: false,
-        modules: false,
-      }));
-
-      // Load manifest into config for gulp
-      const manifest = pathlib.join(config.output, 'manifest.json');
-      config.manifest = JSON.parse(fs.readFileSync(manifest, 'utf8'));
-
-      // Concat commons.js with [config.globalEntry].js
-      const commons = pathlib.join(config.output, config.manifest['commons.js']);
-      const core = pathlib.join(config.output, config.manifest[`${config.coreDir}/${config.entryBase}.js`]);
-      const concat = fs.readFileSync(commons) + fs.readFileSync(core);
-      fs.writeFileSync(core, concat);
-
-      // Cleanup image entry points and commons.js
-      const cleanup = [commons];
-      delete config.manifest['commons.js']
-      Object.keys(config.manifest).forEach(file => {
-        const ext = pathlib.extname(file).slice(1);
-        if (config.fileExts.indexOf(ext) > -1) {
-          const key = file.slice(0, file.lastIndexOf('.')) + '.js';
-          const js = pathlib.join(config.output, config.manifest[key]);
-          cleanup.push(js);
-          delete config.manifest[key];
-        }
-      });
-
-      del(cleanup)
-        .then(() => resolve());
+  if (devServer === 'start-dev-server') {
+    const compiler = webpack(webpackConfig);
+    // compiler.hooks.done.tap('WebpackCallback', stats => {
+    //   webpackCallback(config, stats);
+    // });
+    const server = new WebpackDevServer(compiler, {
+      contentBase: pathlib.join(__dirname, config.output),
+      hot: true,
+      stats: statsConfig,
+      port: 8888,
+      proxy: { '/api': 'http://localhost:8889/api' },
+      writeToDisk(file) {
+        return /manifest\.json/.test(file);
+      },
     });
+    return server.listen(8888, '127.0.0.1', () => {
+      // eslint-disable-next-line no-console
+      console.log('Starting server on http://localhost:8888');
+    });
+
+  } else {
+    return webpack(webpackConfig, (error, stats) => {
+      webpackCallback(config, stats);
+    });
+  }
+}
+
+function webpackCallback(config, stats) {
+  // eslint-disable-next-line no-console
+  console.log(stats.toString(statsConfig));
+
+  // Load manifest into config for gulp
+  const output = pathlib.join(__dirname, config.output);
+  const manifest = pathlib.join(output, 'manifest.json');
+  config.manifest = JSON.parse(fs.readFileSync(manifest, 'utf8'));
+
+  // Concat commons.js with [config.globalEntry].js
+  const commons = pathlib.join(output, config.manifest['commons.js']);
+  const core = pathlib.join(output, config.manifest[`${config.coreDir}/${config.entryBase}.js`]);
+  const concat = fs.readFileSync(commons) + fs.readFileSync(core);
+  fs.writeFileSync(core, concat);
+
+  // Cleanup image entry points and commons.js
+  fs.unlinkSync(commons);
+  delete config.manifest['commons.js']
+  Object.keys(config.manifest).forEach(file => {
+    const ext = pathlib.extname(file).slice(1);
+    if (config.fileExts.indexOf(ext) > -1) {
+      const key = file.slice(0, file.lastIndexOf('.')) + '.js';
+      const js = pathlib.join(output, config.manifest[key]);
+      fs.unlinkSync(js);
+      delete config.manifest[key];
+    }
   });
 }
 
@@ -60,7 +79,7 @@ function makeWebpackConfig(config) {
   return {
     mode: config.isProd ? 'production' : 'development',
     context: pathlib.join(__dirname, config.source),
-    entry: makeWebpackEntries(config),
+    entry: webpackEntries(config),
     output: {
       path: pathlib.join(__dirname, config.output),
       filename: config.isProd ? '[name].[chunkhash:8].js' : '[name].js',
@@ -129,7 +148,7 @@ function makeWebpackConfig(config) {
   };
 }
 
-function makeWebpackEntries(config) {
+function webpackEntries(config) {
   const entries = {};
   const compiled = glob.sync(`${config.source}/**/${config.entryBase}.{js,styl,css.styl}`);
   const fileExts = config.fileExts.join(',');

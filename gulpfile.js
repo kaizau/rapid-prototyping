@@ -31,15 +31,15 @@ config.isProd = config.env.NODE_ENV === 'production';
 
 exports.default = series(clean, assets, html);
 
-exports.watch = series(clean, startWatch);
+exports.watch = series(clean, devServer);
 
-function startWatch() {
+function devServer() {
   const paths = [
     `${config.output}/manifest.json`,
     `${config.source}/**/*.pug`,
   ]
   watch(paths, html);
-  webpack(config, 'watch');
+  webpack(config, 'start-dev-server');
 }
 
 //

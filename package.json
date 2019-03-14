@@ -6,10 +6,10 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "npm run lint && http-server -p 8888 --proxy http://localhost:8889 dist/ ",
-    "api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
-    "dev": "USE_LOCAL_ENV=1 NODE_ENV=development gulp watch",
+    "start": "npm run dev",
+    "dev": "npm run lint && USE_LOCAL_ENV=1 NODE_ENV=development gulp watch",
     "prod": "npm run lint && USE_LOCAL_ENV=1 gulp watch",
+    "api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
     "lint": "eslint --fix .",
     "now-build": "gulp"
   },
@@ -36,6 +36,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "webpack": "^4.29.6",
+    "webpack-dev-server": "^3.2.1",
     "webpack-manifest-plugin": "^2.0.4"
   },
   "dependencies": {
