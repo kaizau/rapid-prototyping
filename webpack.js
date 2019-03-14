@@ -2,52 +2,32 @@ const pathlib = require('path');
 const fs = require('fs');
 const glob = require('glob');
 const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const cssnano = require('cssnano');
 const autoprefixer = require('autoprefixer');
 
-const statsConfig = {
-  chunks: false,
-  colors: true,
-  entrypoints: false,
-  modules: false,
-};
-
-module.exports = function runWebpack(config, devServer) {
+module.exports = function runWebpack(config, watch) {
   const webpackConfig = makeWebpackConfig(config);
-
-  if (devServer === 'start-dev-server') {
-    const compiler = webpack(webpackConfig);
-    // compiler.hooks.done.tap('WebpackCallback', stats => {
-    //   webpackCallback(config, stats);
-    // });
-    const server = new WebpackDevServer(compiler, {
-      contentBase: pathlib.join(__dirname, config.output),
-      hot: true,
-      stats: statsConfig,
-      port: 8888,
-      proxy: { '/api': 'http://localhost:8889/api' },
-      writeToDisk(file) {
-        return /manifest\.json/.test(file);
-      },
-    });
-    return server.listen(8888, '127.0.0.1', () => {
+  webpackConfig.watch = watch === 'watch';
+  return webpack(webpackConfig, (error, stats) => {
+    if (error) {
       // eslint-disable-next-line no-console
-      console.log('Starting server on http://localhost:8888');
-    });
+      console.log(error); return;
+    }
 
-  } else {
-    return webpack(webpackConfig, (error, stats) => {
-      webpackCallback(config, stats);
-    });
-  }
+    webpackCallback(config, stats);
+  });
 }
 
 function webpackCallback(config, stats) {
   // eslint-disable-next-line no-console
-  console.log(stats.toString(statsConfig));
+  console.log(stats.toString({
+    chunks: false,
+    colors: true,
+    entrypoints: false,
+    modules: false,
+  }));
 
   // Load manifest into config for gulp
   const output = pathlib.join(__dirname, config.output);
@@ -60,16 +40,19 @@ function webpackCallback(config, stats) {
   const concat = fs.readFileSync(commons) + fs.readFileSync(core);
   fs.writeFileSync(core, concat);
 
-  // Cleanup image entry points and commons.js
-  fs.unlinkSync(commons);
+  // Remove commons.js and image entry points from manifest to avoid attempting
+  // to replace them in asset URLs.
+  //
+  // We could delete these files as well, but as of 2019.03.14, this leads to
+  // bugs when webpack is running in development watch mode (production seems
+  // fine). commons and image.js files are generated initially but not
+  // regenerated on watched recompile. Potentially a caching issue?
   delete config.manifest['commons.js']
   Object.keys(config.manifest).forEach(file => {
     const ext = pathlib.extname(file).slice(1);
     if (config.fileExts.indexOf(ext) > -1) {
-      const key = file.slice(0, file.lastIndexOf('.')) + '.js';
-      const js = pathlib.join(output, config.manifest[key]);
-      fs.unlinkSync(js);
-      delete config.manifest[key];
+      const jsFile = file.slice(0, file.lastIndexOf('.')) + '.js';
+      delete config.manifest[jsFile];
     }
   });
 }

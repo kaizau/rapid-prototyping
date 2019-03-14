@@ -18,6 +18,7 @@ module.exports = {
     "no-trailing-spaces": "warn",
     "no-var": "warn",
     "no-undef": "warn",
+    "no-unreachable": "warn",
     "no-unused-vars": "warn",
     "space-before-function-paren": ["warn", "never"],
   },

@@ -10,17 +10,14 @@
 ## Usage
 
 ```sh
-# start local dev server (/api/* proxied to api server)
+# local server in development mode (livereload)
 npm start
 
-# start local dev api server
-npm run api
-
-# watch site files in development mode
-npm run dev
-
-# watch site files in production mode
+# local server in production mode (asset hashing, minification)
 npm run prod
+
+# local api server
+npm run api
 ```
 
 ## Hints
@@ -63,8 +60,6 @@ npm run prod
 
 ## TODO
 
-- More robust local dev server
-- Browser sync / livereload / webpack dev server?
 - Better styling defaults
 - Add a "getting started checklist" (env, config, etc.)
 - Add zeit / express patterns

@@ -3,6 +3,8 @@ const { src, dest, series, watch } = require('gulp');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-replace');
+const connect = require('gulp-connect');
+const proxy = require('http-proxy-middleware');
 const webpack = require('./webpack');
 if (process.env.USE_LOCAL_ENV) require('now-env');
 
@@ -33,13 +35,35 @@ exports.default = series(clean, assets, html);
 
 exports.watch = series(clean, devServer);
 
-function devServer() {
+//
+// Dev Server
+//
+
+function devServer(cb) {
+  connect.server({
+    root: config.output,
+    port: 8888,
+    livereload: !config.isProd,
+    middleware() {
+      return [
+        proxy('/api', { target: 'http://localhost:8889' }),
+      ];
+    },
+  });
+
   const paths = [
     `${config.output}/manifest.json`,
     `${config.source}/**/*.pug`,
   ]
-  watch(paths, html);
-  webpack(config, 'start-dev-server');
+  webpack(config, 'watch');
+  watch(paths, series(html, reload));
+
+  cb();
+}
+
+function reload() {
+  return src('gulpfile.js', { read: false })
+    .pipe(connect.reload());
 }
 
 //
