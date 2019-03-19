@@ -6,9 +6,9 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "npm run dev",
-    "dev": "npm run lint && USE_LOCAL_ENV=1 NODE_ENV=development gulp watch",
-    "prod": "npm run lint && USE_LOCAL_ENV=1 gulp watch",
+    "start": "npm run lint & npm run dev & npm run api",
+    "dev": "USE_LOCAL_ENV=1 NODE_ENV=development gulp watch",
+    "prod": "USE_LOCAL_ENV=1 gulp watch",
     "api": "node -r now-env node_modules/.bin/now-lambda --port 8889",
     "lint": "eslint --fix .",
     "deploy": "now && now alias",
