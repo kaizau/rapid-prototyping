@@ -6,7 +6,8 @@ const replace = require('gulp-replace');
 const connect = require('gulp-connect');
 const proxy = require('http-proxy-middleware');
 const webpack = require('./webpack');
-if (process.env.USE_LOCAL_ENV) require('now-env');
+const nowConfig = require('./now.json');
+if (process.env.USE_DOTENV) require('dotenv').config();
 
 //
 // Static site + serverless functions
@@ -19,13 +20,11 @@ const config = {
   coreDir: 'core',
   entryBase: 'bundle',
   fileExts: ['png', 'jpg', 'gif', 'svg'],
-  env: {
-    NODE_ENV: process.env.NODE_ENV || 'production',
-    EXAMPLE_VAR: process.env.EXAMPLE_VAR,
-    EXAMPLE_BUILD_VAR: process.env.EXAMPLE_BUILD_VAR,
-  },
+  env: { NODE_ENV: process.env.NODE_ENV || 'production' },
 };
 config.isProd = config.env.NODE_ENV === 'production';
+Object.keys(nowConfig.build.env)
+  .forEach(key => config.env[key] = process.env[key]);
 
 //
 // Public Tasks

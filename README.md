@@ -38,9 +38,9 @@ npm run deploy
   - [ ] Add project name and alias in `now.json`.
   - [ ] Save production secrets with `now secret` and reference them in
     `now.json`.
-  - [ ] Create local secrets schema in `now-secrets.example.json`.
-  - [ ] Copy local secrets file (`cp now-secrets.example.json
-    now-secrets.json`) and add local secrets. Do not check this file in!
+  - [ ] Create local secrets schema in `schema.env`.
+  - [ ] Copy local secrets file (`cp schema.env .env`) and add local secrets.
+    Do not check this file in!
 - [ ] Test out commands and initial deployment.
 
 ## Hints
