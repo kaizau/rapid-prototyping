@@ -7,6 +7,9 @@ html
 
     block headMeta
 
+    - var blankFavicon = `data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=`
+    link(href=blankFavicon rel='icon' type='image/x-icon')
+
     block headStyles
       link(rel='stylesheet' href='/core/bundle.css')
 
