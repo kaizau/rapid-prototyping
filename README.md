@@ -26,13 +26,6 @@ npm run prod
 npm run deploy # requires now
 ```
 
-**When in doubt, aim to follow these principles:**
-
-- https://github.com/elsewhencode/project-guidelines
-- https://3factor.app/
-- http://madeofmetaphors.com/shapes
-- http://madeofmetaphors.com/boundaries-and-infinities
-
 ### Checklist
 
 - [ ] If this project was `git clone`'ed, `rm -rf .git && git init`.
@@ -47,13 +40,19 @@ npm run deploy # requires now
     Do not check this file in!
 - [ ] Test out commands and initial deployment.
 
-## Hints
+## Conventions
 
 ### General
 
+- When in doubt, aim to follow these principles:
+  - https://github.com/elsewhencode/project-guidelines
+  - https://3factor.app/
+  - http://madeofmetaphors.com/shapes
+  - http://madeofmetaphors.com/boundaries-and-infinities
 - Code is organized by "page namespaces."
   - Related markup, styles, and scripts live in the same folder when possible.
-  - `site/core` must be loaded first on ALL pages.
+  - `site/core` contains the webpack runtime and must be loaded first on ALL
+    pages.
   - `site/_shared` contains import-able, shared resources.
 - Avoid relative path imports. Use webpack aliases and root paths instead.
   - JS: `import '~shared/util';`
