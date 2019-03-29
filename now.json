@@ -5,12 +5,12 @@
 
   "build": {
     "env": {
-      "EXAMPLE_BUILD_VAR": "@example-build-var"
+      "EXAMPLE_BUILD_VAR": "Hello from now's EXAMPLE_BUILD_VAR"
     }
   },
 
   "env": {
-    "EXAMPLE_FUNCTION_VAR": "@example-function-var"
+    "EXAMPLE_FUNCTION_VAR": "Hello from now's EXAMPLE_FUNCTION_VAR"
   },
 
   "builds": [
@@ -28,6 +28,10 @@
     {
       "src": "/api/(.*)",
       "dest": "/functions/$1.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/$1"
     },
     {
       "src": "/.*",
