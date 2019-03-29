@@ -86,7 +86,7 @@ function html() {
   let task = src([`${config.source}/**/*.pug`, `!${config.source}/_shared/**`])
     .pipe(pug({
       basedir: config.source,
-      locals: config.env,
+      locals: process.env,
     }));
 
   if (config.isProd) {
