@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "start": "npm run lint & npm run dev & npm run api",
+    "start-prod": "npm run lint & npm run prod & npm run api",
     "dev": "USE_DOTENV=1 NODE_ENV=development gulp watch",
     "prod": "USE_DOTENV=1 gulp watch",
     "api": "node -r dotenv/config node_modules/.bin/now-lambda --port 8889",
@@ -15,18 +16,16 @@
     "now-build": "gulp"
   },
   "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ]
+    "plugins": ["transform-inline-environment-variables"],
+    "presets": ["@babel/preset-env"]
   },
-  "eslintIgnore": [
-    "dist/"
-  ],
+  "eslintIgnore": ["dist/"],
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "autoprefixer": "^9.5.0",
     "babel-loader": "^8.0.5",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "css-loader": "^2.1.1",
     "cssnano": "^4.1.10",
     "del": "^4.0.0",

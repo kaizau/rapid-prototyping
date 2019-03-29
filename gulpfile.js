@@ -7,7 +7,6 @@ const connect = require('gulp-connect');
 const proxy = require('http-proxy-middleware');
 const webpack = require('webpack');
 const {webpackConfig, webpackCallback} = require('./webpack');
-const nowConfig = require('./now.json');
 if (process.env.USE_DOTENV) require('dotenv').config();
 
 //
@@ -21,11 +20,8 @@ const config = {
   coreDir: 'core',
   entryBase: 'bundle',
   fileExts: ['png', 'jpg', 'gif', 'svg'],
-  env: { NODE_ENV: process.env.NODE_ENV || 'production' },
+  isProd: !process.env.NODE_ENV || process.env.NODE_ENV === 'production',
 };
-config.isProd = config.env.NODE_ENV === 'production';
-Object.keys(nowConfig.build.env)
-  .forEach(key => config.env[key] = process.env[key]);
 
 //
 // Public Tasks

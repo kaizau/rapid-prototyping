@@ -1,7 +1,6 @@
 const pathlib = require('path');
 const fs = require('fs');
 const glob = require('glob');
-const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const cssnano = require('cssnano');
@@ -68,7 +67,6 @@ exports.webpackConfig = function webpackConfig(config) {
       },
     },
     plugins: [
-      new webpack.EnvironmentPlugin(config.env),
       new MiniCssExtractPlugin({
         filename: config.isProd ? '[name].[chunkhash:8].css' : '[name].css',
       }),

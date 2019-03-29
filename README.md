@@ -19,8 +19,8 @@
 # serve site + api in development mode (livereload)
 npm start
 
-# serve site in production mode (asset hashing, minification)
-npm run prod
+# serve site + api in production mode (asset hashing, minification)
+npm run start-prod
 
 # deploy
 npm run deploy # requires now
