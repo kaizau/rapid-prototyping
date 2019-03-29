@@ -1,4 +1,4 @@
-# A streamlined starting point for a static site + serverless functions
+# A streamlined starting point for modern web projects
 
 - [**Gulp**](https://gulpjs.com/docs/en/api/concepts) for tooling.
 - [**Webpack**](https://webpack.js.org/concepts) for asset bundling.
