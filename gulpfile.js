@@ -5,7 +5,8 @@ const addSrc = require('gulp-add-src');
 const replace = require('gulp-replace');
 const connect = require('gulp-connect');
 const proxy = require('http-proxy-middleware');
-const webpack = require('./webpack');
+const webpack = require('webpack');
+const {webpackConfig, webpackCallback} = require('./webpack');
 const nowConfig = require('./now.json');
 if (process.env.USE_DOTENV) require('dotenv').config();
 
@@ -53,9 +54,14 @@ function devServer(cb) {
   const paths = [
     `${config.output}/manifest.json`,
     `${config.source}/**/*.pug`,
-  ]
-  webpack(config, 'watch');
+  ];
   watch(paths, series(html, reload));
+
+  const webpackWatch = webpackConfig(config);
+  webpackWatch.watch = true;
+  webpack(webpackWatch, (error, stats) => {
+    webpackCallback(error, stats, config);
+  });
 
   cb();
 }
@@ -73,8 +79,11 @@ function clean() {
   return del(config.output);
 }
 
-function assets() {
-  return webpack(config);
+function assets(cb) {
+  webpack(webpackConfig(config), (error, stats) => {
+    webpackCallback(error, stats, config);
+    cb();
+  });
 }
 
 function html() {

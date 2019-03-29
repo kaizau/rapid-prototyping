@@ -7,27 +7,20 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const cssnano = require('cssnano');
 const autoprefixer = require('autoprefixer');
 
-module.exports = function runWebpack(config, watch) {
-  const webpackConfig = makeWebpackConfig(config);
-  webpackConfig.watch = watch === 'watch';
+exports.webpackCallback = function webpackCallback(error, stats, config) {
+  /* eslint-disable no-console */
+  if (error) {
+    console.log(error);
+    return;
+  }
 
-  return webpack(webpackConfig, (error, stats) => {
-    if (error) {
-      // eslint-disable-next-line no-console
-      console.log(error); return;
-    }
-    webpackCallback(config, stats);
-  });
-}
-
-function webpackCallback(config, stats) {
-  // eslint-disable-next-line no-console
   console.log(stats.toString({
     chunks: false,
     colors: true,
     entrypoints: false,
     modules: false,
   }));
+  /* eslint-enable no-console */
 
   // Load manifest into config for gulp
   const output = pathlib.join(__dirname, config.output);
@@ -58,7 +51,7 @@ function webpackCallback(config, stats) {
 }
 
 // Not a standard webpack.config.js function
-function makeWebpackConfig(config) {
+exports.webpackConfig = function webpackConfig(config) {
   return {
     mode: config.isProd ? 'production' : 'development',
     context: pathlib.join(__dirname, config.source),
