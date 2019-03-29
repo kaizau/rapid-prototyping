@@ -16,24 +16,28 @@
 **API:** <http://localhost:8889>
 
 ```sh
-# serve site in development mode (livereload)
+# serve site + api in development mode (livereload)
 npm start
 
 # serve site in production mode (asset hashing, minification)
 npm run prod
 
-# serve api
-npm run api
-
 # deploy
-npm i -g now-cli # required
-npm run deploy
+npm run deploy # requires now
 ```
+
+**When in doubt, aim to follow these principles:**
+
+- https://github.com/elsewhencode/project-guidelines
+- https://3factor.app/
+- http://madeofmetaphors.com/shapes
+- http://madeofmetaphors.com/boundaries-and-infinities
 
 ### Checklist
 
 - [ ] If this project was `git clone`'ed, `rm -rf .git && git init`.
-- [ ] Install dependencies with `npm i`.
+- [ ] If not already installed, install now with `npm i -g now`.
+- [ ] Install project dependencies with `npm i`.
 - [ ] Configure Zeit:
   - [ ] Add project name and alias in `now.json`.
   - [ ] Save production secrets with `now secret` and reference them in
@@ -51,7 +55,7 @@ npm run deploy
   - Related markup, styles, and scripts live in the same folder when possible.
   - `site/core` must be loaded first on ALL pages.
   - `site/_shared` contains import-able, shared resources.
-- Use alias and root paths for local imports. Avoid relative path imports.
+- Avoid relative path imports. Use webpack aliases and root paths instead.
   - JS: `import '~shared/util';`
   - Stylus: `@import ~shared/config`
   - Stylus url(): `url(/assets/image.jpg)` (leading slash)
@@ -74,7 +78,3 @@ npm run deploy
 - Each `site/**/bundle.css.styl` is compiled to `dist/**/bundle.css`.
 - Each `site/**/bundle.styl` is merged into `dist/**/bundle.js`, which injects
   styles onto the page. Best for packaging styles with components.
-
-## TODO
-
-- Better styling defaults
