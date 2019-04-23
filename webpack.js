@@ -23,14 +23,19 @@ exports.webpackCallback = function webpackCallback(error, stats, config) {
 
   // Load manifest into config for gulp
   const output = pathlib.join(__dirname, config.output);
-  const manifest = pathlib.join(output, 'manifest.json');
+  const manifest = pathlib.join(output, 'webpack.json');
   config.manifest = JSON.parse(fs.readFileSync(manifest, 'utf8'));
 
-  // Concat commons.js with [config.globalEntry].js
+  // Prepend commons.js to [config.coreDir]/[config.entryBase].js. In watch
+  // mode, webpack incremental rebuild doesn't overwrite our concat'ed file
+  // unless it needs to. So we skip this if the file beginnings match.
   const commons = pathlib.join(output, config.manifest['commons.js']);
   const core = pathlib.join(output, config.manifest[`${config.coreDir}/${config.entryBase}.js`]);
-  const concat = fs.readFileSync(commons) + fs.readFileSync(core);
-  fs.writeFileSync(core, concat);
+  const commonsText = fs.readFileSync(commons);
+  const coreText = fs.readFileSync(core);
+  if (commonsText.slice(0, 50).toString() !== coreText.slice(0, 50).toString()) {
+    fs.writeFileSync(core, commonsText + coreText);
+  }
 
   // Remove commons.js and image entry points from manifest to avoid attempting
   // to replace them in asset URLs.
@@ -53,6 +58,7 @@ exports.webpackCallback = function webpackCallback(error, stats, config) {
 exports.webpackConfig = function webpackConfig(config) {
   return {
     mode: config.isProd ? 'production' : 'development',
+    devtool: config.isProd ? false : 'cheap-eval-source-map',
     context: pathlib.join(__dirname, config.source),
     entry: webpackEntries(config),
     output: {
@@ -70,7 +76,7 @@ exports.webpackConfig = function webpackConfig(config) {
       new MiniCssExtractPlugin({
         filename: config.isProd ? '[name].[chunkhash:8].css' : '[name].css',
       }),
-      new ManifestPlugin(),
+      new ManifestPlugin({fileName: 'webpack.json'}),
     ],
     module: {
       rules: [

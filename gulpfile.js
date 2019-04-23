@@ -27,12 +27,14 @@ const config = {
 // Public Tasks
 //
 
-exports.default = series(clean, assets, html);
+exports.default = series(clean, assets, html, finalize);
 
 exports.watch = series(clean, devServer);
 
 //
 // Dev Server
+// TODO Restart if webpack, gulp, package-lock.json changed
+// TODO Restart if webpack entry points change
 //
 
 function devServer(cb) {
@@ -48,7 +50,7 @@ function devServer(cb) {
   });
 
   const paths = [
-    `${config.output}/manifest.json`,
+    `${config.output}/webpack.json`,
     `${config.source}/**/*.pug`,
   ];
   watch(paths, series(html, reload));
@@ -99,4 +101,12 @@ function html() {
   }
 
   return task.pipe(dest(config.output));
+}
+
+function finalize() {
+  return del([
+    `${config.output}/commons.js`,
+    `${config.output}/commons.*.js`,
+    `${config.output}/webpack.json`,
+  ]);
 }
