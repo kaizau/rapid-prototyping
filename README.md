@@ -5,7 +5,7 @@
 - [**Pug**](https://pugjs.org/) for markup.
 - [**Stylus**](http://stylus-lang.com/) for styling.
 - [**Mithril**](https://mithril.js.org/api.html) for SPAs and JS components.
-- [**Now**](https://zeit.co/docs/) for hosting.
+- [**Now**](https://zeit.co/docs/) for static and serverless hosting.
 
 ## Getting Started
 
@@ -13,52 +13,51 @@
 
 **Site:** <http://localhost:8888>
 
-**API:** <http://localhost:8889>
+**API:** <http://localhost:8888/api/> proxied to <http://localhost:8889/api/>
 
 ```sh
-# serve site + api in development mode (livereload)
+# setup
+npm i -g now degit
+cd my-project-dir
+degit kaizau/starter-web
+npm i
+
+# serve in development mode (with livereload)
 npm start
 
-# serve site + api in production mode (asset hashing, minification)
+# serve in production mode (with asset hashing, minification)
 npm run start-prod
 
-# deploy
-npm run deploy # requires now
+# deploy with zeit now
+npm run deploy
 ```
-
-### Checklist
-
-- [ ] If this project was `git clone`'ed, `rm -rf .git && git init`.
-- [ ] If not already installed, install now with `npm i -g now`.
-- [ ] Install project dependencies with `npm i`.
-- [ ] Configure Zeit:
-  - [ ] Add project name and alias in `now.json`.
-  - [ ] Save production secrets with `now secret` and reference them in
-    `now.json`.
-  - [ ] Create local secrets schema in `schema.env`.
-  - [ ] Copy local secrets file (`cp schema.env .env`) and add local secrets.
-    Do not check this file in!
-- [ ] Test out commands and initial deployment.
 
 ## Conventions
 
 ### General
 
+- Code is organized by "folder namespaces."
+  - Related markup, styles, and scripts live in the same folder when possible.
+  - `site/core` contains the webpack runtime and must be loaded first on ALL
+    pages.
+  - `site/_shared` contains import-able, shared resources.
+- Prefer webpack aliases and root paths when sharing assets between namespaces.
+  This avoids long relative import paths (`import '../../../lib/utils';`).
+  - JS: `import '~shared/util';`
+  - Stylus: `@import ~shared/config`
+  - Stylus url(): `url(/assets/image.jpg)` (leading slash)
+  - Pug: `extends /_shared/layout` (leading slash)
+- Use environment variables for secrets and configuration.
+  - Save production secrets with `now secret` and reference their `@keys` in
+    `now.json`.
+  - Check in a blank .env schema in `schema.env`.
+  - Create a local .env (`cp schema.env .env`) and add development values. Do
+    not check this file in!
 - When in doubt, aim to follow these principles:
   - https://github.com/elsewhencode/project-guidelines
   - https://3factor.app/
   - http://madeofmetaphors.com/shapes
   - http://madeofmetaphors.com/boundaries-and-infinities
-- Code is organized by "page namespaces."
-  - Related markup, styles, and scripts live in the same folder when possible.
-  - `site/core` contains the webpack runtime and must be loaded first on ALL
-    pages.
-  - `site/_shared` contains import-able, shared resources.
-- Avoid relative path imports. Use webpack aliases and root paths instead.
-  - JS: `import '~shared/util';`
-  - Stylus: `@import ~shared/config`
-  - Stylus url(): `url(/assets/image.jpg)` (leading slash)
-  - Pug: `extends /_shared/layout` (leading slash)
 
 ### /site/**.pug
 
