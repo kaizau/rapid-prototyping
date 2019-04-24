@@ -38,9 +38,10 @@ npm run deploy
 
 - Code is organized by "folder namespaces."
   - Related markup, styles, and scripts live in the same folder when possible.
-  - `site/core` contains the webpack runtime and must be loaded first on ALL
+  - `site/_core` contains the webpack runtime and will be loaded first on ALL
     pages.
-  - `site/_shared` contains import-able, shared resources.
+  - `site/_shared` contains import-able resources that are shared across
+    namespaces.
 - Prefer webpack aliases and root paths when sharing assets between namespaces.
   This avoids long relative import paths (`import '../../../lib/utils';`).
   - JS: `import '~shared/util';`
@@ -67,6 +68,8 @@ npm run deploy
 ### /site/**/bundle.js
 
 - Each `site/**/bundle.js` is compiled to `dist/**/bundle.js`.
+- Exception is `site/_core/*`, which is compiled to `site/core/*` along with
+  all shared libraries and modules.
 - No need to `import './bundle.styl'`. Webpack is configured to find styles
   automatically.
 

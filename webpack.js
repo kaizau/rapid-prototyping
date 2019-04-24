@@ -1,5 +1,5 @@
 const pathlib = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const glob = require('glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -26,24 +26,33 @@ exports.webpackCallback = function webpackCallback(error, stats, config) {
   const manifest = pathlib.join(output, 'webpack.json');
   config.manifest = JSON.parse(fs.readFileSync(manifest, 'utf8'));
 
-  // Prepend commons.js to [config.coreDir]/[config.entryBase].js. In watch
-  // mode, webpack incremental rebuild doesn't overwrite our concat'ed file
-  // unless it needs to. So we skip this if the file beginnings match.
+  // Copy _core/ to core/ and rewrite the manifest. This prevents webpack watch
+  // from duplicating concat'ed core code across incremental rebuilds.
+  const coreIn = pathlib.join(output, '_core');
+  const coreOut = pathlib.join(output, 'core');
+  fs.copySync(coreIn, coreOut);
+  Object.keys(config.manifest).forEach(key => {
+    if (key.indexOf('_core') === 0) {
+      const value = config.manifest[key];
+      config.manifest[key.slice(1)] = value.slice(1);
+      delete config.manifest[key];
+    }
+  });
+
+  // Combine commons.js and _core/[config.entryBase].js info core/[config.entryBase].js
   const commons = pathlib.join(output, config.manifest['commons.js']);
-  const core = pathlib.join(output, config.manifest[`${config.coreDir}/${config.entryBase}.js`]);
   const commonsText = fs.readFileSync(commons);
+  const core = pathlib.join(output, config.manifest[`core/${config.entryBase}.js`]);
   const coreText = fs.readFileSync(core);
-  if (commonsText.slice(0, 50).toString() !== coreText.slice(0, 50).toString()) {
-    fs.writeFileSync(core, commonsText + coreText);
-  }
+  fs.writeFileSync(core, commonsText + coreText);
 
   // Remove commons.js and image entry points from manifest to avoid attempting
   // to replace them in asset URLs.
   //
   // We could delete these files as well, but as of 2019.03.14, this leads to
   // bugs when webpack is running in development watch mode (production seems
-  // fine). commons and image.js files are generated initially but not
-  // regenerated on watched recompile. Potentially a caching issue?
+  // fine). commons.js and image.js files are generated initially but not
+  // regenerated on recompile.
   delete config.manifest['commons.js']
   Object.keys(config.manifest).forEach(file => {
     const ext = pathlib.extname(file).slice(1);

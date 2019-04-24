@@ -1,5 +1,6 @@
-const del = require('del');
 const { src, dest, series, watch } = require('gulp');
+const fs = require('fs-extra');
+const glob = require('glob');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-replace');
@@ -17,7 +18,6 @@ if (process.env.USE_DOTENV) require('dotenv').config();
 const config = {
   source: 'site',
   output: 'dist',
-  coreDir: 'core',
   entryBase: 'bundle',
   fileExts: ['png', 'jpg', 'gif', 'svg'],
   isProd: !process.env.NODE_ENV || process.env.NODE_ENV === 'production',
@@ -33,8 +33,6 @@ exports.watch = series(clean, devServer);
 
 //
 // Dev Server
-// TODO Restart if webpack, gulp, package-lock.json changed
-// TODO Restart if webpack entry points change
 //
 
 function devServer(cb) {
@@ -49,22 +47,44 @@ function devServer(cb) {
     },
   });
 
-  const paths = [
+  const markupFiles = [
     `${config.output}/webpack.json`,
     `${config.source}/**/*.pug`,
   ];
-  watch(paths, series(html, reload));
+  watch(markupFiles, config.isProd ? html : series(html, livereload));
 
-  const webpackWatch = webpackConfig(config);
-  webpackWatch.watch = true;
-  webpack(webpackWatch, (error, stats) => {
+  const watchWebpack = webpackConfig(config);
+  watchWebpack.watch = true;
+  webpack(watchWebpack, (error, stats) => {
     webpackCallback(error, stats, config);
   });
+
+  const webpackEntries = [
+    `${config.source}/**/${config.entryBase}.{js,styl,css.styl}`,
+  ];
+  watch(webpackEntries)
+    .on('add', path => restart(`Webpack entry ${path} was added.`))
+    .on('unlink', path => restart(`Webpack entry ${path} was removed.`));
+
+  const configFiles = [
+    'gulpfile.js',
+    'webpack.js',
+    'package-lock.json',
+    '.env',
+  ];
+  watch(configFiles)
+    .on('change', path => restart(`${path} was changed.`));
 
   cb();
 }
 
-function reload() {
+function restart(message) {
+  // eslint-disable-next-line no-console
+  console.log('Restart needed. ' + message);
+  process.exit();
+}
+
+function livereload() {
   return src('gulpfile.js', { read: false })
     .pipe(connect.reload());
 }
@@ -74,7 +94,7 @@ function reload() {
 //
 
 function clean() {
-  return del(config.output);
+  return fs.emptyDir(config.output);
 }
 
 function assets(cb) {
@@ -104,9 +124,10 @@ function html() {
 }
 
 function finalize() {
-  return del([
-    `${config.output}/commons.js`,
-    `${config.output}/commons.*.js`,
-    `${config.output}/webpack.json`,
+  const commons = glob.sync(`${config.output}/commons.*js`)[0];
+  return Promise.all([
+    fs.remove(commons),
+    fs.remove(`${config.output}/webpack.json`),
+    fs.remove(`${config.output}/_core/`),
   ]);
 }
