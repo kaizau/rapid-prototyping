@@ -128,6 +128,6 @@ function finalize() {
   return Promise.all([
     fs.remove(commons),
     fs.remove(`${config.output}/webpack.json`),
-    fs.remove(`${config.output}/_core/`),
+    fs.remove(`${config.output}/_shared/`),
   ]);
 }

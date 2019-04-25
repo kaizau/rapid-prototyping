@@ -26,25 +26,25 @@ exports.webpackCallback = function webpackCallback(error, stats, config) {
   const manifest = pathlib.join(output, 'webpack.json');
   config.manifest = JSON.parse(fs.readFileSync(manifest, 'utf8'));
 
-  // Copy _core/ to core/ and rewrite the manifest. This prevents webpack watch
-  // from duplicating concat'ed core code across incremental rebuilds.
-  const coreIn = pathlib.join(output, '_core');
-  const coreOut = pathlib.join(output, 'core');
-  fs.copySync(coreIn, coreOut);
+  // Copy _shared/ to shared/ and rewrite the manifest. This prevents webpack
+  // watch from duplicating concat'ed shared code across incremental rebuilds.
+  const sharedIn = pathlib.join(output, '_shared');
+  const sharedOut = pathlib.join(output, 'shared');
+  fs.copySync(sharedIn, sharedOut);
   Object.keys(config.manifest).forEach(key => {
-    if (key.indexOf('_core') === 0) {
+    if (key.indexOf('_shared') === 0) {
       const value = config.manifest[key];
       config.manifest[key.slice(1)] = value.slice(1);
       delete config.manifest[key];
     }
   });
 
-  // Combine commons.js and _core/[config.entryBase].js info core/[config.entryBase].js
+  // Combine commons.js and _shared/[config.entryBase].js info shared/[config.entryBase].js
   const commons = pathlib.join(output, config.manifest['commons.js']);
   const commonsText = fs.readFileSync(commons);
-  const core = pathlib.join(output, config.manifest[`core/${config.entryBase}.js`]);
-  const coreText = fs.readFileSync(core);
-  fs.writeFileSync(core, commonsText + coreText);
+  const shared = pathlib.join(output, config.manifest[`shared/${config.entryBase}.js`]);
+  const sharedText = fs.readFileSync(shared);
+  fs.writeFileSync(shared, commonsText + sharedText);
 
   // Remove commons.js and image entry points from manifest to avoid attempting
   // to replace them in asset URLs.

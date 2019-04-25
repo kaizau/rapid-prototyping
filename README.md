@@ -38,14 +38,14 @@ npm run deploy
 
 - Code is organized by "folder namespaces."
   - Related markup, styles, and scripts live in the same folder when possible.
-  - `site/_core` contains the webpack runtime and will be loaded first on ALL
-    pages.
-  - `site/_shared` contains import-able resources that are shared across
-    namespaces.
+  - `site/_shared` contains resources that are shared across namespaces.
+  - `site/_shared/bundle.js` is a special entry point that will have the
+    webpack runtime and all shared modules prepended after compilation. Its
+    compiled output `/shared/bundle.js` must be loaded first on all pages.
 - Prefer webpack aliases and root paths when sharing assets between namespaces.
   This avoids long relative import paths (`import '../../../lib/utils';`).
   - JS: `import '~shared/util';`
-  - Stylus: `@import ~shared/config`
+  - Stylus: `@import ~shared/styles/config`
   - Stylus url(): `url(/assets/image.jpg)` (leading slash)
   - Pug: `extends /_shared/layout` (leading slash)
 - Use environment variables for secrets and configuration.
@@ -65,11 +65,14 @@ npm run deploy
 - Each `site/**.pug` is compiled to `dist/**.html`.
 - Prefer `site/example/index.pug` over `source/example.pug`.
 
+### /site/_shared/*
+
+- Unlike all other namespaces, `site/_shared/` is compiled to `site/shared/`.
+- `/shared/bundle.js` must be loaded first on all pages.
+
 ### /site/**/bundle.js
 
 - Each `site/**/bundle.js` is compiled to `dist/**/bundle.js`.
-- Exception is `site/_core/*`, which is compiled to `site/core/*` along with
-  all shared libraries and modules.
 - No need to `import './bundle.styl'`. Webpack is configured to find styles
   automatically.
 
