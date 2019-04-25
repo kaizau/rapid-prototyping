@@ -53,7 +53,7 @@ exports.webpackCallback = function webpackCallback(error, stats, config) {
   // bugs when webpack is running in development watch mode (production seems
   // fine). commons.js and image.js files are generated initially but not
   // regenerated on recompile.
-  delete config.manifest['commons.js']
+  delete config.manifest['commons.js'];
   Object.keys(config.manifest).forEach(file => {
     const ext = pathlib.extname(file).slice(1);
     if (config.fileExts.indexOf(ext) > -1) {
@@ -61,7 +61,7 @@ exports.webpackCallback = function webpackCallback(error, stats, config) {
       delete config.manifest[jsFile];
     }
   });
-}
+};
 
 // Not a standard webpack.config.js function
 exports.webpackConfig = function webpackConfig(config) {
@@ -90,15 +90,22 @@ exports.webpackConfig = function webpackConfig(config) {
     module: {
       rules: [
         {
+          enforce: 'pre',
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'eslint-loader',
+          options: {fix: true},
+        },
+        {
           test: /\.js$/,
           exclude: /node_modules/,
           loader: 'babel-loader',
-          options: { cacheDirectory: true },
+          options: {cacheDirectory: true},
         },
         {
           test: new RegExp(`\\.(${config.fileExts.join('|')})$`),
           loader: 'file-loader',
-          options: { name: config.isProd ? '[path][name].[hash:8].[ext]' : '[path][name].[ext]' },
+          options: {name: config.isProd ? '[path][name].[hash:8].[ext]' : '[path][name].[ext]'},
         },
         {
           test: /(?!\.css).{4}\.styl$/,
@@ -118,7 +125,7 @@ exports.webpackConfig = function webpackConfig(config) {
       // Webpack doesn't allow concat'ing this directly to a single primary
       // entry point, so we do it with gulp instead.
       // - https://github.com/webpack/webpack/issues/6977
-      runtimeChunk: { name: 'commons' },
+      runtimeChunk: {name: 'commons'},
       splitChunks: {
         cacheGroups: {
           default: false,
@@ -133,7 +140,7 @@ exports.webpackConfig = function webpackConfig(config) {
       },
     },
   };
-}
+};
 
 function webpackEntries(config) {
   const entries = {};
@@ -158,20 +165,20 @@ function sharedStyleLoaders(config) {
   // which will get replaced by gulp.
   const cssLoader = {
     loader: 'css-loader',
-    options: { url: false },
+    options: {url: false},
   };
 
   const postcssLoader = {
     loader: 'postcss-loader',
     options: {
       ident: 'postcss',
-      plugins: [ autoprefixer() ],
+      plugins: [autoprefixer()],
     },
   };
   if (config.isProd) {
     postcssLoader.options.plugins.push(cssnano({
       preset: ['default', {
-        discardComments: { removeAll: true },
+        discardComments: {removeAll: true},
       }],
     }));
   }

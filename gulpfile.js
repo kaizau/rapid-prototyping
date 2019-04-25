@@ -1,4 +1,4 @@
-const { src, dest, series, watch } = require('gulp');
+const {src, dest, series, watch} = require('gulp');
 const fs = require('fs-extra');
 const glob = require('glob');
 const pug = require('gulp-pug');
@@ -42,7 +42,7 @@ function devServer(cb) {
     livereload: !config.isProd,
     middleware() {
       return [
-        proxy('/api', { target: 'http://localhost:8889' }),
+        proxy('/api', {target: 'http://localhost:8889'}),
       ];
     },
   });
@@ -85,7 +85,7 @@ function restart(message) {
 }
 
 function livereload() {
-  return src('gulpfile.js', { read: false })
+  return src('gulpfile.js', {read: false})
     .pipe(connect.reload());
 }
 
