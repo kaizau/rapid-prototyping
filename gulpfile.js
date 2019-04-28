@@ -1,6 +1,7 @@
 const {src, dest, series, watch} = require('gulp');
 const fs = require('fs-extra');
 const glob = require('glob');
+const notifier = require('node-notifier');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-replace');
@@ -78,9 +79,14 @@ function devServer(cb) {
   cb();
 }
 
-function restart(message) {
+function restart(reason) {
+  const message = 'Restart needed. ' + reason;
   // eslint-disable-next-line no-console
-  console.log('Restart needed. ' + message);
+  console.log(message);
+  notifier.notify({
+    message,
+    title: 'Gulp',
+  });
   process.exit();
 }
 
