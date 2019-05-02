@@ -51,9 +51,9 @@ npm run deploy
 - Use environment variables for secrets and configuration.
   - Save production secrets with `now secret` and reference their `@keys` in
     `now.json`.
-  - Check in a blank .env schema in `schema.env`.
-  - Create a local .env (`cp schema.env .env`) and add development values. Do
-    not check this file in!
+  - Check in blank .env schemas in `schema.env` and `schema.env.build`.
+  - Create local .env files (`cp schema.env .env && cp schema.env.build
+    .env.build`) and add development values. Do not check these in!
 - When in doubt, aim to follow these principles:
   - https://github.com/elsewhencode/project-guidelines
   - https://3factor.app/
