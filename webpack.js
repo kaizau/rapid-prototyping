@@ -100,7 +100,10 @@ exports.webpackConfig = function webpackConfig(config) {
           test: /\.js$/,
           exclude: /node_modules/,
           loader: 'babel-loader',
-          options: {cacheDirectory: true},
+          options: {
+            plugins: ['transform-inline-environment-variables'],
+            presets: ['@babel/preset-env'],
+          },
         },
         {
           test: new RegExp(`\\.(${config.fileExts.join('|')})$`),

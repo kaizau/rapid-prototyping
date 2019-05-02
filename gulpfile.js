@@ -9,7 +9,9 @@ const connect = require('gulp-connect');
 const proxy = require('http-proxy-middleware');
 const webpack = require('webpack');
 const {webpackConfig, webpackCallback} = require('./webpack');
-if (process.env.USE_DOTENV) require('dotenv').config();
+if (process.env.USE_DOTENV) {
+  require('dotenv').config({path: './.env.build'});
+}
 
 //
 // Static site + serverless functions
@@ -71,7 +73,7 @@ function devServer(cb) {
     'gulpfile.js',
     'webpack.js',
     'package-lock.json',
-    '.env',
+    '.env.build',
   ];
   watch(configFiles)
     .on('change', path => restart(`${path} was changed.`));

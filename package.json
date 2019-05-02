@@ -13,15 +13,8 @@
     "api": "node -r dotenv/config node_modules/.bin/now-lambda --port 8889",
     "lint": "eslint --fix .",
     "deploy": "now --target production",
+    "now-dev": "gulp",
     "now-build": "gulp"
-  },
-  "babel": {
-    "plugins": [
-      "transform-inline-environment-variables"
-    ],
-    "presets": [
-      "@babel/preset-env"
-    ]
   },
   "eslintIgnore": [
     "dist/"

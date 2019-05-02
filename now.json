@@ -5,12 +5,12 @@
 
   "build": {
     "env": {
-      "EXAMPLE_BUILD_VAR": "Hello from now's EXAMPLE_BUILD_VAR"
+      "EXAMPLE_BUILD_VAR": "Production EXAMPLE_BUILD_VAR from now.json"
     }
   },
 
   "env": {
-    "EXAMPLE_FUNCTION_VAR": "Hello from now's EXAMPLE_FUNCTION_VAR"
+    "EXAMPLE_FUNCTION_VAR": "Production EXAMPLE_FUNCTION_VAR from now.json"
   },
 
   "builds": [
