@@ -1,12 +1,14 @@
 const {src, dest, series, watch} = require('gulp');
 const fs = require('fs-extra');
 const glob = require('glob');
+const pathlib = require('path');
 const notifier = require('node-notifier');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-replace');
 const connect = require('gulp-connect');
 const proxy = require('http-proxy-middleware');
+const eslint = require('gulp-eslint');
 const webpack = require('webpack');
 const {webpackConfig, webpackCallback} = require('./webpack');
 if (process.env.USE_DOTENV) {
@@ -56,6 +58,9 @@ function devServer(cb) {
   ];
   watch(markupFiles, config.isProd ? html : series(html, livereload));
 
+  const jsFiles = ['**/*.js', '!dist/**', '!node_modules/**'];
+  watch(jsFiles).on('change', file => lint(file));
+
   const watchWebpack = webpackConfig(config);
   watchWebpack.watch = true;
   webpack(watchWebpack, (error, stats) => {
@@ -66,8 +71,8 @@ function devServer(cb) {
     `${config.source}/**/${config.entryBase}.{js,styl,css.styl}`,
   ];
   watch(webpackEntries)
-    .on('add', path => restart(`Webpack entry ${path} was added.`))
-    .on('unlink', path => restart(`Webpack entry ${path} was removed.`));
+    .on('add', file => restart(`Webpack entry ${file} was added.`))
+    .on('unlink', file => restart(`Webpack entry ${file} was removed.`));
 
   const configFiles = [
     'gulpfile.js',
@@ -76,9 +81,16 @@ function devServer(cb) {
     '.env.build',
   ];
   watch(configFiles)
-    .on('change', path => restart(`${path} was changed.`));
+    .on('change', file => restart(`${file} was changed.`));
 
   cb();
+}
+
+function lint(file) {
+  return src(file)
+    .pipe(eslint({fix: true}))
+    .pipe(eslint.format())
+    .pipe(dest(pathlib.dirname(file)));
 }
 
 function restart(reason) {
