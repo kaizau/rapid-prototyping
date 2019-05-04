@@ -12,7 +12,6 @@
     "build-prod": "gulp build",
     "lint": "eslint --fix .",
     "deploy": "now --target production",
-    "now-dev": "gulp now",
     "now-build": "gulp now"
   },
   "eslintIgnore": [
@@ -37,7 +36,6 @@
     "gulp-replace": "^1.0.0",
     "mini-css-extract-plugin": "^0.6.0",
     "node-notifier": "^5.4.0",
-    "now-lambda-runner": "^3.3.0",
     "postcss-loader": "^3.0.0",
     "style-loader": "^0.23.1",
     "stylus": "^0.54.5",

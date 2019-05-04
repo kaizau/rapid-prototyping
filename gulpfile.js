@@ -28,18 +28,11 @@ const config = {
 // Public
 //
 
-exports.default = series(clean, assets, html, finalize);
+exports.build = series(clean, assets, html, finalize);
 
 exports.watch = series(clean, devServer);
 
-// `now dev` runs both now-dev and now-build scripts. This workaround ensures
-// that the dev server is used, skipping full rebuilds for each request.
-if (process.env.NOW_REGION === 'dev1') {
-  exports.now = process.env.PORT ? exports.watch : cb => cb();
-}
-else {
-  exports.now = exports.build;
-}
+exports.now = exports.build;
 
 //
 // Watch
