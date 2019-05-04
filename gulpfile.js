@@ -1,4 +1,5 @@
 const {src, dest, series, watch} = require('gulp');
+const connect = require('gulp-connect');
 const fs = require('fs-extra');
 const glob = require('glob');
 const pathlib = require('path');
@@ -6,14 +7,9 @@ const notifier = require('node-notifier');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-replace');
-const connect = require('gulp-connect');
-const proxy = require('http-proxy-middleware');
 const eslint = require('gulp-eslint');
 const webpack = require('webpack');
 const {webpackConfig, webpackCallback} = require('./webpack');
-if (process.env.USE_DOTENV) {
-  require('dotenv').config({path: './.env.build'});
-}
 
 //
 // Static site + serverless functions
@@ -29,44 +25,52 @@ const config = {
 };
 
 //
-// Public Tasks
+// Public
 //
 
 exports.default = series(clean, assets, html, finalize);
 
 exports.watch = series(clean, devServer);
 
+// `now dev` runs both now-dev and now-build scripts. This workaround ensures
+// that the dev server is used, skipping full rebuilds for each request.
+if (process.env.NOW_REGION === 'dev1') {
+  exports.now = process.env.PORT ? exports.watch : cb => cb();
+}
+else {
+  exports.now = exports.build;
+}
+
 //
-// Dev Server
+// Watch
 //
 
 function devServer(cb) {
   connect.server({
-    root: config.output,
-    port: 8888,
-    livereload: !config.isProd,
-    middleware() {
-      return [
-        proxy('/api', {target: 'http://localhost:8889'}),
-      ];
-    },
+    port: process.env.PORT || 8888
   });
 
+  // Rebuild markup
   const markupFiles = [
     `${config.output}/webpack.json`,
     `${config.source}/**/*.pug`,
   ];
-  watch(markupFiles, config.isProd ? html : series(html, livereload));
+  watch(markupFiles, html);
 
+  // Lint and format JS
   const jsFiles = ['**/*.js', '!dist/**', '!node_modules/**'];
-  watch(jsFiles).on('change', file => lint(file));
+  watch(jsFiles)
+    .on('add', file => lint(file))
+    .on('change', file => lint(file));
 
+  // Compile webpack assets
   const watchWebpack = webpackConfig(config);
   watchWebpack.watch = true;
   webpack(watchWebpack, (error, stats) => {
     webpackCallback(error, stats, config);
   });
 
+  // Restart if webpack entries changed
   const webpackEntries = [
     `${config.source}/**/${config.entryBase}.{js,styl,css.styl}`,
   ];
@@ -74,6 +78,7 @@ function devServer(cb) {
     .on('add', file => restart(`Webpack entry ${file} was added.`))
     .on('unlink', file => restart(`Webpack entry ${file} was removed.`));
 
+  // Restart if config changed
   const configFiles = [
     'gulpfile.js',
     'webpack.js',
@@ -104,13 +109,8 @@ function restart(reason) {
   process.exit();
 }
 
-function livereload() {
-  return src('gulpfile.js', {read: false})
-    .pipe(connect.reload());
-}
-
 //
-// Build Tasks
+// Build
 //
 
 function clean() {

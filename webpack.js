@@ -94,6 +94,7 @@ exports.webpackConfig = function webpackConfig(config) {
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
+            cacheDirectory: true,
             plugins: ['transform-inline-environment-variables'],
             presets: ['@babel/preset-env'],
           },

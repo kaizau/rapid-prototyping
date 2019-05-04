@@ -6,15 +6,14 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "npm run dev & npm run api",
-    "start-prod": "npm run prod & npm run api",
-    "dev": "USE_DOTENV=1 NODE_ENV=development gulp watch",
-    "prod": "USE_DOTENV=1 gulp watch",
-    "api": "node -r dotenv/config node_modules/.bin/now-lambda --port 8889",
+    "start": "NODE_ENV=development now dev -p 8888",
+    "start-prod": "now dev -p 8888",
+    "build": "NODE_ENV=development gulp build",
+    "build-prod": "gulp build",
     "lint": "eslint --fix .",
     "deploy": "now --target production",
-    "now-dev": "gulp",
-    "now-build": "gulp"
+    "now-dev": "gulp now",
+    "now-build": "gulp now"
   },
   "eslintIgnore": [
     "dist/"
@@ -27,7 +26,6 @@
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "css-loader": "^2.1.1",
     "cssnano": "^4.1.10",
-    "dotenv": "^8.0.0",
     "eslint": "^5.16.0",
     "file-loader": "^3.0.1",
     "fs-extra": "^7.0.1",
@@ -37,8 +35,6 @@
     "gulp-eslint": "^5.0.0",
     "gulp-pug": "^4.0.1",
     "gulp-replace": "^1.0.0",
-    "http-proxy-middleware": "^0.19.1",
-    "http-server": "^0.11.1",
     "mini-css-extract-plugin": "^0.6.0",
     "node-notifier": "^5.4.0",
     "now-lambda-runner": "^3.3.0",
@@ -50,6 +46,9 @@
     "webpack-manifest-plugin": "^2.0.4"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "helmet": "^3.17.0",
     "mithril": "^1.1.6",
     "normalize.css": "^8.0.1",
     "purecss": "^1.0.0"
