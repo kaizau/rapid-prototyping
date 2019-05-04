@@ -5,7 +5,7 @@
 - [**Pug**](https://pugjs.org/) for markup.
 - [**Stylus**](http://stylus-lang.com/) for styling.
 - [**Mithril**](https://mithril.js.org/api.html) for SPAs and JS components.
-- [**Now**](https://zeit.co/docs/) for static and serverless hosting.
+- [**Zeit**](https://zeit.co/docs/) for static and serverless hosting.
 
 ## Getting Started
 
@@ -13,7 +13,7 @@
 
 **Site:** <http://localhost:8888>
 
-**API:** <http://localhost:8888/api/> proxied to <http://localhost:8889/api/>
+**API:** <http://localhost:8888/api/>
 
 ```sh
 # setup
@@ -28,7 +28,10 @@ npm start
 # serve in production mode (with asset hashing, minification)
 npm run start-prod
 
-# deploy with zeit now
+# preview deployment locally
+npm run preview
+
+# deploy (or if Zeit is integrated , just merge branch into master)
 npm run deploy
 ```
 

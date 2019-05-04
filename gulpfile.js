@@ -1,15 +1,19 @@
 const {src, dest, series, watch} = require('gulp');
-const connect = require('gulp-connect');
-const fs = require('fs-extra');
-const glob = require('glob');
-const pathlib = require('path');
-const notifier = require('node-notifier');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-replace');
 const eslint = require('gulp-eslint');
+const connect = require('gulp-connect');
+const proxy = require('http-proxy-middleware');
 const webpack = require('webpack');
 const {webpackConfig, webpackCallback} = require('./webpack');
+const fs = require('fs-extra');
+const glob = require('glob');
+const pathlib = require('path');
+const notifier = require('node-notifier');
+if (process.env.USE_DOTENV) {
+  require('dotenv').config({path: './.env.build'});
+}
 
 //
 // Static site + serverless functions
@@ -30,7 +34,7 @@ const config = {
 
 exports.build = series(clean, assets, html, finalize);
 
-exports.watch = series(clean, devServer);
+exports.watch = series(clean, watcher);
 
 exports.now = exports.build;
 
@@ -38,9 +42,16 @@ exports.now = exports.build;
 // Watch
 //
 
-function devServer(cb) {
+function watcher(cb) {
   connect.server({
-    port: process.env.PORT || 8888
+    root: config.output,
+    port: process.env.PORT || 8888,
+    livereload: !config.isProd,
+    middleware() {
+      return [
+        proxy('/api', {target: 'http://localhost:8889'}),
+      ];
+    },
   });
 
   // Rebuild markup
@@ -48,7 +59,7 @@ function devServer(cb) {
     `${config.output}/webpack.json`,
     `${config.source}/**/*.pug`,
   ];
-  watch(markupFiles, html);
+  watch(markupFiles, config.isProd ? html : series(html, livereload));
 
   // Lint and format JS
   const jsFiles = ['**/*.js', '!dist/**', '!node_modules/**'];
@@ -89,6 +100,11 @@ function lint(file) {
     .pipe(eslint({fix: true}))
     .pipe(eslint.format())
     .pipe(dest(pathlib.dirname(file)));
+}
+
+function livereload() {
+  return src('gulpfile.js', {read: false})
+    .pipe(connect.reload());
 }
 
 function restart(reason) {
