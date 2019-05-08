@@ -86,6 +86,8 @@
     "gulp-pug": "^4.0.1",
     "gulp-replace": "^1.0.0",
     "http-proxy-middleware": "^0.19.1",
+    "husky": "^2.2.0",
+    "lint-staged": "^8.1.6",
     "mini-css-extract-plugin": "^0.6.0",
     "node-notifier": "^5.4.0",
     "now-lambda-runner": "^3.3.0",
