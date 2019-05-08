@@ -55,31 +55,30 @@ npm run deploy
   - Save production secrets with `now secret` and reference their `@keys` in
     `now.json`.
   - Check in blank .env schemas in `schema.env` and `schema.env.build`.
-  - Create local .env files (`cp schema.env .env && cp schema.env.build
-    .env.build`) and add development values. Do not check these in!
+  - Create local .env files (`cp schema.env .env && cp schema.env.build .env.build`) and add development values. Do not check these in!
 - When in doubt, aim to follow these principles:
   - https://github.com/elsewhencode/project-guidelines
   - https://3factor.app/
   - http://madeofmetaphors.com/shapes
   - http://madeofmetaphors.com/boundaries-and-infinities
 
-### /site/**.pug
+### /site/\*\*.pug
 
 - Each `site/**.pug` is compiled to `dist/**.html`.
 - Prefer `site/example/index.pug` over `source/example.pug`.
 
-### /site/_shared/*
+### /site/\_shared/\*
 
 - Unlike all other namespaces, `site/_shared/` is compiled to `site/shared/`.
 - `/shared/bundle.js` must be loaded first on all pages.
 
-### /site/**/bundle.js
+### /site/\*\*/bundle.js
 
 - Each `site/**/bundle.js` is compiled to `dist/**/bundle.js`.
 - No need to `import './bundle.styl'`. Webpack is configured to find styles
   automatically.
 
-### /site/**/bundle{,.css}.styl
+### /site/\*\*/bundle{,.css}.styl
 
 - Import shared stylus variables with `@import '~shared/config'`.
 - Each `site/**/bundle.css.styl` is compiled to `dist/**/bundle.css`.

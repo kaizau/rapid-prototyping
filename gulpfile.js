@@ -8,7 +8,6 @@ const webpack = require('webpack');
 const {webpackConfig, webpackCallback} = require('./webpack');
 const fs = require('fs-extra');
 const glob = require('glob');
-const pathlib = require('path');
 const notifier = require('node-notifier');
 if (process.env.USE_DOTENV) {
   require('dotenv').config({path: './.env.build'});

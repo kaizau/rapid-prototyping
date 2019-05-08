@@ -13,12 +13,14 @@ exports.webpackCallback = function webpackCallback(error, stats, config) {
     return;
   }
 
-  console.log(stats.toString({
-    chunks: false,
-    colors: true,
-    entrypoints: false,
-    modules: false,
-  }));
+  console.log(
+    stats.toString({
+      chunks: false,
+      colors: true,
+      entrypoints: false,
+      modules: false,
+    })
+  );
   /* eslint-enable no-console */
 
   // Load manifest into config for gulp
@@ -42,7 +44,10 @@ exports.webpackCallback = function webpackCallback(error, stats, config) {
   // Combine commons.js and _shared/[config.entryBase].js info shared/[config.entryBase].js
   const commons = pathlib.join(output, config.manifest['commons.js']);
   const commonsText = fs.readFileSync(commons);
-  const shared = pathlib.join(output, config.manifest[`shared/${config.entryBase}.js`]);
+  const shared = pathlib.join(
+    output,
+    config.manifest[`shared/${config.entryBase}.js`]
+  );
   const sharedText = fs.readFileSync(shared);
   fs.writeFileSync(shared, commonsText + sharedText);
 
@@ -78,7 +83,7 @@ exports.webpackConfig = function webpackConfig(config) {
       alias: {
         // Duplicated to allow stylus to use same alias
         '~shared': pathlib.resolve(__dirname, config.source, '_shared'),
-        'shared': pathlib.resolve(__dirname, config.source, '_shared'),
+        shared: pathlib.resolve(__dirname, config.source, '_shared'),
       },
     },
     plugins: [
@@ -101,7 +106,11 @@ exports.webpackConfig = function webpackConfig(config) {
         {
           test: new RegExp(`\\.(${config.fileExts.join('|')})$`),
           loader: 'file-loader',
-          options: {name: config.isProd ? '[path][name].[hash:8].[ext]' : '[path][name].[ext]'},
+          options: {
+            name: config.isProd
+              ? '[path][name].[hash:8].[ext]'
+              : '[path][name].[ext]',
+          },
         },
         {
           test: /(?!\.css).{4}\.styl$/,
@@ -140,7 +149,9 @@ exports.webpackConfig = function webpackConfig(config) {
 
 function webpackEntries(config) {
   const entries = {};
-  const compiled = glob.sync(`${config.source}/**/${config.entryBase}.{js,styl,css.styl}`);
+  const compiled = glob.sync(
+    `${config.source}/**/${config.entryBase}.{js,styl,css.styl}`
+  );
   const fileExts = config.fileExts.join(',');
   const copied = glob.sync(`${config.source}/**/*.{${fileExts}}`);
   compiled.concat(copied).forEach(entry => {
@@ -172,11 +183,16 @@ function sharedStyleLoaders(config) {
     },
   };
   if (config.isProd) {
-    postcssLoader.options.plugins.push(cssnano({
-      preset: ['default', {
-        discardComments: {removeAll: true},
-      }],
-    }));
+    postcssLoader.options.plugins.push(
+      cssnano({
+        preset: [
+          'default',
+          {
+            discardComments: {removeAll: true},
+          },
+        ],
+      })
+    );
   }
 
   const stylusLoader = {
