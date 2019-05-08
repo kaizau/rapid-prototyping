@@ -2,7 +2,6 @@ const {src, dest, series, watch} = require('gulp');
 const pug = require('gulp-pug');
 const addSrc = require('gulp-add-src');
 const replace = require('gulp-replace');
-const eslint = require('gulp-eslint');
 const connect = require('gulp-connect');
 const proxy = require('http-proxy-middleware');
 const webpack = require('webpack');
@@ -48,9 +47,7 @@ function watcher(cb) {
     port: process.env.PORT || 8888,
     livereload: !config.isProd,
     middleware() {
-      return [
-        proxy('/api', {target: 'http://localhost:8889'}),
-      ];
+      return [proxy('/api', {target: 'http://localhost:8889'})];
     },
   });
 
@@ -60,12 +57,6 @@ function watcher(cb) {
     `${config.source}/**/*.pug`,
   ];
   watch(markupFiles, config.isProd ? html : series(html, livereload));
-
-  // Lint and format JS
-  const jsFiles = ['**/*.js', '!dist/**', '!node_modules/**'];
-  watch(jsFiles)
-    .on('add', file => lint(file))
-    .on('change', file => lint(file));
 
   // Compile webpack assets
   const watchWebpack = webpackConfig(config);
@@ -89,22 +80,13 @@ function watcher(cb) {
     'package-lock.json',
     '.env.build',
   ];
-  watch(configFiles)
-    .on('change', file => restart(`${file} was changed.`));
+  watch(configFiles).on('change', file => restart(`${file} was changed.`));
 
   cb();
 }
 
-function lint(file) {
-  return src(file)
-    .pipe(eslint({fix: true}))
-    .pipe(eslint.format())
-    .pipe(dest(pathlib.dirname(file)));
-}
-
 function livereload() {
-  return src('gulpfile.js', {read: false})
-    .pipe(connect.reload());
+  return src('gulpfile.js', {read: false}).pipe(connect.reload());
 }
 
 function restart(reason) {
@@ -134,11 +116,15 @@ function assets(cb) {
 }
 
 function html() {
-  let task = src([`${config.source}/**/*.pug`, `!${config.source}/_shared/**`])
-    .pipe(pug({
+  let task = src([
+    `${config.source}/**/*.pug`,
+    `!${config.source}/_shared/**`,
+  ]).pipe(
+    pug({
       basedir: config.source,
       locals: process.env,
-    }));
+    })
+  );
 
   if (config.isProd) {
     // Rewrite asset paths in .html, .css, and .js

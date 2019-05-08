@@ -9,14 +9,63 @@
     "start": "NODE_ENV=development USE_DOTENV=1 gulp watch & npm run api",
     "start-prod": "USE_DOTENV=1 gulp watch & npm run api",
     "api": "node -r dotenv/config node_modules/.bin/now-lambda --port 8889",
-    "lint": "eslint --fix .",
+    "lint": "prettier --write '*.{json,md,yml,yaml,graphql}' & eslint --fix .",
     "preview": "now dev -p 8888",
     "deploy": "now --target production",
     "now-build": "gulp now"
   },
+  "prettier": {
+    "bracketSpacing": false,
+    "endOfLine": "lf",
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended"
+    ],
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "rules": {
+      "prettier/prettier": "warn",
+      "brace-style": [
+        "warn",
+        "stroustrup"
+      ],
+      "no-console": "warn",
+      "no-duplicate-imports": "warn",
+      "no-trailing-spaces": "warn",
+      "no-var": "warn",
+      "no-undef": "warn",
+      "no-unreachable": "warn",
+      "no-unused-vars": "warn",
+      "prefer-const": "warn"
+    }
+  },
   "eslintIgnore": [
     "dist/"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,md,yml,yaml,graphql}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
@@ -27,12 +76,13 @@
     "cssnano": "^4.1.10",
     "dotenv": "^8.0.0",
     "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.2.0",
+    "eslint-plugin-prettier": "^3.0.1",
     "file-loader": "^3.0.1",
     "fs-extra": "^7.0.1",
-    "gulp": "^4.0.1",
+    "gulp": "^4.0.2",
     "gulp-add-src": "^1.0.0",
     "gulp-connect": "^5.7.0",
-    "gulp-eslint": "^5.0.0",
     "gulp-pug": "^4.0.1",
     "gulp-replace": "^1.0.0",
     "http-proxy-middleware": "^0.19.1",
@@ -40,6 +90,7 @@
     "node-notifier": "^5.4.0",
     "now-lambda-runner": "^3.3.0",
     "postcss-loader": "^3.0.0",
+    "prettier": "^1.17.0",
     "style-loader": "^0.23.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
@@ -49,7 +100,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.16.4",
-    "helmet": "^3.17.0",
+    "helmet": "^3.18.0",
     "mithril": "^1.1.6",
     "normalize.css": "^8.0.1",
     "purecss": "^1.0.0"
