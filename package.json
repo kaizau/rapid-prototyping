@@ -33,19 +33,15 @@
       "sourceType": "module"
     },
     "rules": {
-      "prettier/prettier": "warn",
       "brace-style": [
-        "warn",
+        "error",
         "stroustrup"
       ],
       "no-console": "warn",
-      "no-duplicate-imports": "warn",
-      "no-trailing-spaces": "warn",
-      "no-var": "warn",
-      "no-undef": "warn",
-      "no-unreachable": "warn",
+      "no-duplicate-imports": "error",
+      "no-var": "error",
       "no-unused-vars": "warn",
-      "prefer-const": "warn"
+      "prefer-const": "error"
     }
   },
   "eslintIgnore": [
