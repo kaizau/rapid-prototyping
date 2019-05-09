@@ -53,18 +53,8 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "npm run lint"
     }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.{json,md,yml,yaml,graphql}": [
-      "prettier --write",
-      "git add"
-    ]
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -87,7 +77,6 @@
     "gulp-replace": "^1.0.0",
     "http-proxy-middleware": "^0.19.1",
     "husky": "^2.2.0",
-    "lint-staged": "^8.1.6",
     "mini-css-extract-plugin": "^0.6.0",
     "node-notifier": "^5.4.0",
     "now-lambda-runner": "^3.3.0",
