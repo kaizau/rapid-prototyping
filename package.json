@@ -19,6 +19,14 @@
       "pre-commit": "npm run lint"
     }
   },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^3.18.0",
+    "mithril": "^1.1.6",
+    "normalize.css": "^8.0.1",
+    "purecss": "^1.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
@@ -50,14 +58,6 @@
     "stylus-loader": "^3.0.2",
     "webpack": "^4.35.0",
     "webpack-manifest-plugin": "^2.0.4"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "helmet": "^3.18.0",
-    "mithril": "^1.1.6",
-    "normalize.css": "^8.0.1",
-    "purecss": "^1.0.0"
   },
   "prettier": {
     "bracketSpacing": false,
