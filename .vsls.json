@@ -1,4 +1,4 @@
 {
   "$schema": "http://json.schemastore.org/vsls",
-  "excludeFiles": [".env", ".gitignore"]
+  "excludeFiles": [".env", ".env.build", ".gitignore"]
 }

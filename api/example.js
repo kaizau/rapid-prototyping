@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('*', (req, res) => {
-  res.send(process.env.EXAMPLE_FUNCTION_VAR);
+  res.send('OK: ' + process.env.EXAMPLE_API_VAR);
 });
 
 // eslint-disable-next-line no-unused-vars

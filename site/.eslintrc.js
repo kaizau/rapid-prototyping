@@ -9,4 +9,6 @@ module.exports = {
     // For ENV var replacement
     process: 'readonly',
   },
+  parser: "babel-eslint",
+
 };

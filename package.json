@@ -1,63 +1,30 @@
 {
   "name": "",
-  "version": "",
+  "version": "0.0.1",
+  "description": "",
   "author": "",
   "repository": "",
-  "description": "",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development USE_DOTENV=1 gulp watch & npm run api",
-    "start-prod": "USE_DOTENV=1 gulp watch & npm run api",
-    "api": "node -r dotenv/config node_modules/.bin/now-lambda --port 8889",
+    "start": "now dev --listen 8888",
+    "debug": "now dev --listen 8888 --debug",
     "lint": "prettier --write '*.{json,md,yml,yaml,graphql}' & eslint --fix .",
-    "preview": "now dev -p 8888",
-    "deploy": "now --target production",
-    "now-build": "gulp now"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
+    "build": "npm run clean && parcel build 'site/**.html' --out-dir public --no-source-maps --no-cache",
+    "watch": "npm run clean && parcel watch 'site/**.html' --out-dir public --no-source-maps --no-cache",
+    "clean": "rimraf public"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "helmet": "^3.18.0",
-    "mithril": "^1.1.6",
-    "normalize.css": "^8.0.1",
-    "purecss": "^1.0.0"
+    "helmet": "^3.21.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.0",
-    "@babel/preset-env": "^7.5.0",
-    "autoprefixer": "^9.6.1",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
-    "css-loader": "^3.0.0",
-    "cssnano": "^4.1.10",
-    "dotenv": "^8.0.0",
-    "eslint": "^6.0.1",
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-prettier": "^3.1.0",
-    "file-loader": "^4.0.0",
-    "fs-extra": "^8.1.0",
-    "gulp": "^4.0.2",
-    "gulp-add-src": "^1.0.0",
-    "gulp-connect": "^5.7.0",
-    "gulp-pug": "^4.0.1",
-    "gulp-replace": "^1.0.0",
-    "http-proxy-middleware": "^0.19.1",
-    "husky": "^3.0.0",
-    "mini-css-extract-plugin": "^0.7.0",
-    "node-notifier": "^5.4.0",
-    "now-lambda-runner": "^3.3.0",
-    "postcss-loader": "^3.0.0",
+    "eslint": "^6.5.1",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "parcel-bundler": "^1.12.4",
     "prettier": "^1.18.2",
-    "style-loader": "^0.23.1",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2",
-    "webpack": "^4.35.2",
-    "webpack-manifest-plugin": "^2.0.4"
+    "rimraf": "^3.0.0"
   },
   "prettier": {
     "bracketSpacing": false,
@@ -78,10 +45,6 @@
       "sourceType": "module"
     },
     "rules": {
-      "brace-style": [
-        "error",
-        "stroustrup"
-      ],
       "no-console": "warn",
       "no-duplicate-imports": "error",
       "no-var": "error",
@@ -90,6 +53,6 @@
     }
   },
   "eslintIgnore": [
-    "dist/"
+    "public"
   ]
 }
