@@ -16,43 +16,13 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "helmet": "^3.21.3"
+    "helmet": "^4.0.0"
   },
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-plugin-prettier": "^3.1.2",
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^6.11.0",
     "parcel-bundler": "^1.12.4",
-    "prettier": "^1.18.2",
+    "prettier": "^2.0.5",
     "rimraf": "^3.0.2"
-  },
-  "prettier": {
-    "bracketSpacing": false,
-    "endOfLine": "lf",
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
-  "eslintConfig": {
-    "extends": [
-      "eslint:recommended",
-      "plugin:prettier/recommended"
-    ],
-    "env": {
-      "node": true,
-      "es6": true
-    },
-    "parserOptions": {
-      "sourceType": "module"
-    },
-    "rules": {
-      "no-console": "warn",
-      "no-duplicate-imports": "error",
-      "no-var": "error",
-      "no-unused-vars": "warn",
-      "prefer-const": "error"
-    }
-  },
-  "eslintIgnore": [
-    "public"
-  ]
+  }
 }
