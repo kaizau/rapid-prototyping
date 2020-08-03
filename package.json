@@ -1,16 +1,20 @@
 {
-  "name": "",
+  "name": "kz-vercel-template",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": {
+    "name": "Kai Zau",
+    "email": "k@kaizau.com",
+    "url": "https://kaizau.com"
+  },
   "repository": "",
   "private": true,
   "scripts": {
-    "start": "now dev --listen 8888",
-    "debug": "now dev --listen 8888 --debug",
-    "lint": "prettier --write '*.{json,md,yml,yaml,graphql}' && eslint --fix .",
+    "start": "vercel dev --listen 8888",
+    "dev": "npm run clean && parcel --port $PORT 'site/**.html' --out-dir public --no-cache",
     "build": "npm run clean && parcel build 'site/**.html' --out-dir public --no-source-maps --no-cache",
-    "watch": "npm run clean && parcel watch 'site/**.html' --out-dir public --no-source-maps --no-cache",
+    "lint": "prettier --ignore-path .gitignore --write . && eslint --fix .",
+    "test": "jest --watch",
     "clean": "rimraf public"
   },
   "dependencies": {
@@ -21,8 +25,10 @@
   "devDependencies": {
     "eslint": "^7.6.0",
     "eslint-config-prettier": "^6.11.0",
+    "jest": "^26.2.2",
     "parcel-bundler": "^1.12.4",
     "prettier": "^2.0.5",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "stylus": "^0.54.8"
   }
 }

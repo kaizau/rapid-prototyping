@@ -23,7 +23,7 @@ Thumbs.db
 # NPM
 node_modules/
 
-# Now
+# Vercel
 public/
 .env
-.env.build
+.vercel

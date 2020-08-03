@@ -1,0 +1,16 @@
+{
+  "_": "https://vercel.com/docs/configuration",
+  "cleanUrls": true,
+  "trailingSlash": true,
+
+  "_": "Variables for /api endpoints and /site build. For best results,",
+  "_": "configure from Vercel project settings.",
+  "env": {
+    "EXAMPLE_API_VAR": "Example API Variable"
+  },
+  "build": {
+    "env": {
+      "EXAMPLE_BUILD_VAR": "Example Build Variable"
+    }
+  }
+}
