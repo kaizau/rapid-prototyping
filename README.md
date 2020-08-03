@@ -9,12 +9,13 @@
 
 ## Installation
 
-Requires globally installed `vercel`.
+Expects globally-installed [`degit`](https://github.com/Rich-Harris/degit#readme) and [`vercel`](https://vercel.com/download).
 
-- [ ] Install dependencies with `npm i`
-- [ ] Configure Vercel domain, git integration, ENV variables
-- [ ] Sync ENV variables with `vercel env pull`
-- [ ] Trigger initial deploy with `vercel`
+1. Copy template with `degit kaizau/template-vercel`
+2. Install dependencies with `npm i`
+3. Configure Vercel domain, git integration, ENV variables
+4. Sync ENV variables with `vercel env pull`
+5. Trigger initial deploy with `vercel`
 
 ## Usage
 
