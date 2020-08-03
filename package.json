@@ -8,7 +8,7 @@
   "scripts": {
     "start": "now dev --listen 8888",
     "debug": "now dev --listen 8888 --debug",
-    "lint": "prettier --write '*.{json,md,yml,yaml,graphql}' & eslint --fix .",
+    "lint": "prettier --write '*.{json,md,yml,yaml,graphql}' && eslint --fix .",
     "build": "npm run clean && parcel build 'site/**.html' --out-dir public --no-source-maps --no-cache",
     "watch": "npm run clean && parcel watch 'site/**.html' --out-dir public --no-source-maps --no-cache",
     "clean": "rimraf public"

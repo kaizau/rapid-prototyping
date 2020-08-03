@@ -2,7 +2,6 @@
   "ignorePatterns": ["build", "dist", "public"],
   "extends": ["eslint:recommended", "prettier"],
   "env": {
-    "node": true,
     "es2017": true
   },
   "parserOptions": {
