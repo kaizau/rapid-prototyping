@@ -10,9 +10,9 @@
   "repository": "",
   "private": true,
   "scripts": {
-    "start": "PORT=8888 npm run serve",
-    "serve": "npm run clean && parcel --port $PORT 'site/**.html' --out-dir public --no-cache",
-    "start-stack": "vercel dev --listen 8888",
+    "start": "PORT=8888 npm run serve-ui",
+    "serve-ui": "npm run clean && parcel --port $PORT 'site/**.html' --out-dir public --no-cache",
+    "serve-stack": "vercel dev --listen 8888",
     "build": "npm run clean && parcel build 'site/**.html' --out-dir public --no-source-maps --no-cache",
     "lint": "prettier --ignore-path .gitignore --write . && eslint --fix .",
     "test": "jest --watch",
