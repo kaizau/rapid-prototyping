@@ -10,8 +10,9 @@
   "repository": "",
   "private": true,
   "scripts": {
-    "start": "vercel dev --listen 8888",
-    "dev": "npm run clean && parcel --port $PORT 'site/**.html' --out-dir public --no-cache",
+    "start": "PORT=8888 npm run serve",
+    "serve": "npm run clean && parcel --port $PORT 'site/**.html' --out-dir public --no-cache",
+    "start-stack": "vercel dev --listen 8888",
     "build": "npm run clean && parcel build 'site/**.html' --out-dir public --no-source-maps --no-cache",
     "lint": "prettier --ignore-path .gitignore --write . && eslint --fix .",
     "test": "jest --watch",
@@ -20,14 +21,14 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "helmet": "^4.0.0"
+    "helmet": "^4.2.0"
   },
   "devDependencies": {
-    "eslint": "^7.6.0",
-    "eslint-config-prettier": "^6.11.0",
-    "jest": "^26.2.2",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "jest": "^26.6.2",
     "parcel-bundler": "^1.12.4",
-    "prettier": "^2.0.5",
+    "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
     "stylus": "^0.54.8"
   }
