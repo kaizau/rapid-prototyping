@@ -21,9 +21,10 @@ nbproject
 Thumbs.db
 
 # NPM
-node_modules/
+node_modules
 
-# Vercel
-public/
+# Build
+dist
+.parcel-cache
 .env
 .vercel
