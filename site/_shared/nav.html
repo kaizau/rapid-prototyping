@@ -1,0 +1,20 @@
+<nav class="container mx-auto p-10">
+  <ul class="flex">
+    <li class="mr-6">
+      <if condition="active === '/'">
+        <strong class="text-blue-500">Home</strong>
+      </if>
+      <else>
+        <a class="text-blue-500 hover:text-blue-800" href="/">Home</a>
+      </else>
+    </li>
+    <li class="mr-6">
+      <if condition="active === '/about'">
+        <strong class="text-blue-500">About</strong>
+      </if>
+      <else>
+        <a class="text-blue-500 hover:text-blue-800" href="/about">About</a>
+      </else>
+    </li>
+  </ul>
+</nav>
