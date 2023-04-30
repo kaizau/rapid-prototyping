@@ -1,3 +1,4 @@
+const serverless = require("serverless-http");
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
@@ -8,7 +9,8 @@ app.use(cors());
 app.use(express.json());
 
 app.get("*", (req, res) => {
-  res.json({ data: process.env.EXAMPLE_API_VAR });
+  res.set("Cache-control", "public, max-age=60");
+  res.json({ data: process.env.EXAMPLE_VAR });
 });
 
 // eslint-disable-next-line no-unused-vars
@@ -18,4 +20,4 @@ app.use((err, req, res, next) => {
   res.sendStatus(err.status);
 });
 
-module.exports = app;
+module.exports.handler = serverless(app);
