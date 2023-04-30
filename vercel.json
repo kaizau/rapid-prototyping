@@ -1,4 +1,7 @@
 {
+  "buildCommand": "npm run build",
+  "devCommand": "parcel --port $PORT",
   "outputDirectory": "dist",
-  "trailingSlash": true
+  "trailingSlash": false,
+  "redirects": [{ "source": "/api/example", "destination": "/api/vercel" }]
 }
