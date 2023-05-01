@@ -13,9 +13,10 @@ module.exports = (app) => {
       {
         target: `http://localhost:${process.env.PORT}`,
         pathRewrite(path) {
-          if (path.endsWith("/")) {
-            return path + "index.html";
-          }
+          // NOTE: Parcel seems to automatically try "path/index.html" when path.html is missing
+          // if (path.endsWith("/")) {
+          //   return path + "index.html";
+          // }
           return path + ".html";
         },
       }
