@@ -1,20 +1,27 @@
+<script locals>
+  module.exports = {
+    pages: {
+      "/": "Home",
+      "/sibling": "Page (sibling)",
+      "/page/": "Page (index)",
+      "/page/sibling": "Subpage (sibling)",
+      "/page/subpage/": "Subpage (index)",
+    },
+  };
+</script>
 <nav class="container mx-auto p-10">
   <ul class="flex">
-    <li class="mr-6">
-      <if condition="active === '/'">
-        <strong class="text-blue-500">Home</strong>
-      </if>
-      <else>
-        <a class="text-blue-500 hover:text-blue-800" href="/">Home</a>
-      </else>
-    </li>
-    <li class="mr-6">
-      <if condition="active === '/about'">
-        <strong class="text-blue-500">About</strong>
-      </if>
-      <else>
-        <a class="text-blue-500 hover:text-blue-800" href="/about">About</a>
-      </else>
-    </li>
+    <each loop="value, key in pages">
+      <li class="mr-6">
+        <if condition="active === key">
+          <strong class="text-blue-500">{{ value }}</strong>
+        </if>
+        <else>
+          <a class="text-blue-500 hover:text-blue-800" href="{{ key }}">
+            {{ value }}
+          </a>
+        </else>
+      </li>
+    </each>
   </ul>
 </nav>

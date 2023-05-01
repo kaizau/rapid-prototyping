@@ -25,6 +25,7 @@ node_modules
 
 # Build
 dist
+parcel-bundle-reports
 .parcel-cache
 .env
 .vercel
