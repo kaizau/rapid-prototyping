@@ -2,6 +2,7 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run parcel",
   "outputDirectory": "dist",
+  "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [{ "source": "/api/example", "destination": "/api/vercel" }]
 }
