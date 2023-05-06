@@ -5,12 +5,11 @@
 **Opinionated takes:**
 
 - React, Vue, and other SPA frameworks are overkill for 90% of projects.
-- Adding tests or TypeScript before you have user traction is about as
-  restrictive wearing a tuxedo / evening gown to a triathlon.
-- Expect to throw this version away and rewrite it The Right Way™ after you
-  figure out what you're actually building.
-- When in doubt, just use Firebase... and follow
-  [sane defaults](https://github.com/elsewhencode/project-guidelines).
+- Adding tests or TypeScript before you have user traction is about as restrictive as wearing a
+  tuxedo / evening gown to a triathlon.
+- Expect to throw this version away and rewrite it The Right Way™ after you figure out what you're
+  actually building.
+- When in doubt, follow [sane defaults](https://github.com/elsewhencode/project-guidelines).
 
 ## Installation
 
@@ -23,8 +22,7 @@ Expects globally-installed [`degit`](https://github.com/Rich-Harris/degit#readme
 
 ## Usage
 
-Use one of the commands below to start a development server on
-`localhost:8888`.
+Use one of the commands below to start a development server on `localhost:8888`.
 
 ```sh
 npm start         # static server
@@ -43,16 +41,15 @@ npm run analyze   # build + bundle analysis
 ## Notes
 
 - [Parcel](https://parceljs.org/) is the _least bad_ bundler out there, and
-  provides a much simpler local development expereience than alternatives.
+  provides a simpler local development experience than alternatives.
   - Cache-busting hashes, minification, transpiling... all of these happen
     automatically using sensible defaults.
   - Module resolution automatically routes absolute paths to the project root.
-- Local development, Vercel, and Netlify have been configured to be roughly
-  identical.
-  - The local dev server uses a middleware proxy to emulate clean URLs (no
-    ".html" extension).
-- [PostHTML](https://github.com/posthtml/posthtml) adds simple templating
-  (variables, modules, expressions) to static HTML.
+- [EJS](https://ejs.co/) adds JS templating to static HTML.
 - [PostCSS](https://github.com/postcss/postcss) is included to support
-  [Tailwind](https://tailwindcss.com/), which provides a pragmatic (and
-  easily LLM-generatable) foundation for layout and styling.
+  [Tailwind](https://tailwindcss.com/), which provides a pragmatic foundation
+  for layout and styling.
+- Local development scripts have been configured to be roughly identical.
+  - A local middleware proxy is to emulate clean URLs (no ".html" extension).
+  - Only reason to use `npm run (vercel|netlify)` is for local serverless
+    functions.
