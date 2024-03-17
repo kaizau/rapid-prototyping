@@ -15,16 +15,16 @@
     "analyze": "npm run build -- --reporter @parcel/reporter-bundle-analyzer"
   },
   "devDependencies": {
-    "@parcel/reporter-bundle-analyzer": "^2.11.0",
-    "eslint": "^8.56.0",
+    "@parcel/reporter-bundle-analyzer": "^2.12.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "http-proxy-middleware": "^2.0.6",
-    "parcel": "^2.11.0",
+    "parcel": "^2.12.0",
     "parcel-reporter-static-files-copy": "^1.5.3",
     "parcel-transformer-ejs": "^1.0.1",
-    "postcss": "^8.4.33",
+    "postcss": "^8.4.35",
     "postcss-modules": "^6.0.0",
-    "prettier": "^3.2.1",
+    "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "tailwindcss": "^3.4.1"
   }
