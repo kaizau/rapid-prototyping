@@ -9,13 +9,14 @@
     "start": "PORT=8888 npm run parcel",
     "netlify": "PORT=8887 netlify dev",
     "vercel": "vercel dev --listen 8888",
-    "parcel": "rimraf dist/ && parcel 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --port $PORT --lazy",
-    "build": "rimraf dist/ && parcel build 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --no-source-maps --no-cache",
+    "parcel": "del dist/ && parcel 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --port $PORT --lazy",
+    "build": "del dist/ && parcel build 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --no-source-maps --no-cache",
     "lint": "prettier --ignore-path .gitignore --write . && eslint --fix .",
     "analyze": "npm run build -- --reporter @parcel/reporter-bundle-analyzer"
   },
   "devDependencies": {
     "@parcel/reporter-bundle-analyzer": "^2.12.0",
+    "del-cli": "^5.1.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "http-proxy-middleware": "^2.0.6",
@@ -25,7 +26,6 @@
     "postcss": "^8.4.35",
     "postcss-modules": "^6.0.0",
     "prettier": "^3.2.5",
-    "rimraf": "^5.0.5",
     "tailwindcss": "^3.4.1"
   }
 }
