@@ -50,6 +50,4 @@ npm run analyze   # build + bundle analysis
   [Tailwind](https://tailwindcss.com/), which provides a pragmatic foundation
   for layout and styling.
 - Local development scripts have been configured to be roughly identical.
-  - A local middleware proxy is to emulate clean URLs (no ".html" extension).
-  - Only reason to use `npm run (vercel|netlify)` is for local serverless
-    functions.
+- Use `npm run (vercel|netlify)` for local serverless functions.
