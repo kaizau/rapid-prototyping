@@ -9,23 +9,25 @@
     "start": "PORT=8888 npm run parcel",
     "netlify": "PORT=8887 netlify dev",
     "vercel": "vercel dev --listen 8888",
-    "parcel": "rimraf dist/ && parcel 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --port $PORT --lazy",
-    "build": "rimraf dist/ && parcel build 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --no-source-maps --no-cache",
+    "parcel": "del-cli dist/ && parcel 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --port $PORT --lazy",
+    "build": "del-cli dist/ && parcel build 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --no-source-maps --no-cache",
     "lint": "prettier --ignore-path .gitignore --write . && eslint --fix .",
     "analyze": "npm run build -- --reporter @parcel/reporter-bundle-analyzer"
   },
+  "dependencies": {
+    "tailwindcss": "^4.0.3"
+  },
   "devDependencies": {
-    "@parcel/reporter-bundle-analyzer": "^2.11.0",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
-    "http-proxy-middleware": "^2.0.6",
-    "parcel": "^2.11.0",
+    "@parcel/reporter-bundle-analyzer": "^2.13.3",
+    "@tailwindcss/postcss": "^4.0.3",
+    "del-cli": "^6.0.0",
+    "eslint": "^9.19.0",
+    "eslint-config-prettier": "^10.0.1",
+    "parcel": "^2.13.3",
     "parcel-reporter-static-files-copy": "^1.5.3",
     "parcel-transformer-ejs": "^1.0.1",
-    "postcss": "^8.4.33",
-    "postcss-modules": "^6.0.0",
-    "prettier": "^3.2.1",
-    "rimraf": "^5.0.5",
-    "tailwindcss": "^3.4.1"
+    "postcss": "^8.5.1",
+    "postcss-modules": "^6.0.1",
+    "prettier": "^3.4.2"
   }
 }
