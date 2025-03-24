@@ -1,0 +1,42 @@
+---
+description:
+globs: *.js,*.mjs,*.cjs,*.ts
+alwaysApply: false
+---
+
+# JavaScript/TypeScript Rules
+
+## Core Principles
+
+- Use modern ES modules (import/export)
+- Minimize external dependencies
+- Separate concerns: state management, UI, and utilities
+
+## State Management
+
+- Extend EventTarget to make state subscribable
+```js
+class Store extends EventTarget {
+  state = {};
+
+  set(key, value) {
+    this.state[key] = value;
+    this.dispatchEvent(new CustomEvent('statechange', { detail: this.state }));
+  }
+}
+```
+- Avoid duplicating global state (localStorage, URL params, data-attributes, etc.); prefer setting/getting it instead
+
+## UI Conventions
+
+- Implement UI as standalone components that subscribe to state changes
+- Prefix DOM references with `$`
+- Use data attributes for element selection
+- Use event delegation where appropriate
+- Prefer custom events for component communication
+- Default to using Tailwind classes
+
+## Code Conventions
+
+- Prefer short circuiting with early returns to avoid deep nesting
+- Avoid chaining multiple array iteration methods
