@@ -1,5 +1,5 @@
 [build]
-  command = "pnpm build"
+  command = "PARCEL_WORKER_BACKEND=process pnpm build"
   publish = "dist/"
 
 [dev]
