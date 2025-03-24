@@ -1,10 +1,10 @@
 [build]
-  command = "npm run build"
+  command = "pnpm build"
   publish = "dist/"
 
 [dev]
   autoLaunch = false
-  command = "npm run parcel"
+  command = "pnpm parcel"
   port = 8888
   targetPort = 8887
 

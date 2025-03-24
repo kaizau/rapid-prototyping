@@ -1,6 +1,6 @@
 {
-  "buildCommand": "npm run build",
-  "devCommand": "npm run parcel",
+  "buildCommand": "pnpm build",
+  "devCommand": "pnpm parcel",
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,

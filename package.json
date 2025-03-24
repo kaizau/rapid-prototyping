@@ -6,13 +6,13 @@
   "private": true,
   "browserslist": "defaults, not IE 11",
   "scripts": {
-    "start": "PORT=8888 npm run parcel",
+    "start": "PORT=8888 pnpm parcel",
     "netlify": "PORT=8887 netlify dev",
     "vercel": "vercel dev --listen 8888",
     "parcel": "del-cli dist/ && parcel 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --port $PORT --lazy",
     "build": "del-cli dist/ && parcel build 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --no-source-maps --no-cache",
     "lint": "prettier --ignore-path .gitignore --write . && eslint --fix .",
-    "analyze": "npm run build -- --reporter @parcel/reporter-bundle-analyzer"
+    "analyze": "pnpm build -- --reporter @parcel/reporter-bundle-analyzer"
   },
   "devDependencies": {
     "@parcel/config-default": "^2.14.2",
