@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm build",
+  "buildCommand": "PARCEL_WORKER_BACKEND=process pnpm build",
   "devCommand": "pnpm parcel",
   "outputDirectory": "dist",
   "cleanUrls": true,
