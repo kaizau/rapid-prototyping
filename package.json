@@ -15,17 +15,18 @@
     "analyze": "npm run build -- --reporter @parcel/reporter-bundle-analyzer"
   },
   "devDependencies": {
-    "@parcel/reporter-bundle-analyzer": "^2.13.3",
-    "@tailwindcss/postcss": "^4.0.3",
+    "@parcel/config-default": "^2.14.2",
+    "@parcel/reporter-bundle-analyzer": "^2.14.2",
+    "@tailwindcss/postcss": "^4.0.15",
     "del-cli": "^6.0.0",
-    "eslint": "^9.19.0",
-    "eslint-config-prettier": "^10.0.1",
-    "parcel": "^2.13.3",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "parcel": "^2.14.2",
     "parcel-reporter-static-files-copy": "^1.5.3",
     "parcel-transformer-ejs": "^1.0.1",
-    "postcss": "^8.5.1",
+    "postcss": "^8.5.3",
     "postcss-modules": "^6.0.1",
-    "prettier": "^3.4.2",
-    "tailwindcss": "^4.0.3"
+    "prettier": "^3.5.3",
+    "tailwindcss": "^4.0.15"
   }
 }
