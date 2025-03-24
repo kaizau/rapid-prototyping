@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@content "./site/**/*.{html,ejs,js,ts}";
+
 @layer base {
   html {
     @apply min-h-full;
