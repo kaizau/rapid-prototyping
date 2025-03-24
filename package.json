@@ -12,7 +12,7 @@
     "parcel": "del-cli dist/ && parcel 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --port $PORT --lazy",
     "build": "del-cli dist/ && parcel build 'site/{,[^_]*/,[^_]*/**/}*.{ejs,html}' --no-source-maps --no-cache",
     "lint": "prettier --ignore-path .gitignore --write . && eslint --fix .",
-    "analyze": "pnpm build -- --reporter @parcel/reporter-bundle-analyzer"
+    "analyze": "pnpm run build --reporter @parcel/reporter-bundle-analyzer"
   },
   "devDependencies": {
     "@parcel/config-default": "^2.14.2",
