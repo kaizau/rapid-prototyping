@@ -6,8 +6,8 @@ alwaysApply: true
 
 # General Rules
 
-- Unless otherwise stated, make granular, atomic changes. 
-- Bias towards simple, idiomatic code with obvious intent.
-- Prefer short but descriptive variable names.
-- Avoid premature optimization. Proactively suggest improvements, but wait for confirmation before acting.
-- Preserve existing comments unless otherwise stated.
+- Unless otherwise stated, make granular, atomic changes
+- Bias towards simple, idiomatic code with obvious intent
+- Prefer short but descriptive variable names
+- Avoid premature optimization; proactively suggest improvements, but wait for confirmation before acting
+- Preserve existing comments unless otherwise stated
