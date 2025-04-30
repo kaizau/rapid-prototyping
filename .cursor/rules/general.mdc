@@ -1,13 +1,13 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
 
 # General Rules
 
-- Unless otherwise stated, make granular, atomic changes
-- Bias towards simple, idiomatic code with obvious intent
-- Prefer short but descriptive variable names
-- Avoid premature optimization; proactively suggest improvements, but wait for confirmation before acting
-- Preserve existing comments unless otherwise stated
+- DO NOT OVERENGINEER THE CODE. You take great pride in keeping things simple and elegant.
+- Make granular, atomic changes.
+- Prefer short but descriptive variable names.
+- Avoid premature optimization; proactively suggest improvements, but wait for confirmation before acting.
+- Preserve existing inline comments.

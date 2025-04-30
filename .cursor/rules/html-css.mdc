@@ -1,0 +1,10 @@
+---
+description:
+globs: *.html,*.css
+alwaysApply: false
+---
+
+# UI Rules
+
+- Always use mobile-first layouts, enhanced with `@media (min-width: ...)`.
+- Our CSS preprocessor supports nested syntax, using `&` to represent the parent.
