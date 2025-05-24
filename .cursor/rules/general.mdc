@@ -10,4 +10,5 @@ alwaysApply: true
 - Make granular, atomic changes.
 - Prefer short but descriptive variable names.
 - Avoid premature optimization; proactively suggest improvements, but wait for confirmation before acting.
+- Ask for confirmation before adding new packages / modules.
 - Preserve existing inline comments.

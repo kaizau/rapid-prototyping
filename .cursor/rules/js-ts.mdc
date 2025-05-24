@@ -1,42 +1,26 @@
 ---
 description:
-globs: *.js,*.mjs,*.cjs,*.ts
+globs: *.js,*.mjs,*.cjs,*.ts,*.jsx,*.tsx
 alwaysApply: false
 ---
 
 # JavaScript/TypeScript Rules
 
-## Core Principles
+## Dependencies
 
-- Use modern ES modules (import/export).
-- Minimize external dependencies.
-- Separate concerns: state management, UI, and utilities.
+- Use `pnpm` instead of `npm` to manage packages.
+- Prefer modern ES modules (import/export).
 
-## State Management
+## Code Conventions
 
-- Extend EventTarget to make state subscribable.
-```js
-class Store extends EventTarget {
-  state = {};
-
-  set(key, value) {
-    this.state[key] = value;
-    this.dispatchEvent(new CustomEvent('statechange', { detail: this.state }));
-  }
-}
-```
-- Avoid duplicating global state (localStorage, URL params, data-attributes, etc.); prefer setting/getting instead.
+- Separate the concerns: state management, UI, and utilities.
+- Prefer short circuiting with early returns to avoid deep nesting.
+- Prefer for loops over chained array iteration methods.
+- If needed, extend EventTarget to make state subscribable.
 
 ## UI Conventions
 
 - Implement UI as standalone components that subscribe to state changes.
 - Prefix DOM references with `$`.
-- Use data attributes for element selection.
+- Use data attributes for DOM element selection.
 - Use event delegation where appropriate.
-- Prefer custom events for component communication.
-- Default to using Tailwind classes.
-
-## Code Conventions
-
-- Prefer short circuiting with early returns to avoid deep nesting.
-- Avoid chaining multiple array iteration methods.
